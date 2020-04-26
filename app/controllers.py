@@ -7,22 +7,31 @@ def commitToDatabase(item):
     db.session.add(item)
     db.session.commit()
 
+# User Controllers
 def createNewUser(username, password, email):
-    user = User(username, email,password)
+    user = User(username.strip(), email.strip(),password.strip())
     commitToDatabase(user)
 
 def createNewAdmin(username, password, email):
-    user = User(username, email.password)
+    user = User(username.strip(), email.strip(),password.strip())
     adminRole = Privileges.query.filter_by(name="Administrator").first()
     user.role = adminRole
     commitToDatabase(user)
 
 # Gets The User Object Once Validated, otherwise returns false
 def validateUserLogin(username, password):
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(username=username.strip()).first()
     if (user and user.check_password(password)):
         return user
 
     return False
+
+def isUsernameTaken(username):
+    user = User.query.filter_by(username=username.strip()).first()
+    return  bool(user)
+
+def isEmailTaken(email):
+    user = User.query.filter_by(email=email.strip()).first()
+    return bool(user)
 
 
