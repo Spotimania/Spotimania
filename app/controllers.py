@@ -11,12 +11,14 @@ def commitToDatabase(item):
 def createNewUser(username, password, email):
     user = User(username.strip(), email.strip(),password.strip())
     commitToDatabase(user)
+    return user
 
 def createNewAdmin(username, password, email):
     user = User(username.strip(), email.strip(),password.strip())
     adminRole = Privileges.query.filter_by(name="Administrator").first()
     user.role = adminRole
     commitToDatabase(user)
+    return user
 
 # Gets The User Object Once Validated, otherwise returns false
 def validateUserLogin(username, password):

@@ -1,5 +1,7 @@
 from app import db
-from werkzeug.security import generate_password_hash,check_password_hash
+from app import login
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 # Define a base model for other database tables to inherit
 # Useful for logging purposes
@@ -15,8 +17,13 @@ class BaseAutoPrimary(Base):
     __abstract__ = True
     id            = db.Column(db.Integer, primary_key=True)
 
+# Login User Loader / Session Retriever
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
 # Define a User model
-class User(BaseAutoPrimary):
+class User(UserMixin,BaseAutoPrimary):
 
     __tablename__ = 'user'
 

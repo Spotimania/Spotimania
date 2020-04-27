@@ -15,6 +15,7 @@ migrate = Migrate(app, db, compare_type=True)
 
 # Setup Session Logins
 login = LoginManager(app)
+login.login_view = 'login'
 
 #Getting All Routes and Database Models
 from app import routes, models
