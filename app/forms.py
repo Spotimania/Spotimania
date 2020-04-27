@@ -29,4 +29,7 @@ class RegisterForm(FlaskForm):
         if (isUsernameTaken(username.data)):
             raise ValidationError("Username Is Already In Use")
 
+class RegisterAdminForm(RegisterForm):
+    specialPassword = PasswordField("Special Password", [DataRequired()])
+
 

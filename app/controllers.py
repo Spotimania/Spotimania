@@ -8,15 +8,22 @@ def commitToDatabase(item):
     db.session.commit()
 
 # User Controllers
+def getAdminRole():
+    adminRole = Privileges.query.filter_by(name="Administrator").first()
+    if (adminRole):
+        return adminRole
+    adminRole = Privileges("Administrator")
+    commitToDatabase(adminRole)
+    return adminRole
+
 def createNewUser(username, password, email):
     user = User(username.strip(), email.strip(),password.strip())
     commitToDatabase(user)
     return user
 
 def createNewAdmin(username, password, email):
-    user = User(username.strip(), email.strip(),password.strip())
-    adminRole = Privileges.query.filter_by(name="Administrator").first()
-    user.role = adminRole
+    adminRole = getAdminRole()
+    user = User(username.strip(), email.strip(),password.strip(),adminRole)
     commitToDatabase(user)
     return user
 

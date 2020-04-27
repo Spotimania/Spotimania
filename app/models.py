@@ -36,7 +36,7 @@ class User(UserMixin,BaseAutoPrimary):
 
     # Authorisation Data: role & status
     # Null Role refers to normal user
-    role = db.Column(db.Integer, db.ForeignKey("privileges.id"))
+    privilegeId = db.Column(db.Integer, db.ForeignKey("privileges.id"))
 
 
     #Password Methods
@@ -44,11 +44,12 @@ class User(UserMixin,BaseAutoPrimary):
         return check_password_hash(self.password_hash, password)
 
     # New instance instantiation procedure
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password,role=None):
 
         self.username     = username
         self.email    = email
         self.password_hash = generate_password_hash(password)
+        self.role=role
 
     def __repr__(self):
         return '<User %r>' % (self.username)
@@ -60,7 +61,7 @@ class Privileges(BaseAutoPrimary):
     name =db.Column(db.String(128), index=True, unique=True)
 
     # One To Many Relationship
-    user = db.relationship("User",backref="users",lazy="dynamic")
+    user = db.relationship("User",backref="role",lazy="dynamic")
 
     def __init__(self, name):
         self.name = name

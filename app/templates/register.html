@@ -31,6 +31,15 @@
 			<span class="error-message">{{error}}</span>
 			{% endfor %}
 		</p>
+		{% if form.specialPassword %}
+		<p>
+			{{form.specialPassword.label}}<br />
+			{{form.specialPassword(size=30)}} <br />
+			{% for error in form.specialPassword.errors%}
+			<span class="error-message">{{error}}</span>
+			{% endfor %}
+		</p>
+		{% endif %}
 		<p>
 			{{form.submit()}}
 		</p>

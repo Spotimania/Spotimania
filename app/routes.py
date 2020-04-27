@@ -20,6 +20,11 @@ def redirectToLastVisitedPage():
 @app.route("/home")
 @app.route("/index")
 def index():
+    print(current_user)
+    try:
+        print(current_user.role)
+    except AttributeError:
+        pass
     return render_template("index.html", index=True)
 
 @app.route("/login",methods=["GET","POST"])
@@ -50,12 +55,28 @@ def register():
 
     form = RegisterForm()
     if (form.validate_on_submit()):
-        print("USER CREATING")
         userObject = createNewUser(form.username.data, form.password.data, form.email.data)
-        login_user(userObject, remember=form.rememberMe.data)
+        login_user(userObject)
         flash("You are successfully registered", "success")
         return redirect("/index")
     return render_template("register.html", title="Register", form=form)
+
+@app.route("/registerAdmin",methods=["GET","POST"])
+def registerAdmin():
+    # PREVENT USER TO REGISTER WHEN LOGIN
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    form = RegisterAdminForm()
+    if (form.validate_on_submit()):
+        if(app.config["ADMIN_KEY"]==form.specialPassword.data):
+            userObject = createNewAdmin(form.username.data, form.password.data, form.email.data)
+            login_user(userObject)
+            flash("You are successfully registered", "success")
+            return redirect("/index")
+        else:
+            flash("Your Admin Key Is Wrong")
+    return render_template("register.html", title="Register Admin", form=form)
 
 @app.route('/logout')
 def logout():
