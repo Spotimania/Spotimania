@@ -1,3 +1,1 @@
-web: gunicorn app:app
-init: python db_create.py
-upgrade: python db_upgrade.py
+web: flask db upgrade; flask translate compile; gunicorn microblog:app
