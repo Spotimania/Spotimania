@@ -5,7 +5,9 @@
 		{% include 'components/nav.html' %}
 
 		<div class="container">
-			{% block content%} {% endblock %}
+			{% with messages = get_flashed_messages(with_categories=true)%} {% if messages %} {% for category,message in messages %}
+			<div class="alert alert-{{category}}"><p>{{message}}</p></div>
+			{% endfor %} {% endif %} {% block content%} {% endblock %} {% endwith %}
 		</div>
 	</body>
 	{% include 'components/footer.html' %}
