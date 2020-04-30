@@ -1,0 +1,81 @@
+/*Hero*/
+
+.hero{
+    width: 100%;
+    height: 100vh;
+    background: url(/app/static/images/hero.png) center no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.sub-headline{
+    font-size: 50px;
+    font-family: var(--Rubik);
+    font-weight: 100;
+    letter-spacing: 2px;
+    color: white;
+    padding: 2rem;
+}
+
+.dark {
+    background-color: var(--body-font-color);
+}
+
+.first-letter{
+    text-transform: uppercase;
+    font-size: 55px;
+}
+
+.headline{
+    /* color: rgb(8, 242, 215); */
+    color: rgb(69, 225, 159);
+    font-size: 2.5rem;
+    font-family: var(--Livvic);
+    /* text-transform: uppercase; */
+    font-weight: 400;
+    letter-spacing: 0.2rem;
+    margin-right: -0.5rem;
+    line-height: 2;
+}
+
+.headline-description h5{
+    color: white;
+    font-size: 15px;
+    font-weight: 350;
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    letter-spacing: 2px;
+    margin-right: -3px;
+    line-height: 2;
+}
+
+.btn{
+    display: inline-block;
+    letter-spacing: 1px;
+    margin-right: -1px;
+    font-family: var(--Livvic);
+}
+
+.cta-btn{
+    display: initial;
+    font-size: 1.5rem;
+    /* background-color:  rgb(130, 227, 215); */
+    /* background-color: rgb(8, 242, 215); */
+    background-color: rgb(69, 225, 159);
+    padding: 1rem 3rem;
+    color: black;
+    border-radius: 2rem;
+    transition: background-color 0.5s;
+    border: 1.5px;
+    font-weight: 500;
+}
+
+.cta-btn:hover,
+.cta-btn:focus{
+    background: transparent;
+    border: 1.5px solid var(--secondary-font-color);
+    color: white;
+    transform: translateY(-4px);
+}
