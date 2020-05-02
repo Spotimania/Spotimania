@@ -5,6 +5,7 @@ from werkzeug.urls import url_parse
 from app.forms import *
 from app.controllers import *
 from flask_login import current_user, login_user, logout_user
+from app.models import Playlist
 
 def redirectToLastVisitedPage():
     next_page = request.args.get('next')
@@ -77,6 +78,11 @@ def registerAdmin():
         else:
             flash("Your Admin Key Is Wrong")
     return render_template("register.html", title="Register Admin", form=form)
+@app.route("/admin")
+def adminPage():
+    
+        return render_template("admin.html", title="Admin Home")
+
 
 @app.route('/logout')
 def logout():
@@ -86,3 +92,17 @@ def logout():
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
+@app.route('/process', methods=['POST'])
+def createPlaylist():
+    
+        data = request.get_json()
+        songName = data['songName']
+        songID = data['songID']
+        prevURL = data['prevURL']
+        newSong = Playlist(songName=songName, songID=songID,prevURL=prevURL)
+        db.session.add(newSong)
+        db.session.commit()
+        return str(songID)
+
+    
+    

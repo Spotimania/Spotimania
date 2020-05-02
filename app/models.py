@@ -69,3 +69,9 @@ class Privileges(BaseAutoPrimary):
     def __repr__(self):
         return '<Privileges %r>' % (self.name)
 
+
+class Playlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    songName = db.Column(db.String(100))
+    songID = db.Column(db.String(100))
+    prevURL = db.Column(db.String(100))
