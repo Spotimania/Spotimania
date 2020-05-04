@@ -1,4 +1,5 @@
 {% extends 'layout.html' %} {% block content %}
+
 <script language="JavaScript">
 function toggle(source) {
   checkboxes = document.getElementsByName('songName');
@@ -8,17 +9,28 @@ function toggle(source) {
 }
 </script>
 <h1>Playlist</h1>
+<table style="width:100%">
+	<tr>
+		<td><input type="checkbox" name='selectAll' onClick="toggle(this)"/></td>
+	    <th>ID</th>
+	    <th>Song Name</th>
+	    <th>Song ID</th> 
+    <tr>
 	<form id="songForm" action = "/handle_data" method = "POST" onsubmit="setTimeout(function () { window.location.reload(); }, 10)">
-	<input type="checkbox" name='selectAll' onClick="toggle(this)"/><label for="selectAll">Select All</label> <input type="submit"><br>
+	 <input type="submit" value="Delete"><br><br>
     {% for r in results %}
-
-    <input type="checkbox" name="songName" value='{{ r.songName }}'>
-  	<label for="songName">Song Name: {{ r.songName }}</label>
-    <p>ID: {{ r.id }}<br>Song ID: {{ r.songID }}<br> </p>
-    <br>
+    <tr>
+	    <td><input type="checkbox" name="songName" value='{{ r.songName }}'></td>
+	    <td>{{ r.id }}</td>
+	    <td><label for="songName">{{ r.songName }}</label></td>
+	    <td> {{ r.songID }}</td>
+	  	
+	    
+    </tr>
+    
     {% endfor %}
     </form>
-
+</table>
 
 
 {% endblock %}

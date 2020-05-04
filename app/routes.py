@@ -104,14 +104,14 @@ def addSong():
         newSong = Playlist(songName=songName, songID=songID,prevURL=prevURL)
         db.session.add(newSong)
         db.session.commit()
-        checkboxval = request.form.get('songName')
+        
 
-        return str(checkboxval)
+        return 'Added song!'
     else:
         results = Playlist.query.all()
         return render_template('process.html', title='Songs', results=results)
 
-    
+
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
     i = request.form.getlist('songName')
