@@ -1,5 +1,7 @@
 var accessToken;
 
+
+
 $.ajax({
 	        url: "https://spotify-token-authenticator.frinzelapuz.now.sh/api/token",
 	        type: 'GET',
@@ -10,8 +12,12 @@ $.ajax({
 	        }
 	    });
 
+
+
 var id;
 window.onload=function(){
+var el = document.getElementById('submit');
+if (el){
 document.querySelector("#submit").addEventListener("click", function(event) {
 	document.getElementById('artists').innerHTML=('')
 	event.preventDefault();
@@ -97,4 +103,5 @@ document.querySelector("#submit").addEventListener("click", function(event) {
           
             });
         });
+}
 }

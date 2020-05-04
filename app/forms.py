@@ -31,5 +31,3 @@ class RegisterForm(FlaskForm):
 
 class RegisterAdminForm(RegisterForm):
     specialPassword = PasswordField("Special Password", [DataRequired()])
-
-
