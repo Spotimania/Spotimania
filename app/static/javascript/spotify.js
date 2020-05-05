@@ -35,7 +35,7 @@ document.querySelector("#submitArtist").addEventListener("click", function(event
 	            	document.getElementById('results').innerHTML+=("<li><button class='artistname' type='button'>"+(data.artists.items[i].name)+"</button></li>");
 	            }
 	            $('.artistname').click(function(event) {
-	            	document.getElementById('artists').innerHTML=('')
+	            	document.getElementById('results').innerHTML=('')
 	            	var target = event.target || event.srcElement;
 	            	var name = target.innerHTML;
 	            	
@@ -57,11 +57,9 @@ document.querySelector("#submitArtist").addEventListener("click", function(event
 	            					document.getElementById('results').innerHTML+=("<li><input class='tracks' type='submit' value='"+(data.tracks[i].name)+"'></li>");
 	            				}
 	            				$('.tracks').click(function(event) {
-	            					document.getElementById('tracks').innerHTML=('')
 					            	var target = event.target || event.srcElement;
 					            	var name = target.value;
 					            	target.style.display='none';
-					            	
 					            	for (i=0;i<data.tracks.length;i++) {
 
   										if (name == data.tracks[i].name) {
@@ -136,6 +134,7 @@ if (el){
 			            $('.songname').click(function(event) {
 					            	var target = event.target || event.srcElement;
 					            	var name = target.innerHTML;
+					            	target.style.display='none';
 					            	console.log(name);
 					            	for (i=0;i<data.tracks.items.length;i++){
   											//ajax call to get data for specific track
