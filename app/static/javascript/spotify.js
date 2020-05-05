@@ -1,7 +1,7 @@
 var accessToken;
 
 
-
+//Gets the spotify access token
 $.ajax({
 	        url: "https://spotify-token-authenticator.frinzelapuz.now.sh/api/token",
 	        type: 'GET',
@@ -14,13 +14,14 @@ $.ajax({
 
 
 
-var id;
+
 window.onload=function(){
 var el = document.getElementById('submit');
 if (el){
 document.querySelector("#submit").addEventListener("click", function(event) {
 	document.getElementById('artists').innerHTML=('')
 	event.preventDefault();
+	//ajax call to get data for artist
 	$.ajax({
           url: "https://api.spotify.com/v1/search?q=" + $('#tracks').val() + '&type=artist',
           type: 'GET',
@@ -29,7 +30,7 @@ document.querySelector("#submit").addEventListener("click", function(event) {
                     "Authorization": "Bearer " + accessToken
                  },
           success: function(data) {
-	            console.log(data);
+	            
 	            for (i=0;i<data.artists.items.length;i++) {
 	            	document.getElementById('artists').innerHTML+=("<li><button class='artistname' type='button'>"+(data.artists.items[i].name)+"</button></li>");
 	            }
@@ -43,6 +44,7 @@ document.querySelector("#submit").addEventListener("click", function(event) {
   						if (name == data.artists.items[i].name) {
   							console.log(data.artists.items[i].id);
   							id = data.artists.items[i].id;
+  							//ajax call to get top 10 tracks for artist
   							$.ajax({
   							url: "https://api.spotify.com/v1/artists/" + id + "/top-tracks?country=AU",
   							type: "GET",
@@ -58,11 +60,12 @@ document.querySelector("#submit").addEventListener("click", function(event) {
 	            					document.getElementById('tracks').innerHTML=('')
 					            	var target = event.target || event.srcElement;
 					            	var name = target.value;
-					            	console.log(name)
+					            	target.style.display='none';
+					            	
 					            	for (i=0;i<data.tracks.length;i++) {
 
   										if (name == data.tracks[i].name) {
-  											console.log(data.tracks[i].id)
+  											//ajax call to get data for specific track
   											$.ajax({
 					  							url: "https://api.spotify.com/v1/tracks/" + data.tracks[i].id + "?market=au",
 					  							type: "GET",
@@ -71,15 +74,21 @@ document.querySelector("#submit").addEventListener("click", function(event) {
 					                    		"Authorization": "Bearer " + accessToken
 					                 				},
 					                 			success: function(data) {
+					                 				console.log(data);
+					                 				//ajax call to post track data
 					                 				$.ajax({
-							  							url: "/process",
+							  							url: "/playlist",
 							  							type: "POST",
 							  							contentType: "application/json",
 							  							dataType: 'json',
 							  							data: JSON.stringify({
-							  								songName: data.name,
 							  								songID: data.id,
+							  								artist: data.album.artists[0].name,
+							  								songName: data.name,
+							  								prevIMG: data.album.images[0].url,
 							  								prevURL: data.preview_url,
+							  								album: data.album.name,
+
 							  							})
 
 					                 					});

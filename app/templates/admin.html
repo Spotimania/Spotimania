@@ -1,14 +1,23 @@
 {% extends 'layout.html' %} {% block content %}
-
+<style type="text/css">
+	.artistname{
+		width: 50%;
+	}
+	input {
+		width: 50%;	
+		text-align: center;
+	}
+	form input {
+		width: 150px;
+	}
+</style>
 <form>
-	<input id="tracks" type="text" name="Enter Playlist"/>
+	<legend>Search for an artist on Spotify</legend>
+	<input id="tracks" type="text" name="enterSong" placeholder="Enter Song" />
 	<input  id="submit" type="submit" value="Search"/>
 </form>
 <br>
-
 <ul id="artists">
 	
 </ul>
-
-
 {% endblock %}

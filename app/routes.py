@@ -93,24 +93,23 @@ def logout():
 def not_found(error):
     return render_template('404.html'), 404
 
-@app.route('/process', methods=['GET', 'POST'])
+@app.route('/playlist', methods=['GET', 'POST'])
 def addSong():
     if request.method == 'POST':
-        
         data = request.get_json()
         songName = data['songName']
         songID = data['songID']
         prevURL = data['prevURL']
-        newSong = Playlist(songName=songName, songID=songID,prevURL=prevURL)
+        prevIMG = data['prevIMG']
+        artist = data['artist']
+        album = data['album']
+        newSong = Playlist(songName=songName, songID=songID,prevURL=prevURL, prevIMG=prevIMG, artist=artist,album=album)
         db.session.add(newSong)
         db.session.commit()
-        
-
         return 'Added song!'
     else:
         results = Playlist.query.all()
-        return render_template('process.html', title='Songs', results=results)
-
+        return render_template('playlist.html', title='Songs', results=results)
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
