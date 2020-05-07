@@ -38,6 +38,8 @@ class User(UserMixin,BaseAutoPrimary):
     # Null Role refers to normal user
     privilegeId = db.Column(db.Integer, db.ForeignKey("privileges.id"))
 
+    #Back Reference
+    userPlayedPlaylist = db.relationship("Results", backref="user", lazy="dynamic")
 
     #Password Methods
     def check_password(self, password):
@@ -45,7 +47,6 @@ class User(UserMixin,BaseAutoPrimary):
 
     # New instance instantiation procedure
     def __init__(self, username, email, password,role=None):
-
         self.username     = username
         self.email    = email
         self.password_hash = generate_password_hash(password)
@@ -70,12 +71,91 @@ class Privileges(BaseAutoPrimary):
         return '<Privileges %r>' % (self.name)
 
 # Playlist model with track data
-class Playlist(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    songID = db.Column(db.String(100))
+class Song(BaseAutoPrimary):
+    spotifySongID = db.Column(db.String(100),unique=True)
     prevURL = db.Column(db.String(100))
     prevIMG = db.Column(db.String(100))
     songName = db.Column(db.String(100))
     artist = db.Column(db.String(100))
     album = db.Column(db.String(100))
+
+    #Back Reference
+    songsInPlaylist = db.relationship("Playlist_Song", backref="song", lazy="dynamic")
+    songsInResults = db.relationship("IndividualResults", backref="song", lazy="dynamic")
+
+    def __init__(self, spotifySongID, prevURL, prevIMG, songName, artist, album):
+        self.spotifySongID = spotifySongID
+        self.prevURL = prevURL
+        self.prevIMG = prevIMG
+        self.songName = songName
+        self.artist = artist
+        self.album = album
+
+    def __repr__(self):
+        return '<Song %r>' % (self.songName)
+
+class Playlist_Song(BaseAutoPrimary):
+    __tablename__ = "playlist_song"
+    playlistId = db.Column(db.Integer, db.ForeignKey("playlist.id"))
+    songId = db.Column(db.Integer, db.ForeignKey("song.id"))
+
+    def __init__(self, playlist, song):
+        self.playlist = playlist
+        self.song = song
+
+    def __repr__(self):
+        return '<Song %r in Playlist %r>' % (self.song.songName,self.playlist.playlistName)
+
+class Playlist(BaseAutoPrimary):
+    playlistName = db.Column(db.String(100))
+
+    #Back Reference
+    playlistInSong = db.relationship("Playlist_Song", backref="playlist", lazy="dynamic")
+    playlistUser = db.relationship("Results", backref="playlist", lazy="dynamic")
+
+    def __init__(self,name):
+        self.playlistName = name
+
+    def __repr__(self):
+        return '<Playlist %r>' % (self.playlistName)
+
+
+class Results(BaseAutoPrimary):
+    playlistId = db.Column(db.Integer, db.ForeignKey("playlist.id"))
+    userId = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    # Back Reference
+    resultsIndividual = db.relationship("IndividualResults", backref="result", lazy="dynamic")
+
+    def __init__(self,playlist,user):
+      self.playlist = playlist
+      self.user = user
+
+    def __repr__(self):
+        return '<Results %r Attempt By %r>' % (self.playlist.playlistName,self.user.username)
+
+class IndividualResults(BaseAutoPrimary):
+    __tablename__ = "individualResults"
+    answerArtist =db.Column(db.String(100))
+    answerSong =db.Column(db.String(100))
+    isAnswerArtistCorrect =db.Column(db.Boolean)
+    isAnswerSongCorrect = db.Column(db.Boolean)
+
+    #Foreign Keys
+    resultId = db.Column(db.Integer, db.ForeignKey("results.id"))
+    songId = db.Column(db.Integer, db.ForeignKey("song.id"))
+
+    def __init__(self, answerArtist, answerSong, isAnswerArtistCorrect, isAnswerSongCorrect,result,song):
+        self.answerArtist = answerArtist
+        self.answerSong = answerSong
+        self.isAnswerArtistCorrect = isAnswerArtistCorrect
+        self.isAnswerSongCorrect = isAnswerSongCorrect
+
+        self.result = result
+        self.song = song
+
+    def __repr__(self):
+        return '<IndividualResults %r By %r >' % (self.song.songName, self.result.user.username)
+
+
 
