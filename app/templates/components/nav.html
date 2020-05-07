@@ -7,15 +7,15 @@
             </div>
             <ul class="nav-list">
                 <li class="nav-item">
-                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
                 </li>
             </ul>
             <ul class="nav-list">
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Register</a>
+                    <a href="{{ url_for('login') }}" class="nav-link">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">Login</a>
+                    <a href="{{ url_for('register') }}" class="nav-link">Register</a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">Quiz</a>

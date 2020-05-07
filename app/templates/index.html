@@ -1,5 +1,23 @@
-{% extends 'layout.html' %}{% block content %}
+{% extends 'layout.html' %}
 
+{% block content %}
+<!---------- Hero Image & Headlines ---------->
+<section class="hero">
+    <div class="container">
+        <h2 class="sub-headline">
+            <span class="first-letter">S</span>potimania!
+        </h2>
+        <h1 class="headline">Welcome</h1>
+        <div class="headline-description">
+            <div class="single-animation">
+                <h5>CITS3403</h5>
+                <a href="#home-intro" class="btn cta-btn">Explore</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!---------- App Introduction ---------->
 <section class="home-intro" id="home-intro">
     <div class="container">
         <div class="intro-info">
@@ -23,7 +41,7 @@
                 <a href="#" class="btn body-btn">Get Registered</a>
             </div>
             <div class="intro-image">
-                <img src="/app/static/images/spotify.gif" alt="Spotify GIF">
+                <img src="{{ url_for('static', filename='images/spotify.gif') }}" alt="Spotify GIF">
             </div>
         </div>
     </div>
