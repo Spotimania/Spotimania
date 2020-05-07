@@ -1,3 +1,82 @@
+@import "global.css";
+@import "header.css";
+@import "hero.css";
+@import "footer.css";
+@import "responsive.css";
+
+/* Body Styling */
+
+.global-headline{
+    text-align: center;
+    margin-top: 3.9rem;
+}
+
+.home-intro .global-headline{
+    margin-top: 6.9rem;
+}
+
+.global-headline .asterisk{
+    color: black;
+    margin: 2.4rem 0;
+}
+
+.headline-dark{
+    color: black;
+    letter-spacing: 0.7rem;
+    margin-right: -0.7rem;
+}
+
+.global-headline .sub-headline{
+    letter-spacing: -1px;
+    line-height: 0.42;
+}
+
+.intro-info{
+    text-align: center;
+}
+
+.intro-description{
+    margin-bottom: 3rem;
+}
+
+.intro-description p{
+    line-height: 1.6;
+    margin-bottom: 2.4rem;
+}
+
+.body-btn{
+    font-size: 1.5rem;
+    color: var(--secondary-font-color);
+    position: relative;
+    transition: color 0.5s;
+}
+
+.body-btn::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 2px;
+    background-color: var(--secondary-font-color);
+    transition: background-color 0.5s;
+}
+
+.body-btn:hover,
+.body-btn:focus{
+    color: var(--main-font-color-dark);
+}
+
+.body-btn:hover::before,
+.body-btn:focus::before{
+    background-color: var(--main-font-color-dark);
+}
+
+.between{
+    min-height: 65vh;
+    display: flexbox;
+    align-items: center;
+}
 ul	{
 	list-style-type: none;
 }

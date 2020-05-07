@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-	{% include 'components/head.html' %}
-	<body>
-		{% include 'components/nav.html' %}
+{% include 'components/head.html' %}
 
-		<div class="container">
-			{% with messages = get_flashed_messages(with_categories=true)%} {% if messages %} {% for category,message in messages %}
-			<div class="alert alert-{{category}}"><p>{{message}}</p></div>
-			{% endfor %} {% endif %} {% block content%} {% endblock %} {% endwith %}
+<body>
+	{% include 'components/nav.html' %}
+
+
+	<div>
+		{% with messages = get_flashed_messages(with_categories=true)%} {% if messages %}
+		{% for category,message in messages %}
+		<div class="alert alert-{{category}}">
+			<p>{{message}}</p>
 		</div>
-	</body>
+		{% endfor %} {% endif %} {% endwith %}
+	</div>
+
+
+	{% block content%} {% endblock %}
+
 	{% include 'components/footer.html' %}
+</body>
+
 </html>
