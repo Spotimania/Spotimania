@@ -69,3 +69,13 @@ class Privileges(BaseAutoPrimary):
     def __repr__(self):
         return '<Privileges %r>' % (self.name)
 
+# Playlist model with track data
+class Playlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    songID = db.Column(db.String(100))
+    prevURL = db.Column(db.String(100))
+    prevIMG = db.Column(db.String(100))
+    songName = db.Column(db.String(100))
+    artist = db.Column(db.String(100))
+    album = db.Column(db.String(100))
+

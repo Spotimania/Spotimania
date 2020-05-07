@@ -1,0 +1,33 @@
+{% extends 'layout.html' %} {% block content %}
+<style type="text/css">
+	.artistname {
+		width: 50%;
+	}
+	.songname {
+		width: 50%;
+	}
+	input {
+		width: 50%;	
+		text-align: center;
+	}
+	form input {
+		width: 150px;
+	}
+</style>
+<form>
+	<legend>Search for an artist on Spotify</legend>
+	<input id="artist" type="text" name="enterArtist" placeholder="Enter Artist" />
+	<input  id="submitArtist" type="submit" value="Search"/>
+</form>
+
+<form>
+	<legend>Search for a track on Spotify</legend>
+	<input id="track" type="text" name="enterSong" placeholder="Enter Song" />
+	<input  id="submitTrack" type="submit" value="Search"/>
+</form>
+
+<br>
+<ul id="results">
+
+</ul>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'layout.html' %} {% block content %}
+
+<script language="JavaScript">
+	//checkbox to check all boxes
+	function toggle(source) {
+	  checkboxes = document.getElementsByName('songName');
+	  for(var i=0, n=checkboxes.length;i<n;i++) {
+	    checkboxes[i].checked = source.checked;
+	  }
+}
+</script>
+<!--Style table-->
+<style type="text/css">
+	th {
+		background-color: black;
+		color: white;
+	}
+	td, th {
+		text-align: center;
+		
+	}
+	tr:nth-child(even) {
+  		background-color: #dddddd;
+	}
+
+	div.playlistTable	{
+		overflow: auto;
+	}
+</style>
+<h1>Playlist</h1>
+
+<div class='playlistTable'>
+<table style="width: 100%;">
+	<tr>
+		<th ><input type="checkbox" name='selectAll' onClick="toggle(this)"/></th>
+	    <th></th>
+	    <th>Song Name</th>
+	    <th>Song ID</th> 
+	    <th>Preview URL</th> 
+	    <th>Preview IMG</th> 
+	    <th>Artist</th> 
+	    <th>Album</th> 
+    <tr>
+	<form id="songForm" action = "/handle_data" method = "POST" onsubmit="setTimeout(function () { window.location.reload(); }, 20)">
+	 <input type="submit" value="Delete"><br><br>
+    {% for r in results %}
+    <tr>
+	    <td><input type="checkbox" name="songName" value='{{ r.songName }}'></td>
+	    <td></td>
+	    <td><label for="songName">{{ r.songName }}</label></td>
+	    <td> {{ r.songID }}</td>
+	    <td> <a href='{{ r.prevURL }}'>Sample</a></td>
+	    <td> <a href='{{ r.prevIMG }}'>Image</a></td>
+	    <td> {{ r.artist }}</td>
+	    <td> {{ r.album }}</td>
+	  	
+	    
+    </tr>
+    
+    {% endfor %}
+    </form>
+</table>
+</div>
+
+{% endblock %}
