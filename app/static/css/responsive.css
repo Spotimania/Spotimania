@@ -1,0 +1,95 @@
+/* Resposnive Design */
+@media screen and (min-width: 900px){
+    section{
+        padding: 7.9rem;
+    }
+
+    .menu-toggle{
+        display: none;
+    }
+
+    .nav{
+        justify-content: space-between;
+    }
+
+    .nav-list{
+        position: initial;
+        width: initial;
+        height: initial;
+        background-color: transparent;
+        padding: 0;
+        justify-content: 0;
+        flex-direction: row;
+        transform: initial;
+        transition: initial;
+    }
+
+    .nav-item{
+        margin: 0 2.4rem;
+        border: none;
+    }
+
+    .nav-item:last-child{
+        margin-right: 0;
+    }
+
+    .nav-link{
+        font-size: 1.8rem;
+    }
+
+    .active{
+        position: relative;
+    }
+
+    .active::before{
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: white;
+        left: 0;
+        bottom: -3px;
+    }
+
+    .sub-headline{
+        font-size: 8rem;
+        letter-spacing: initial;
+    }
+
+    .first-letter{
+        font-size: 10rem;
+    }
+
+    .headline{
+        margin: 3rem;
+        font-size: 3rem;
+        letter-spacing: 0.2rem;
+    }
+
+    .line{
+        max-width: 11.4rem;
+    }
+
+    .intro-info{
+        display: flex;
+        align-items: center;
+    }
+
+    .intro-info > div{
+        flex: 1;
+    }
+
+    .padding-right{
+        padding-right: 7rem;
+    }
+
+    .footer-content{
+        max-width: 77.5rem;
+        margin: auto;
+    }
+
+    .footer-content-about{
+        max-width: 51.3rem;
+        margin: 0 auto 5.4rem;
+    }
+}   
