@@ -1,30 +1,41 @@
 {% extends 'layout.html' %}
 
-{% block content %}
+{% block content%}
 
-<form name="login" action="" method="POST" novalidate>
-	<fieldset class="form-group">
-		<legend>{{title}}</legend>
-		{{form.hidden_tag()}}
-		<p>
-			{{form.username.label}}<br />
-			{{form.username(size=30)}} <br />
-			{% for error in form.username.errors%}
-			<span class="error-message">{{error}}</span>
-			{% endfor %}
-		</p>
-		<p>
-			{{form.password.label}}<br />
-			{{form.password(size=30)}} <br />
-			{% for error in form.password.errors%}
-			<span class="error-message">{{error}}</span>
-			{% endfor %}
-		</p>
-		<p>
-			{{form.submit()}}
-		</p>
-		<p>If you don't have an account, sign up <a href="{{url_for('register')}}">here</a></p>
-	</fieldset>
-</form>
+<div class="mainContent" style="background-position: top right;">
+    <div class="row">
+        <div class="col-md-7">
+			<h1 class="sub-headline" style="font-size: 40px;">{{title}}</h1>
+			<div class="innerContent" style="margin: 15px;">
+				<form name="login" action="" method="POST" novalidate>
+					<fieldset class="form-group">
+						{{form.hidden_tag()}}
+						<p>
+							{{form.username.label(class="inputLabel")}}<br />
+							{{form.username(size=30, class="inputGuess")}} <br />
+							{% for error in form.username.errors%}
+							<span class="error-message">{{error}}</span>
+							{% endfor %}
+						</p>
+						<p>
+							{{form.password.label(class="inputLabel")}}<br />
+							{{form.password(size=30, class="inputGuess")}} <br />
+							{% for error in form.password.errors%}
+							<span class="error-message">{{error}}</span>
+							{% endfor %}
+						</p>
+						<p>
+							{{form.submit(class="inputSubmit")}}
+						</p>
+						<p>If you don't have an account, <a href="{{url_for('register')}}">Register here...</a></p>
+					</fieldset>
+				</form>
+            </div>
+        </div>
+        <div class="col-md-5">
+
+        </div>
+    </div>
+</div>
 
 {% endblock %}
