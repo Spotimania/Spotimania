@@ -78,9 +78,9 @@ def registerAdmin():
         else:
             flash("Your Admin Key Is Wrong")
     return render_template("register.html", title="Register Admin", form=form)
+
 @app.route("/admin")
 def adminPage():
-    
         return render_template("admin.html", title="Admin Home")
 
 
