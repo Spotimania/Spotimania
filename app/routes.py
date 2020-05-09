@@ -119,3 +119,7 @@ def handle_data():
 
     db.session.commit()
     return 'success'
+
+@app.route('/quiz')
+def quiz():
+    return render_template("quiz.html", title="Quiz Page")
