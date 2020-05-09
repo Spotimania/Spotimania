@@ -2,6 +2,19 @@
 
 {% block content%}
 
-<h1>Hello World!!</h1>
+<!-- <img id="" src="" alt=""> -->
+<form style="padding: 15px; background-color: lightgrey;" name="quiz" action="/quiz"> <!-- What would be the Action? -->
+    <fieldset>
+        <legend><h1>Guess the Song...</h1></legend>
+        <p>What song is it?</p>
+        <input id="songName" type="text">
+        <br>
+        <p>Who is the Artist?</p>
+        <input id="artistName" type="text">
+        <br> <br>
+        <input type="submit" class="btn cta-btn">
+    </fieldset>    
+</form>
+
 
 {% endblock %}
