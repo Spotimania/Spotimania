@@ -7,7 +7,7 @@
         <h2 class="sub-headline">
             <span class="first-letter">S</span>potimania!
         </h2>
-        <h1 class="headline">Welcome</h1>
+        <h1 class="headline">Spotify Music Quiz</h1>
         <div class="headline-description">
             <div class="single-animation">
                 <h5>CITS3403</h5>
@@ -38,7 +38,7 @@
                     using the navgation bar above, if you have not yet created an account,
                     click on the button below to get started!
                 </p>
-                <a href="#" class="btn body-btn">Get Registered</a>
+                <a href="{{ url_for('register') }}" class="btn body-btn">Get Registered</a>
             </div>
             <div class="intro-image">
                 <img src="{{ url_for('static', filename='images/spotify.gif') }}" alt="Spotify GIF">
