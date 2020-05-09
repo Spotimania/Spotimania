@@ -2,9 +2,8 @@
 
 header{
     width: 100%;
-    position: absolute;
+    margin: 0; /* has been changed to margin so that <section> tag works/orients properly, Clear Cache to see it's effects */
     top: 0;
-    left: 0;
     z-index: 1;
     background: rgb(18, 18, 18);
 }
@@ -46,6 +45,7 @@ header{
     z-index: 1250;
     transform: translateX(-100%);
     transition: transform 0.5s;
+    margin: 0;
 }
 
 .nav::before{
@@ -97,19 +97,4 @@ header{
 
 .nav-link:hover{
     color: var(--secondary-font-color);
-}
-
-.sticky {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgb(18, 18, 18);
-}
-
-.home-icon {
-    vertical-align: auto;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    margin-right: 10px;
 }
