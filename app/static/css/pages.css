@@ -1,0 +1,61 @@
+/* CSS file providing the CSS Required for the Content of various Pages. such as: quiz.html, login.html, register.html and etc... */
+
+div.mainContent {
+    background-image: url(../images/hero.png);
+    height: fit-content;
+    padding: 50px;
+    border-radius: 25px;
+}
+
+div.innerContent {
+    margin: 50px; 
+    padding: 50px; 
+    background-color: white; 
+    border-radius: 70px;
+}
+
+div.musicContent {
+    margin: 20px; 
+    padding: 20px; 
+    background-color: grey;
+    border-radius: 20px;
+}
+audio {
+    width: 100%;
+}
+
+.inputGuess {
+    width: 100%;
+    font-size: 20px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 20px; 
+    padding: 2px 20px;
+    outline: none;
+}
+.inputGuess:focus {
+    border-color: rgb(69, 225, 159);
+    box-shadow: 0 0 8px 0 rgb(69, 225, 159);
+}
+
+.inputLabel {
+    font-family: var(--Rubik);
+    font-size: 20px;
+}
+
+.inputSubmit {
+    border: none; /* To Remove the weird effect */
+
+    font-family: var(--Rubik);
+    font-size: 15px;
+    background-color: rgb(69, 225, 159);
+    border-radius: 25px;
+    padding: 10px 30px;
+}
+.inputSubmit:hover {
+    box-shadow: 0 0 15px 0 rgb(69, 225, 159);
+}
+
+span.error-message{
+    color: salmon;
+}
