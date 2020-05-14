@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 {% include 'components/head.html' %}
 
 <body>
 	{% include 'components/nav.html' %}
-
 
 	<div>
 		{% with messages = get_flashed_messages(with_categories=true)%} {% if messages %}
@@ -15,10 +15,13 @@
 		{% endfor %} {% endif %} {% endwith %}
 	</div>
 
+	{% block home%} {% endblock %}
+	<!-- Home Block can be Empty, to be used ONLY in Homepage (index.html) -->
 
 	<section>
 		<div class="container">
 			{% block content%} {% endblock %}
+			<!-- Content Block CANNOT be Empty -->
 		</div>
 	</section>
 

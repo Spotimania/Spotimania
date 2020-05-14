@@ -44,3 +44,29 @@ def isEmailTaken(email):
     return bool(user)
 
 
+# Results Controllers
+
+def getResultsOfUser(userId):
+    collection = []
+    userPlayedPlaylist = User.query.get(userId).userPlayedPlaylist
+
+    # Parse all Playlist Played By User
+    for playlist in userPlayedPlaylist:
+        hashMap = playlist.to_dict()
+        hashMap["results"] = []
+
+        # Parse all the question sets in the playlist
+        individualResultsCollection = playlist.resultsIndividual
+        for individualResult in individualResultsCollection:
+            individualResultMap = individualResult.to_dict()
+            songInQuiz = Song.query.get(individualResult.songId)
+
+            # Get Some Details of the song
+            individualResultMap["correctArtist"] = songInQuiz.artist
+            individualResultMap["correctSongName"] = songInQuiz.songName
+            hashMap["results"].append(individualResultMap)
+
+
+        collection.append(hashMap)
+
+    return collection
