@@ -7,6 +7,10 @@ def commitToDatabase(item):
     db.session.add(item)
     db.session.commit()
 
+def commitDelete(item):
+    db.session.delete(item)
+    db.session.commit()
+
 # User Controllers
 def getAdminRole():
     adminRole = Privileges.query.filter_by(name="Administrator").first()
@@ -70,3 +74,13 @@ def getResultsOfUser(userId):
         collection.append(hashMap)
 
     return collection
+
+# Deletes a Results for a Specific User result
+def deleteResults(resultsId):
+    results = Results.query.get(resultsId)
+    individualResultsCollection = results.resultsIndividual
+
+    for IndividualResults in individualResultsCollection:
+        commitDelete(IndividualResults)
+
+    commitDelete(results)
