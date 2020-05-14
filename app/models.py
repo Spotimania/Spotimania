@@ -20,13 +20,13 @@ class Base(db.Model):
                               onupdate=db.func.current_timestamp())
 
     def to_dict(self):
-        class_vars = vars(type(self))  # get any "default" attrs defined at the class level
-        inst_vars = vars(self)  # get any attrs defined on the instance (self)
-        all_vars = dict(class_vars)
-        all_vars.update(inst_vars)
-        # filter out private attributes
-        public_vars = {k: v for k, v in all_vars.items() if not (k.startswith('_') or (isinstance(v, types.FunctionType)) or (isinstance(v,InstrumentedAttribute)))}
-        return public_vars
+        classVars = vars(type(self))  # get any "default" attrs defined at the class level
+        instanceVars = vars(self)  # get any attrs defined on the instance (self)
+        allVars = dict(classVars)
+        allVars.update(instanceVars)
+        # filter out private attributes, functions and SQL_Alchemy references
+        publicVars = {key: value for key, value in allVars.items() if not (key.startswith('_') or (isinstance(value, types.FunctionType)) or (isinstance(value,InstrumentedAttribute)))}
+        return publicVars
 
 
 class BaseAutoPrimary(Base):

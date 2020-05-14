@@ -60,6 +60,8 @@ def getResultsOfUser(userId):
         for individualResult in individualResultsCollection:
             individualResultMap = individualResult.to_dict()
             songInQuiz = Song.query.get(individualResult.songId)
+
+            # Get Some Details of the song
             individualResultMap["correctArtist"] = songInQuiz.artist
             individualResultMap["correctSongName"] = songInQuiz.songName
             hashMap["results"].append(individualResultMap)
