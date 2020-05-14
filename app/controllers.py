@@ -75,28 +75,35 @@ def getResultsOfUser(userId):
         collection.append(hashMap)
 
     return collection
+
+# Playlist and Playlist/Song Controllers
 def deletePlaylist(playlistId):
-    playlist = Playlist.query.filter_by(playlistId=playlistId).first()
+    playlist = Playlist.query.get(playlistId)
     db.session.delete(playlist)
     db.session.commit()
     return 'success'
 
 def getPlaylistName(playlistId):
-    playlist = Playlist.query.filter_by(playlistId=playlistId).first()
+    playlist = Playlist.query.get(playlistId)
     return playlist.name
 
-def addSongInPlaylist(songId,playListId):
-    addSong = Playlist_Song(songId, playlistId)
-    db.session.add(addSong)
-    db.session.commit()
+def addSongInPlaylist(songId, playlistId):
+    playlist = Playlist.query.get(playlistId)
+    song = Song.query.get(songId)
+    addSong = Playlist_Song(playlist,song)
+    commitToDatabase(addSong)
 
-def deleteSongInPlaylist(songId,playListId):
+def deleteSongInPlaylist(songId,playlistId):
     playlistSong = Playlist_Song.query.filter_by(playlistId=playlistId, songId=songId).first()
     db.session.delete(playlistSong)
     db.session.commit()
 
 def getSongsInPlaylist(playlistId):
     songs = []
-    playlistSong = Playlist_Song.query.filter_by(playlistId=playlistId).all()
-    for playlist in playlistSong:
-        songs.append(playlist.)
+    playlistSongCollection = Playlist.query.get(playlistId).playlistInSong
+
+    for playlistSong in playlistSongCollection:
+        song = playlistSong.song.to_dict()
+        songs.append(song)
+
+    return songs
