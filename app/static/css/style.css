@@ -3,6 +3,7 @@
 @import "hero.css";
 @import "footer.css";
 @import "responsive.css";
+@import "pages.css";
 
 /* Body Styling */
 
@@ -46,7 +47,7 @@
 
 .body-btn{
     font-size: 1.5rem;
-    color: var(--secondary-font-color);
+    color: var(--light-black);
     position: relative;
     transition: color 0.5s;
 }
@@ -58,7 +59,7 @@
     bottom: -3px;
     width: 100%;
     height: 2px;
-    background-color: var(--secondary-font-color);
+    background-color: var(--light-black);
     transition: background-color 0.5s;
 }
 
