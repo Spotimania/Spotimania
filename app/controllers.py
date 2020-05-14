@@ -44,3 +44,34 @@ def isEmailTaken(email):
     return bool(user)
 
 
+def editPlaylistName(playlistId, playlistName):
+    playlist = Playlist.query.filter_by(playlistId=playlistId).first()
+    playlist.playlistName = playlistName
+    db.session.commit()
+    return 'success'
+
+def deletePlaylist(playlistId):
+    playlist = Playlist.query.filter_by(playlistId=playlistId).first()
+    db.session.delete(playlist)
+    db.session.commit()
+    return 'success'
+
+def getPlaylistName(playlistId):
+    playlist = Playlist.query.filter_by(playlistId=playlistId).first()
+    return playlist.name
+
+def addSongInPlaylist(songId,playListId):
+    addSong = Playlist_Song(songId, playlistId)
+    db.session.add(addSong)
+    db.session.commit()
+
+def deleteSongInPlaylist(songId,playListId):
+    playlistSong = Playlist_Song.query.filter_by(playlistId=playlistId, songId=songId).first()
+    db.session.delete(playlistSong)
+    db.session.commit()
+
+def getSongsInPlaylist(playlistId):
+    songs = []
+    playlistSong = Playlist_Song.query.filter_by(playlistId=playlistId).all()
+    for playlist in playlistSong:
+        songs.append(playlist.)
