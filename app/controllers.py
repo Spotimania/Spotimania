@@ -1,10 +1,15 @@
 from app import db
 from app.models import *
+from fuzzywuzzy import fuzz
 
 
 # Used To Add Changes To Database
 def commitToDatabase(item):
     db.session.add(item)
+    db.session.commit()
+
+def removeFromDatabase(item):
+    db.session.delete(item)
     db.session.commit()
 
 # User Controllers
@@ -42,6 +47,17 @@ def isUsernameTaken(username):
 def isEmailTaken(email):
     user = User.query.filter_by(email=email.strip()).first()
     return bool(user)
+
+def deleteUser(username):
+    user = User.query.filter_by(username=username.strip()).first()
+    if user:
+        removeFromDatabase(user)
+
+
+def doesThisMatch(string1, string2):
+    ratio = fuzz.ratio(string1.lower(), string2.lower())
+    return ratio > 80
+
 
 
 # Results Controllers
