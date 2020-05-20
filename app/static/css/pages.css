@@ -8,14 +8,13 @@ div.mainContent {
 }
 
 div.innerContent {
-    margin: 50px; 
+    margin: 15px; 
     padding: 50px; 
     background-color: white; 
     border-radius: 70px;
 }
 
 div.musicContent {
-    margin: 20px; 
     padding: 20px; 
     background-color: grey;
     border-radius: 20px;
@@ -41,6 +40,8 @@ audio {
 .inputLabel {
     font-family: var(--Rubik);
     font-size: 20px;
+    margin: 0;
+    margin-left: 10px;
 }
 
 .inputSubmit {
