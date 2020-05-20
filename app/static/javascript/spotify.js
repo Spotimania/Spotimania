@@ -80,13 +80,12 @@ window.onload=function(){
 					                 					contentType: "application/json",
 					                 					dataType: 'json',
 					                 					data: JSON.stringify({
-					                 						songID: data.id,
-					                 						artist: data.album.artists[0].name,
-					                 						songName: data.name,
-					                 						prevIMG: data.album.images[0].url,
+					                 						spotifySongID: data.id,
 					                 						prevURL: data.preview_url,
+					                 						prevIMG: data.album.images[0].url,
+					                 						songName: data.name,
+					                 						artist: data.album.artists[0].name,
 					                 						album: data.album.name,
-
 					                 					})
 
 					                 				});

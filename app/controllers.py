@@ -77,11 +77,17 @@ def getResultsOfUser(userId):
     return collection
 
 # Playlist and Playlist/Song Controllers
+
+def createNewPlaylist(playlistName):
+    playlist = Playlist(playlistName)
+    commitToDatabase(playlist)
+
+
 def deletePlaylist(playlistId):
     playlist = Playlist.query.get(playlistId)
     db.session.delete(playlist)
     db.session.commit()
-    return 'success'
+    
 
 def getPlaylistName(playlistId):
     playlist = Playlist.query.get(playlistId)
@@ -107,3 +113,14 @@ def getSongsInPlaylist(playlistId):
         songs.append(song)
 
     return songs
+
+def getSongDetails(songId):
+    song = Song.query.get(songId)
+    return song
+
+def addSongDetails(spotifySongID, prevURL, prevIMG, songName, artist, album):
+    if bool(Song.query.filter_by(spotifySongID=spotifySongID).first()):
+        return False
+    addSong = Song(spotifySongID, prevURL, prevIMG, songName, artist, album)
+    commitToDatabase(addSong)
+    return True
