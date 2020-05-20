@@ -1,6 +1,5 @@
 from app.controllers import *
 from flask import Blueprint, request, jsonify, abort, Response
-
 api =Blueprint("api",__name__)
 
 @api.route("/")
@@ -11,8 +10,8 @@ def test():
 def routeAddSongsInPlaylist(playlistId):
     try:
         body = request.get_json()
-        newSong = addSongDetails(body["songID"], body["prevURL"], body["prevIMG"], body["songName"], body["artist"], body["album"])
-        addSongInPlaylist(newSong.id,playlistId)
+        song = addSongDetails(body["songID"], body["prevURL"], body["prevIMG"], body["songName"], body["artist"], body["album"])
+        addSongInPlaylist(song.id,playlistId)
         return ({"message": "Success!"})
     except:
         abort(Response("Something Went Wrong"))

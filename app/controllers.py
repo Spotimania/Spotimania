@@ -114,9 +114,13 @@ def addSongInPlaylist(songId, playlistId):
     if (playlist is None):  # playlist does not exist
         raise Exception("Playlist Does Not Exist")
 
-    song = Song.query.get(songId)
-    addSong = Playlist_Song(playlist,song)
-    commitToDatabase(addSong)
+    # check if song already exist
+    playlistSong = Playlist_Song.query.filter_by(playlistId=playlistId, songId=songId).first()
+
+    if(playlistSong is None):
+        song = Song.query.get(songId)
+        addSong = Playlist_Song(playlist,song)
+        commitToDatabase(addSong)
 
 def deleteSongInPlaylist(songId,playlistId):
     playlistSong = Playlist_Song.query.filter_by(playlistId=playlistId, songId=songId).first()
