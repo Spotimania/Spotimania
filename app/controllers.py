@@ -103,7 +103,7 @@ def deletePlaylist(playlistId):
     playlist = Playlist.query.get(playlistId)
     db.session.delete(playlist)
     db.session.commit()
-    
+
 
 def getPlaylistName(playlistId):
     playlist = Playlist.query.get(playlistId)
@@ -111,6 +111,9 @@ def getPlaylistName(playlistId):
 
 def addSongInPlaylist(songId, playlistId):
     playlist = Playlist.query.get(playlistId)
+    if (playlist is None):  # playlist does not exist
+        raise Exception("Playlist Does Not Exist")
+
     song = Song.query.get(songId)
     addSong = Playlist_Song(playlist,song)
     commitToDatabase(addSong)
@@ -135,8 +138,11 @@ def getSongDetails(songId):
     return song
 
 def addSongDetails(spotifySongID, prevURL, prevIMG, songName, artist, album):
-    if bool(Song.query.filter_by(spotifySongID=spotifySongID).first()):
-        return False
-    addSong = Song(spotifySongID, prevURL, prevIMG, songName, artist, album)
-    commitToDatabase(addSong)
-    return True
+    song =Song.query.filter_by(spotifySongID=spotifySongID).first()
+    if bool(song): # the song exist
+        return song
+
+    # The song does not exist
+    newSong = Song(spotifySongID, prevURL, prevIMG, songName, artist, album)
+    commitToDatabase(newSong)
+    return newSong

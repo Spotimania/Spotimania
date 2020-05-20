@@ -6,6 +6,7 @@ from app.forms import *
 from app.controllers import *
 from flask_login import current_user, login_user, logout_user
 from flask import jsonify
+
 def redirectToLastVisitedPage():
     next_page = request.args.get('next')
     print(next_page)
