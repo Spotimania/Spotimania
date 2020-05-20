@@ -108,6 +108,10 @@ def deletePlaylist(playlistId):
 def getAllPlaylists():
     return Playlist.query.all()
 
+def getPlaylist(playlistId):
+    playlist = Playlist.query.get(playlistId)
+    return playlist
+
 def getPlaylistName(playlistId):
     playlist = Playlist.query.get(playlistId)
     return playlist.name

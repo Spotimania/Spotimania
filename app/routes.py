@@ -18,7 +18,7 @@ def redirectToLastVisitedPage():
     return redirect(next_page)
 
 def redirectTo404():
-    redirect(url_for('404'))
+    return redirect(url_for('page404'),404)
 
 @app.route("/")
 @app.route("/home")
@@ -82,18 +82,14 @@ def registerAdmin():
             flash("Your Admin Key Is Wrong")
     return render_template("register.html", title="Register Admin", form=form)
 
-@app.route("/admin")
-def adminPage():
-        return render_template("admin.html", title="Admin Home")
-
-
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
 @app.errorhandler(404)
-def not_found(error):
+@app.route('/404')
+def page404(error=404):
     return render_template('404.html'), 404
 
 
@@ -104,15 +100,19 @@ def playlists():
     if (form.validate_on_submit()):
         playlistName = form.playlistName.data
         newPlaylist = createNewPlaylist(playlistName)
-        redirect(url_for('playlist',playlistId=newPlaylist.id))
+        return redirect(url_for('playlist',playlistId=newPlaylist.id))
 
     playlistsCollection = getAllPlaylists();
     return render_template('playlist.html', title='Songs', playlists = playlistsCollection, form=form)
 
 @app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
 def playlist(playlistId):
-    print(playlistId)
-    return playlistId
+    playlist = getPlaylist(playlistId)
+    if (playlist is None):
+        return redirectTo404()
+
+    songs = getSongsInPlaylist(playlistId)
+    return render_template("admin.html", title="Admin Home",playlist=playlist,songs=songs)
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
