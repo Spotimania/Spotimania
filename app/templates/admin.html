@@ -3,11 +3,31 @@
 {% block content %}
 
 <style>
-li {
-	margin: 5px;
-	display: flex;
-	justify-content: center;
-}
+	ul {
+		max-height: 80vh;
+		overflow: scroll;
+	}
+
+	li {
+		margin: 5px;
+		display: flex;
+		justify-content: center;
+	}
+
+	.searchResultHeading {
+		font-family: var(--Rubik);
+		font-size: 30px;
+		
+		width: 100%;
+		text-align: center;
+
+		margin: 0;
+		margin-bottom: 15px;
+	}
+
+	.searchResultDescription {
+
+	}
 </style>
 
 <div class="mainContent" style="background-position: bottom right;">
@@ -34,8 +54,9 @@ li {
             </div>
         </div>
         <div class="col-md-6">
-			<div class="innerContent" style="max-height: 80vh; overflow: scroll;">
-				<label class="inputLabel" style="text-align: center; margin: 0;">Search Results</label>
+			<div class="innerContent">
+				<h2 class="searchResultHeading">Search Results</h2>
+				<p class="searchResultDescription" id="SRDescription"></p>
 				<ul id="results">
 					
 				</ul>
