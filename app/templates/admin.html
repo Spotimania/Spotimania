@@ -1,33 +1,36 @@
-{% extends 'layout.html' %} {% block content %}
-<style type="text/css">
-	.artistname {
-		width: 50%;
-	}
-	.songname {
-		width: 50%;
-	}
-	input {
-		width: 50%;	
-		text-align: center;
-	}
-	form input {
-		width: 150px;
-	}
-</style>
-<form>
-	<legend>Search for an artist on Spotify</legend>
-	<input id="artist" type="text" name="enterArtist" placeholder="Enter Artist" />
-	<input  id="submitArtist" type="submit" value="Search"/>
-</form>
+{% extends 'layout.html' %}
 
-<form>
-	<legend>Search for a track on Spotify</legend>
-	<input id="track" type="text" name="enterSong" placeholder="Enter Song" />
-	<input  id="submitTrack" type="submit" value="Search"/>
-</form>
+{% block content %}
 
-<br>
-<ul id="results">
+<div class="mainContent" style="background-position: bottom right;">
+	<h1 class="sub-headline" style="font-size: 40px;">Search for Songs</h1>
+    <div class="row">
+        <div class="col-md-7">
+			<div class="innerContent" style="margin: 15px;">
+				<form>
+					<label class="inputLabel">Search Artists</label>
+					<input id="artist" type="text" name="enterArtist" placeholder="Enter Artist" class="inputGuess">
+					<br><br><br>
+					<input id="submitArtist" type="submit" value="Search" class="inputSubmit">
+				</form>
+			</div>
+			
 
-</ul>
+			<div class="innerContent" style="margin: 15px;">
+					<form>
+						<label class="inputLabel">Search Songs</label>
+						<input id="track" type="text" name="enterSong" placeholder="Enter Song Name or Artist" class="inputGuess">
+						<br><br><br>
+						<input id="submitTrack" type="submit" value="Search" class="inputSubmit">
+					</form>
+            </div>
+        </div>
+        <div class="col-md-5">
+			<ul id="results">
+
+			</ul>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
