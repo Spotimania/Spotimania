@@ -32,9 +32,9 @@ window.onload=function(){
 		success: function(data) {
 
 			for (i=0;i<data.artists.items.length;i++) {
-				document.getElementById('results').innerHTML+=("<li><button class='artistname' type='button'>"+(data.artists.items[i].name)+"</button></li>");
+				document.getElementById('results').innerHTML+=("<li><button class='inputSubmit' type='button'>"+(data.artists.items[i].name)+"</button></li>");
 			}
-			$('.artistname').click(function(event) {
+			$('.inputSubmit').click(function(event) {
 				document.getElementById('results').innerHTML=('')
 				var target = event.target || event.srcElement;
 				var name = target.innerHTML;
@@ -54,9 +54,9 @@ window.onload=function(){
   								},
   								success: function(data) {
   									for (i=0;i<data.tracks.length;i++) {
-  										document.getElementById('results').innerHTML+=("<li><input class='tracks' type='submit' value='"+(data.tracks[i].name)+"'></li>");
+  										document.getElementById('results').innerHTML+=("<li><button class='inputSubmit'>"+(data.tracks[i].name)+"</button></li>");
   									}
-  									$('.tracks').click(function(event) {
+  									$('.inputSubmit').click(function(event) {
   										var target = event.target || event.srcElement;
   										var name = target.value;
   										target.style.display='none';
@@ -128,9 +128,9 @@ window.onload=function(){
 			success: function(data) {
 				console.log(data)
 				for (i=0;i<data.tracks.items.length;i++) {
-					document.getElementById('results').innerHTML+=("<li><button class='songname' type='button'>"+(data.tracks.items[i].name)+"</button></li>");
+					document.getElementById('results').innerHTML+=("<li><button class='inputSubmit'>"+(data.tracks.items[i].name)+"</button></li>");
 				}
-				$('.songname').click(function(event) {
+				$('.inputSubmit').click(function(event) {
 					var target = event.target || event.srcElement;
 					var name = target.innerHTML;
 					target.style.display='none';

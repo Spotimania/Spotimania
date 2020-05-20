@@ -2,10 +2,18 @@
 
 {% block content %}
 
+<style>
+li {
+	margin: 5px;
+	display: flex;
+	justify-content: center;
+}
+</style>
+
 <div class="mainContent" style="background-position: bottom right;">
 	<h1 class="sub-headline" style="font-size: 40px;">Search for Songs</h1>
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-6">
 			<div class="innerContent">
 				<form>
 					<label class="inputLabel">Search Artists</label>
@@ -17,18 +25,21 @@
 			
 
 			<div class="innerContent">
-					<form>
-						<label class="inputLabel">Search Songs</label>
-						<input id="track" type="text" name="enterSong" placeholder="Enter Song Name or Artist" class="inputGuess">
-						<br><br><br>
-						<input id="submitTrack" type="submit" value="Search" class="inputSubmit">
-					</form>
+				<form>
+					<label class="inputLabel">Search Songs</label>
+					<input id="track" type="text" name="enterSong" placeholder="Enter Song Name or Artist" class="inputGuess">
+					<br><br><br>
+					<input id="submitTrack" type="submit" value="Search" class="inputSubmit">
+				</form>
             </div>
         </div>
-        <div class="col-md-5">
-			<ul id="results">
-
-			</ul>
+        <div class="col-md-6">
+			<div class="innerContent" style="max-height: 80vh; overflow: scroll;">
+				<label class="inputLabel" style="text-align: center; margin: 0;">Search Results</label>
+				<ul id="results">
+					
+				</ul>
+			</div>
         </div>
     </div>
 </div>
