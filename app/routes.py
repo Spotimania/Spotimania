@@ -17,6 +17,9 @@ def redirectToLastVisitedPage():
     print(next_page)
     return redirect(next_page)
 
+def redirectTo404():
+    redirect(url_for('404'))
+
 @app.route("/")
 @app.route("/home")
 @app.route("/index")
@@ -93,23 +96,23 @@ def logout():
 def not_found(error):
     return render_template('404.html'), 404
 
-@app.route('/playlist', methods=['GET', 'POST'])
-def addSong():
-    if request.method == 'POST':
-        data = request.get_json()
-        spotifySongID = data['spotifySongID']
-        prevURL = data['prevURL']
-        prevIMG = data['prevIMG']
-        songName = data['songName']
-        artist = data['artist']
-        album = data['album']
-        newSong = Song(songName=songName, spotifySongID=spotifySongID,prevURL=prevURL, prevIMG=prevIMG, artist=artist,album=album)
-        db.session.add(newSong)
-        db.session.commit()
-        return 'Added song!'
-    else:
-        results = Playlist.query.all()
-        return render_template('playlist.html', title='Songs', results=results)
+
+@app.route('/playlists', methods=['GET', 'POST'])
+def playlists():
+
+    form = CreateNewPlaylistForm()
+    if (form.validate_on_submit()):
+        playlistName = form.playlistName.data
+        newPlaylist = createNewPlaylist(playlistName)
+        redirect(url_for('playlist',playlistId=newPlaylist.id))
+
+    playlistsCollection = getAllPlaylists();
+    return render_template('playlist.html', title='Songs', playlists = playlistsCollection, form=form)
+
+@app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
+def playlist(playlistId):
+    print(playlistId)
+    return playlistId
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
@@ -120,6 +123,7 @@ def handle_data():
     db.session.commit()
     return 'success'
 
-@app.route('/quiz')
-def quiz():
+@app.route('/quiz/<playlistId>')
+def quiz(playlistId):
+    print(playlistId)
     return render_template("quiz.html", title="Quiz Page")

@@ -1,7 +1,7 @@
-from app import db
-from app import login
+from app import app, db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from datetime import datetime
 
 # Checking Types
 from sqlalchemy.orm.attributes import InstrumentedAttribute
@@ -27,6 +27,10 @@ class Base(db.Model):
         # filter out private attributes, functions and SQL_Alchemy references
         publicVars = {key: value for key, value in allVars.items() if not (key.startswith('_') or (isinstance(value, types.FunctionType)) or (isinstance(value,InstrumentedAttribute)))}
         return publicVars
+
+@app.template_filter("datetimeformat")
+def datetimeformat(value, format="%d %B, %Y %I:%M:%S %p"):
+    return value.strftime(format)
 
 
 class BaseAutoPrimary(Base):

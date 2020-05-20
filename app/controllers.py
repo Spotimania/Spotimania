@@ -97,6 +97,7 @@ def getResultsOfUser(userId):
 def createNewPlaylist(playlistName):
     playlist = Playlist(playlistName)
     commitToDatabase(playlist)
+    return playlist
 
 
 def deletePlaylist(playlistId):
@@ -104,6 +105,8 @@ def deletePlaylist(playlistId):
     db.session.delete(playlist)
     db.session.commit()
 
+def getAllPlaylists():
+    return Playlist.query.all()
 
 def getPlaylistName(playlistId):
     playlist = Playlist.query.get(playlistId)
