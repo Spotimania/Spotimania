@@ -18,13 +18,13 @@
 <section class="hero">
     <div class="container">
         <h2 class="sub-headline">
-            <span class="first-letter">W</span>elcome!
+            <span class="first-letter">W</span>elcome {{ current_user.username }} !
         </h2>
-        <h1 class="headline">{{ current_user.username }}</h1>
+        <h2 class="sub-headline">
+            
+        </h2>
         <div class="headline-description">
             <div class="single-animation">
-                <h5>Ready to Play?</h5>
-                <a href="#home-intro" class="btn cta-btn">Explore</a>
                 <a href="{{ url_for('playlists') }}" class="btn cta-btn">Start a Quiz</a>
             </div>
         </div>
@@ -35,7 +35,7 @@
 
 {% block content %}
 
-{if current_user.is_anonymous %}
+{% if current_user.is_anonymous %}
 <!---------- App Introduction ---------->
 <section class="home-intro" id="home-intro" style="padding: 0;">
 	<div class="intro-info">
@@ -58,5 +58,13 @@
 	</div>
 </section>
 {% else %}
+<section class="home-intro" id="home-intro" style="padding: 0;">
+	<div class="intro-info">
+		<div class="intro-description padding-right animate-left">
+			<div class="global-headline">
+				<h2 class="sub-headline dark"><span class="first-letter">E</span>njoy!</h2>
+			</div>
+	</div>
+</section>
 {% endif %}
 {% endblock %}
