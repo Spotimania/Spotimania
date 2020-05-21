@@ -1,18 +1,53 @@
 {% extends 'layout.html' %} {% block content %}
 
+<!-- ON OPEN MODAL -->
+<!-- Modal -->
+<div
+	class="modal fade"
+	data-keyboard="false"
+	data-backdrop="static"
+	id="joinModal"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="exampleModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">{{playlist.playlistName}}</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" id="joinModalContent">
+				<a class="btn" onclick="getJoinLink(this)">Copy Join Link</a>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" onclick="window.history.back();">Close</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="startTheGame(this)">Start The Game</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- No Hint or Image has been added. Does Spotify API provide such an image or we have to get it from somewhere else? -->
 <div id="toasts"></div>
 <div class="mainContent" style="background-position: bottom left;">
 	<div class="row">
 		<div class="col-md-5">
 			<h1 class="sub-headline" style="font-size: 40px;">Guess the Song...</h1>
-			<h3>{{playlist.playlistName}}</h3>
+			<img src="{{ url_for('static', filename='images/song-placeholder.jpg') }}" alt="" id="quizImage" />
+			<div id="countdown"></div>
 		</div>
 		<div class="col-md-7">
 			<div class="innerContent">
 				<div class="musicContent">
-					<audio controls>
-						<source src="https://p.scdn.co/mp3-preview/4901df6e0f8bf6ce93e08df7d98a50e220c45799?cid=b060111d7a074485871624166dbd16ce" />
+					<audio controls id="quizAudioPlayer" loop>
+						<source
+							src="https://p.scdn.co/mp3-preview/4901df6e0f8bf6ce93e08df7d98a50e220c45799?cid=b060111d7a074485871624166dbd16ce"
+							id="quizSong"
+						/>
 						Your browser does not support the audio element.
 					</audio>
 				</div>
@@ -25,6 +60,7 @@
 					<input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess" />
 					<br /><br /><br />
 					<input type="submit" class="btn inputSubmit" />
+					<button class="btn" onclick="showImageHint(this)">Hint</button>
 				</fieldset>
 			</div>
 		</div>

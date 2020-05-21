@@ -1,7 +1,7 @@
 from app.controllers import *
 from app import socketio
 from flask import render_template, session, request, \
-    copy_current_request_context
+    copy_current_request_context, jsonify,json
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
 
@@ -31,7 +31,7 @@ def connectFirstTime(message):
         session["playerRooms"][message['room']].append(message['userId'])
     else:
         session["playerRooms"][message['room']] = [message['userId']]
-        session["roomPlaylist"][message['room']]=[[message['playlistId']]]
+        session["roomPlaylist"][message['room']]= message['playlistId']
 
     # RESET USER SCORE
     session["scores"]["playerId"] = 0
@@ -40,11 +40,29 @@ def connectFirstTime(message):
     join_room(message['room'])
     emit('onUserJoin',{'username': message['username']},room=message['room'])
 
-@socketio.on('join', namespace='/sockets')
-def join(message):
-    join_room(message['room'])
-    emit('my_response',
-         {'data': 'In rooms: ' + ', '.join(rooms())})
+@socketio.on('startGame', namespace='/sockets')
+def startGame(message):
+    room = message["room"]
+    playlistId = session["roomPlaylist"][room]
+
+    session["songs"] = {}
+    session["songsFiltered"] = {}
+    session["songs"][room] = getSongsInPlaylist(playlistId)
+    session["songsFiltered"][room] = getSongsInPlaylist(playlistId)
+    session["currentSongIndex"] = {}
+    session["currentSongIndex"][room] = 1
+
+    for song in session["songsFiltered"][room]:
+        del song["songName"]
+        del song["artist"]
+        del song["date_created"]
+        del song["date_modified"]
+        del song["spotifySongID"]
+    jsonDump = json.dumps(session["songsFiltered"][room])
+    print(jsonDump)
+    print(jsonify(jsonDump))
+    emit('receivesSongData',session["songsFiltered"][room][0],room=message['room'])
+
 
 @socketio.on('leave', namespace='/sockets')
 def leave(message):
