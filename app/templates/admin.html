@@ -1,33 +1,83 @@
 {% extends 'layout.html' %} {% block content %}
-<style type="text/css">
-	.artistname {
-		width: 50%;
+
+<style>
+	ul {
+		max-height: 80vh;
+		overflow: scroll;
 	}
-	.songname {
-		width: 50%;
+
+	li {
+		margin: 5px;
+		display: flex;
+		justify-content: center;
 	}
-	input {
-		width: 50%;	
+
+	.searchResultHeading {
+		font-family: var(--Rubik);
+		font-size: 30px;
+
+		width: 100%;
 		text-align: center;
+
+		margin: 0;
+		margin-bottom: 15px;
 	}
-	form input {
-		width: 150px;
+
+	.searchResultDescription {
 	}
 </style>
-<form>
-	<legend>Search for an artist on Spotify</legend>
-	<input id="artist" type="text" name="enterArtist" placeholder="Enter Artist" />
-	<input  id="submitArtist" type="submit" value="Search"/>
-</form>
 
-<form>
-	<legend>Search for a track on Spotify</legend>
-	<input id="track" type="text" name="enterSong" placeholder="Enter Song" />
-	<input  id="submitTrack" type="submit" value="Search"/>
-</form>
+<div class="mainContent" style="background-position: bottom right;">
+	<h1 class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="innerContent">
+				<form>
+					<label class="inputLabel">Search</label>
+					<div class="input-group-prepend">
+						<label class="input-group-text" for="inputGroupSelect01">Options</label>
+					</div>
+					<select class="custom-select" id="searchOption" name="searchOption">
+						<option value="artist" selected>Artist</option>
+						<option value="track">Track</option>
+					</select>
 
-<br>
-<ul id="results">
+					<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
+					<br /><br /><br />
+					<button type="button" onclick="searchSong(this)" id="submitSongSearch" class="inputSubmit">Search</button>
+				</form>
+			</div>
+			<div class="innerContent">
+				<h2 class="searchResultHeading">Search Results</h2>
+				<p class="searchResultDescription" id="SRDescription"></p>
+				<ul id="results"></ul>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="innerContent">
+				<label class="inputLabel">Currently In The List</label>
+				{% for song in songs %}
+				<div>
+					<div class="avatar-root">
+						<img class="avatar" src="{{song['prevIMG']}}" alt="" />
+					</div>
+					<p>{{song["songName"]}}</p>
+					<p>{{song["artist"]}}</p>
+					<audio controls>
+						<source src="{{song['prevURL']}}" />
+						Your browser does not support the audio element.
+					</audio>
+				</div>
+				<a id="{{song['id']}}" onclick="deleteSong(this,'{{playlist.id}}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
 
-</ul>
+<script>
+	sessionStorage.setItem('playlistId', '{{playlist.id}}');
+	console.log('SESION SAVED');
+</script>
+
 {% endblock %}
