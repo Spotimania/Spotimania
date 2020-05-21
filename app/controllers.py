@@ -8,7 +8,7 @@ def commitToDatabase(item):
     db.session.add(item)
     db.session.commit()
 
-def removeFromDatabase(item):
+def commitDelete(item):
     db.session.delete(item)
     db.session.commit()
 
@@ -51,7 +51,7 @@ def isEmailTaken(email):
 def deleteUser(username):
     user = User.query.filter_by(username=username.strip()).first()
     if user:
-        removeFromDatabase(user)
+        commitDelete(user)
 
 
 def doesThisMatch(string1, string2):
@@ -157,3 +157,14 @@ def addSongDetails(spotifySongID, prevURL, prevIMG, songName, artist, album):
     newSong = Song(spotifySongID, prevURL, prevIMG, songName, artist, album)
     commitToDatabase(newSong)
     return newSong
+
+
+# Deletes a Results for a Specific User result
+def deleteResults(resultsId):
+    results = Results.query.get(resultsId)
+    individualResultsCollection = results.resultsIndividual
+
+    for IndividualResults in individualResultsCollection:
+        commitDelete(IndividualResults)
+
+    commitDelete(results)
