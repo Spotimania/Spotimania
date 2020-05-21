@@ -1,165 +1,98 @@
 var accessToken;
 
-
 //Gets the spotify access token
 $.ajax({
-	url: "https://spotify-token-authenticator.frinzelapuz.now.sh/api/token",
+	url: 'https://spotify-token-authenticator.frinzelapuz.now.sh/api/token',
 	type: 'GET',
-	        dataType: 'json', // added data type
-	        success: function(data) {
-	        	console.log(data.accessToken);
-	        	accessToken = data.accessToken;
-	        }
-	    });
-
-
-
-//search by artist name
-window.onload=function(){
-	var el = document.getElementById('submitArtist');
-	if (el){
-		document.querySelector("#submitArtist").addEventListener("click", function(event) {
-			document.getElementById('results').innerHTML=('')
-			event.preventDefault();
-	//ajax call to get data for artist
-	$.ajax({
-		url: "https://api.spotify.com/v1/search?q=" + $('#artist').val() + '&type=artist',
-		type: 'GET',
-		contentType: 'application/json',
-		headers: {
-			"Authorization": "Bearer " + accessToken
-		},
-		success: function(data) {
-
-			for (i=0;i<data.artists.items.length;i++) {
-				document.getElementById('results').innerHTML+=("<li><button class='inputSubmit' type='button'>"+(data.artists.items[i].name)+"</button></li>");
-			}
-			$('.inputSubmit').click(function(event) {
-				document.getElementById('results').innerHTML=('')
-				var target = event.target || event.srcElement;
-				var name = target.innerHTML;
-
-				for (i=0;i<data.artists.items.length;i++) {
-
-					if (name == data.artists.items[i].name) {
-						console.log(data.artists.items[i].id);
-						id = data.artists.items[i].id;
-  							//ajax call to get top 10 tracks for artist
-  							$.ajax({
-  								url: "https://api.spotify.com/v1/artists/" + id + "/top-tracks?country=AU",
-  								type: "GET",
-  								contentType: "application/json",
-  								headers: {
-  									"Authorization": "Bearer " + accessToken
-  								},
-  								success: function(data) {
-  									for (i=0;i<data.tracks.length;i++) {
-  										document.getElementById('results').innerHTML+=("<li><button class='inputSubmit'>"+(data.tracks[i].name)+"</button></li>");
-  									}
-  									$('.inputSubmit').click(function(event) {
-  										var target = event.target || event.srcElement;
-  										var name = target.value;
-  										target.style.display='none';
-  										for (i=0;i<data.tracks.length;i++) {
-
-  											if (name == data.tracks[i].name) {
-  											//ajax call to get data for specific track
-  											$.ajax({
-  												url: "https://api.spotify.com/v1/tracks/" + data.tracks[i].id + "?market=au",
-  												type: "GET",
-  												contentType: "application/json",
-  												headers: {
-  													"Authorization": "Bearer " + accessToken
-  												},
-  												success: function(data) {
-  													console.log(data);
-					                 				//ajax call to post track data
-					                 				$.ajax({
-					                 					url: "/playlist",
-					                 					type: "POST",
-					                 					contentType: "application/json",
-					                 					dataType: 'json',
-					                 					data: JSON.stringify({
-					                 						spotifySongID: data.id,
-					                 						prevURL: data.preview_url,
-					                 						prevIMG: data.album.images[0].url,
-					                 						songName: data.name,
-					                 						artist: data.album.artists[0].name,
-					                 						album: data.album.name,
-					                 					})
-
-					                 				});
-					                 			}
-					                 		});
-  										}
-  									}
-  								});
-
-  									console.log(data);
-
-  								}
-  							});
-
-  						}
-  						
-  					}
-  				});
-
-		}
-
-	});
+	dataType: 'json', // added data type
+	success: function (data) {
+		console.log(data.accessToken);
+		accessToken = data.accessToken;
+	},
 });
+
+const sameOriginAPI = (
+	endpoint = '',
+	body = {},
+	method = 'POST',
+	headers = {
+		'Content-Type': 'application/json',
 	}
+) => {
+	return fetch(`/api/${endpoint}`, { headers, method, body: JSON.stringify(body) });
+};
 
-//search by track name
-	var el = document.getElementById('submitTrack');
-	if (el){
-		document.querySelector("#submitTrack").addEventListener("click", function(event) {
-			document.getElementById('results').innerHTML=('')
-			event.preventDefault();
-		
-		$.ajax({
-			url: "https://api.spotify.com/v1/search?q=" + $('#track').val() + '&type=track',
-			type: 'GET',
-			contentType: 'application/json',
-			headers: {
-				"Authorization": "Bearer " + accessToken
-			},
-			success: function(data) {
-				console.log(data)
-				for (i=0;i<data.tracks.items.length;i++) {
-					document.getElementById('results').innerHTML+=("<li><button class='inputSubmit'>"+(data.tracks.items[i].name)+"</button></li>");
-				}
-				$('.inputSubmit').click(function(event) {
-					var target = event.target || event.srcElement;
-					var name = target.innerHTML;
-					target.style.display='none';
-					console.log(name);
-					for (i=0;i<data.tracks.items.length;i++){
-  						//ajax call to get data for specific track
-  						if (name == data.tracks.items[i].name) {
-  							$.ajax({
-  								url: "/playlist",
-  								type: "POST",
-  								contentType: "application/json",
-  								dataType: 'json',
-  								data: JSON.stringify({
-  									songID: data.tracks.items[i].id,
-  									artist: data.tracks.items[i].album.artists[0].name,
-  									songName: data.tracks.items[i].name,
-  									prevIMG: data.tracks.items[i].album.images[0].url,
-  									prevURL: data.tracks.items[i].preview_url,
-  									album: data.tracks.items[i].album.name,
-  										})
-
-  									});
-  							}
-  						}
-  					});
-				}
-			});
-		})
+const spotifyFetchAPI = (
+	query = '',
+	method = 'GET',
+	headers = {
+		Accept: 'application/json',
+		'Content-Type': 'application/json',
+		Authorization: 'Bearer ' + accessToken,
 	}
-}
+) => {
+	return fetch(`https://api.spotify.com/v1/${query}`, { headers, method });
+};
 
+const deleteSong = async (e, playlistId) => {
+	try {
+		sameOriginAPI(`playlist/${playlistId}/${e.id}`, (body = {}), (method = 'DELETE'));
+		console.log('Successfully Deleted');
+	} catch (err) {
+		console.log(err);
+	}
+};
 
+const searchSong = async (e) => {
+	document.getElementById('results').innerHTML = '';
+	const searchOption = $('#searchOption').val();
+	const searchInput = $('#searchInput').val();
+
+	const responseData = await (await spotifyFetchAPI(`search?q=${searchInput}&type=${searchOption}`)).json();
+	console.log(responseData);
+	if (searchOption === 'artist') {
+		responseData.artists.items.forEach((item) => {
+			document.getElementById(
+				'results'
+			).innerHTML += `<li><button class='inputSubmit' type='button' onclick="onClickNavigateArtist('${item.id}')">${item.name}</button></li>`;
+		});
+	} else if (searchOption === 'track') {
+		responseData.tracks.items.forEach((track) => {
+			document.getElementById(
+				'results'
+			).innerHTML += `<li><button class='inputSubmit' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
+		});
+	}
+};
+
+const onClickNavigateArtist = async (id) => {
+	document.getElementById('results').innerHTML = '';
+	const responseData = await (await spotifyFetchAPI(`artists/${id}/top-tracks?country=AU`)).json();
+	console.log(responseData);
+	responseData.tracks.forEach((track) => {
+		document.getElementById(
+			'results'
+		).innerHTML += `<li><button class='inputSubmit' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
+	});
+};
+
+const onClickTrack = async (id) => {
+	const data = await (await spotifyFetchAPI(`tracks/${id}?market=au`)).json();
+	console.log(data);
+
+	const playlistId = sessionStorage.getItem('playlistId');
+	const payload = {
+		spotifySongID: data.id,
+		prevURL: data.preview_url,
+		prevIMG: data.album.images[0].url,
+		songName: data.name,
+		artist: data.album.artists[0].name,
+		album: data.album.name,
+	};
+	try {
+		sameOriginAPI(`playlist/${playlistId}`, payload);
+		console.log('SUCCESS');
+	} catch (err) {
+		console.log(err);
+	}
+};

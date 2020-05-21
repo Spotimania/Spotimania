@@ -9,11 +9,13 @@ def test():
 @api.route("/playlist/<playlistId>", methods=['POST'])
 def routeAddSongsInPlaylist(playlistId):
     try:
-        body = request.get_json()
-        song = addSongDetails(body["songID"], body["prevURL"], body["prevIMG"], body["songName"], body["artist"], body["album"])
+        print(request.data)
+        body = request.get_json(force=True)
+        print(body)
+        song = addSongDetails(body["spotifySongID"], body["prevURL"], body["prevIMG"], body["songName"], body["artist"], body["album"])
         addSongInPlaylist(song.id,playlistId)
         return ({"message": "Success!"})
-    except:
+    except Exception as err:
         abort(Response("Something Went Wrong"))
 
 
@@ -22,5 +24,5 @@ def routeDeleteSongsInPlaylist(playlistId, songId):
     try:
         deleteSongInPlaylist(songId, playlistId)
         return ({"message": "Success!"})
-    except:
+    except Exception as err:
         abort(Response("Something Went Wrong"))

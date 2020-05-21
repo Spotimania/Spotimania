@@ -3,11 +3,11 @@
 <script language="JavaScript">
 	//checkbox to check all boxes
 	function toggle(source) {
-	  checkboxes = document.getElementsByName('songName');
-	  for(var i=0, n=checkboxes.length;i<n;i++) {
-	    checkboxes[i].checked = source.checked;
-	  }
-}
+		checkboxes = document.getElementsByName('songName');
+		for (var i = 0, n = checkboxes.length; i < n; i++) {
+			checkboxes[i].checked = source.checked;
+		}
+	}
 </script>
 <!--Style table-->
 <style type="text/css">
@@ -15,51 +15,87 @@
 		background-color: black;
 		color: white;
 	}
-	td, th {
+
+	td,
+	th {
 		text-align: center;
-		
-	}
-	tr:nth-child(even) {
-  		background-color: #dddddd;
 	}
 
-	div.playlistTable	{
+	tr:nth-child(even) {
+		background-color: #dddddd;
+	}
+
+	div.playlistTable {
 		overflow: auto;
 	}
 </style>
 <h1>Playlist</h1>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+	Create A New Playlist
+</button>
 
-<div class='playlistTable'>
-<table style="width: 100%;">
-	<tr>
-		<th ><input type="checkbox" name='selectAll' onClick="toggle(this)"/></th>
-	    <th></th>
-	    <th>Song Name</th>
-	    <th>Song ID</th> 
-	    <th>Preview URL</th> 
-	    <th>Preview IMG</th> 
-	    <th>Artist</th> 
-	    <th>Album</th> 
-    <tr>
-	<form id="songForm" action = "/handle_data" method = "POST" onsubmit="setTimeout(function () { window.location.reload(); }, 20)">
-	 <input type="submit" value="Delete"><br><br>
-    {% for r in results %}
-    <tr>
-	    <td><input type="checkbox" name="songName" value='{{ r.songName }}'></td>
-	    <td></td>
-	    <td><label for="songName">{{ r.songName }}</label></td>
-	    <td> {{ r.songID }}</td>
-	    <td> <a href='{{ r.prevURL }}'>Sample</a></td>
-	    <td> <a href='{{ r.prevIMG }}'>Image</a></td>
-	    <td> {{ r.artist }}</td>
-	    <td> {{ r.album }}</td>
-	  	
-	    
-    </tr>
-    
-    {% endfor %}
-    </form>
-</table>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Create New Playlist</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form name="login" action="" method="POST">
+			{{form.hidden_tag()}}
+			<div class="modal-body">
+
+
+				<div class="form-group">
+					{{form.playlistName.label(class="inputLabel")}}<br />
+					{{form.playlistName(size=30, class="inputGuess")}} <br />
+					{% for error in form.playlistName.errors%}
+					<span class="error-message">{{error}}</span>
+					{% endfor %}
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				{{form.submit(class="inputSubmit")}}
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="playlistTable">
+	<table style="width: 100%;">
+		<tr>
+			<th>Playlist Id</th>
+			<th>Playlist Name</th>
+			<th>Date Created</th>
+			<th>Date Last Modified</th>
+			<th></th>
+		</tr>
+
+		<tr>
+			{% for playlist in playlists %}
+		<tr>
+			<td>{{ playlist.id }}</th>
+			<td>{{ playlist.playlistName }}</th>
+			<td>{{ playlist.date_created|datetimeformat  }}</th>
+			<td>{{ playlist.date_modified|datetimeformat }}</th>
+			<td>
+				{% if current_user.is_admin %}
+				<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}">Edit</a>
+				{% endif %}
+
+				<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}">Play</a></th>
+		</tr>
+
+		{% endfor %}
+		</tr>
+	</table>
 </div>
 
 {% endblock %}

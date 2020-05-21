@@ -1,6 +1,4 @@
-{% extends 'layout.html' %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block content %}
 
 <style>
 	ul {
@@ -17,7 +15,7 @@
 	.searchResultHeading {
 		font-family: var(--Rubik);
 		font-size: 30px;
-		
+
 		width: 100%;
 		text-align: center;
 
@@ -26,43 +24,60 @@
 	}
 
 	.searchResultDescription {
-
 	}
 </style>
 
 <div class="mainContent" style="background-position: bottom right;">
-	<h1 class="sub-headline" style="font-size: 40px;">Search for Songs</h1>
-    <div class="row">
-        <div class="col-md-6">
+	<h1 class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
+	<div class="row">
+		<div class="col-md-6">
 			<div class="innerContent">
 				<form>
-					<label class="inputLabel">Search Artists</label>
-					<input id="artist" type="text" name="enterArtist" placeholder="Enter Artist" class="inputGuess">
-					<br><br><br>
-					<input id="submitArtist" type="submit" value="Search" class="inputSubmit">
+					<label class="inputLabel">Search</label>
+					<div class="input-group-prepend">
+						<label class="input-group-text" for="inputGroupSelect01">Options</label>
+					</div>
+					<select class="custom-select" id="searchOption" name="searchOption">
+						<option value="artist" selected>Artist</option>
+						<option value="track">Track</option>
+					</select>
+
+					<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
+					<br /><br /><br />
+					<button type="button" onclick="searchSong(this)" id="submitSongSearch" class="inputSubmit">Search</button>
 				</form>
 			</div>
-			
-
-			<div class="innerContent">
-				<form>
-					<label class="inputLabel">Search Songs</label>
-					<input id="track" type="text" name="enterSong" placeholder="Enter Song Name or Artist" class="inputGuess">
-					<br><br><br>
-					<input id="submitTrack" type="submit" value="Search" class="inputSubmit">
-				</form>
-            </div>
-        </div>
-        <div class="col-md-6">
 			<div class="innerContent">
 				<h2 class="searchResultHeading">Search Results</h2>
 				<p class="searchResultDescription" id="SRDescription"></p>
-				<ul id="results">
-					
-				</ul>
+				<ul id="results"></ul>
 			</div>
-        </div>
-    </div>
+		</div>
+		<div class="col-md-6">
+			<div class="innerContent">
+				<label class="inputLabel">Currently In The List</label>
+				{% for song in songs %}
+				<div>
+					<div class="avatar-root">
+						<img class="avatar" src="{{song['prevIMG']}}" alt="" />
+					</div>
+					<p>{{song["songName"]}}</p>
+					<p>{{song["artist"]}}</p>
+					<audio controls>
+						<source src="{{song['prevURL']}}" />
+						Your browser does not support the audio element.
+					</audio>
+				</div>
+				<a id="{{song['id']}}" onclick="deleteSong(this,'{{playlist.id}}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 </div>
+
+<script>
+	sessionStorage.setItem('playlistId', '{{playlist.id}}');
+	console.log('SESION SAVED');
+</script>
 
 {% endblock %}

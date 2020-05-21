@@ -1,22 +1,18 @@
-{% extends 'layout.html' %}
-
-{% block home %}
+{% extends 'layout.html' %} {% block home %}
 <!---------- Hero Image & Headlines ---------->
 {% if current_user.is_anonymous %}
 <section class="hero">
-    <div class="container">
-        <h2 class="sub-headline">
-            <span class="first-letter">S</span>potimania!
-        </h2>
-        <h1 class="headline">Spotify Music Quiz</h1>
-        <div class="headline-description">
-            <div class="single-animation">
-                <h5>CITS3403</h5>
-                <a href="#home-intro" class="btn cta-btn">Explore</a>
-                <a href="{{ url_for('quiz') }}" class="btn cta-btn">Start a Quiz</a>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<h2 class="sub-headline"><span class="first-letter">S</span>potimania!</h2>
+		<h1 class="headline">Spotify Music Quiz</h1>
+		<div class="headline-description">
+			<div class="single-animation">
+				<h5>CITS3403</h5>
+				<a href="#home-intro" class="btn cta-btn">Explore</a>
+				<a href="{{ url_for('playlists') }}" class="btn cta-btn">Start a Quiz</a>
+			</div>
+		</div>
+	</div>
 </section>
 {% else %}
 <section class="hero">
@@ -40,30 +36,24 @@
 {% block content %}
 <!---------- App Introduction ---------->
 <section class="home-intro" id="home-intro" style="padding: 0;">
-    <div class="intro-info">
-        <div class="intro-description padding-right animate-left">
-            <div class="global-headline">
-                <h2 class="sub-headline dark">
-                    <span class="first-letter">W</span>elcome
-                </h2>
-                <h1 class="headline headline-dark">to Spotimania!</h1>
-            </div>
-            <p>
-                Hello! This application tests your knowledge on
-                how well you really know your music. At first you will be required to
-                create an account, where then you will be able to partake in the Quiz
-                with short demo clips obtained from the Spotify API. You will then
-                answer a variety of questions based on those clips, and will be able to
-                see how well you did in the results section. This app can be navigated
-                using the navgation bar above, if you have not yet created an account,
-                click on the button below to get started!
-            </p>
-            <a href="{{ url_for('register') }}" class="btn body-btn">Get Registered</a>
-        </div>
-        <div class="intro-image">
-            <img src="{{ url_for('static', filename='images/spotify.gif') }}" alt="Spotify GIF">
-        </div>
-    </div>
+	<div class="intro-info">
+		<div class="intro-description padding-right animate-left">
+			<div class="global-headline">
+				<h2 class="sub-headline dark"><span class="first-letter">W</span>elcome</h2>
+				<h1 class="headline headline-dark">to Spotimania!</h1>
+			</div>
+			<p>
+				Hello! This application tests your knowledge on how well you really know your music. At first you will be required to create an
+				account, where then you will be able to partake in the Quiz with short demo clips obtained from the Spotify API. You will then
+				answer a variety of questions based on those clips, and will be able to see how well you did in the results section. This app can be
+				navigated using the navgation bar above, if you have not yet created an account, click on the button below to get started!
+			</p>
+			<a href="{{ url_for('register') }}" class="btn body-btn">Get Registered</a>
+		</div>
+		<div class="intro-image">
+			<img src="{{ url_for('static', filename='images/spotify.gif') }}" alt="Spotify GIF" />
+		</div>
+	</div>
 </section>
 
 {% endblock %}
