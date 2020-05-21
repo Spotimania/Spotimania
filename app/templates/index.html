@@ -1,5 +1,6 @@
 {% extends 'layout.html' %} {% block home %}
 <!---------- Hero Image & Headlines ---------->
+{% if current_user.is_anonymous %}
 <section class="hero">
 	<div class="container">
 		<h2 class="sub-headline"><span class="first-letter">S</span>potimania!</h2>
@@ -13,7 +14,26 @@
 		</div>
 	</div>
 </section>
-{% endblock %} {% block content %}
+{% else %}
+<section class="hero">
+    <div class="container">
+        <h2 class="sub-headline">
+            <span class="first-letter">W</span>elcome!
+        </h2>
+        <h1 class="headline">{{ current_user.username }}</h1>
+        <div class="headline-description">
+            <div class="single-animation">
+                <h5>Ready to Play?</h5>
+                <a href="#home-intro" class="btn cta-btn">Explore</a>
+                <a href="{{ url_for('quiz') }}" class="btn cta-btn">Start a Quiz</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block content %}
 <!---------- App Introduction ---------->
 <section class="home-intro" id="home-intro" style="padding: 0;">
 	<div class="intro-info">
