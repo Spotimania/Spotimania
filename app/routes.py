@@ -123,3 +123,7 @@ def handle_data():
 @app.route('/quiz')
 def quiz():
     return render_template("quiz.html", title="Quiz Page")
+
+@app.route('/results')
+def results():
+    return render_template("results.html", title="Results")

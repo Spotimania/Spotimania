@@ -19,6 +19,7 @@
 </section>
 {% endblock %}
 
+{% if current_user.is_anonymous %}
 {% block content %}
 <!---------- App Introduction ---------->
 <section class="home-intro" id="home-intro" style="padding: 0;">
@@ -47,5 +48,6 @@
         </div>
     </div>
 </section>
-
 {% endblock %}
+{% else %}
+{% endif %}
