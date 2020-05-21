@@ -86,7 +86,7 @@
 			<td>{{ playlist.date_created|datetimeformat  }}</th>
 			<td>{{ playlist.date_modified|datetimeformat }}</th>
 			<td>
-				{% if current_user.is_admin %}
+				{% if current_user.is_admin() %}
 				<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}">Edit</a>
 				{% endif %}
 
