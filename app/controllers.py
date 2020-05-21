@@ -61,6 +61,11 @@ def doesThisMatch(string1, string2):
 
 
 # Results Controllers
+def editPlaylistName(playlistId, playlistName):
+    playlist = Playlist.query.filter_by(playlistId=playlistId).first()
+    playlist.playlistName = playlistName
+    db.session.commit()
+    return 'success'
 
 def getResultsOfUser(userId):
     collection = []
@@ -86,3 +91,62 @@ def getResultsOfUser(userId):
         collection.append(hashMap)
 
     return collection
+
+# Playlist and Playlist/Song Controllers
+
+def createNewPlaylist(playlistName):
+    playlist = Playlist(playlistName)
+    commitToDatabase(playlist)
+
+
+def deletePlaylist(playlistId):
+    playlist = Playlist.query.get(playlistId)
+    db.session.delete(playlist)
+    db.session.commit()
+
+
+def getPlaylistName(playlistId):
+    playlist = Playlist.query.get(playlistId)
+    return playlist.name
+
+def addSongInPlaylist(songId, playlistId):
+    playlist = Playlist.query.get(playlistId)
+    if (playlist is None):  # playlist does not exist
+        raise Exception("Playlist Does Not Exist")
+
+    # check if song already exist
+    playlistSong = Playlist_Song.query.filter_by(playlistId=playlistId, songId=songId).first()
+
+    if(playlistSong is None):
+        song = Song.query.get(songId)
+        addSong = Playlist_Song(playlist,song)
+        commitToDatabase(addSong)
+
+def deleteSongInPlaylist(songId,playlistId):
+    playlistSong = Playlist_Song.query.filter_by(playlistId=playlistId, songId=songId).first()
+    db.session.delete(playlistSong)
+    db.session.commit()
+
+def getSongsInPlaylist(playlistId):
+    songs = []
+    playlistSongCollection = Playlist.query.get(playlistId).playlistInSong
+
+    for playlistSong in playlistSongCollection:
+        song = playlistSong.song.to_dict()
+        songs.append(song)
+
+    return songs
+
+def getSongDetails(songId):
+    song = Song.query.get(songId)
+    return song
+
+def addSongDetails(spotifySongID, prevURL, prevIMG, songName, artist, album):
+    song =Song.query.filter_by(spotifySongID=spotifySongID).first()
+    if bool(song): # the song exist
+        return song
+
+    # The song does not exist
+    newSong = Song(spotifySongID, prevURL, prevIMG, songName, artist, album)
+    commitToDatabase(newSong)
+    return newSong

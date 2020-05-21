@@ -5,8 +5,8 @@ from werkzeug.urls import url_parse
 from app.forms import *
 from app.controllers import *
 from flask_login import current_user, login_user, logout_user
-from app.models import Playlist
 from flask import jsonify
+
 def redirectToLastVisitedPage():
     next_page = request.args.get('next')
     print(next_page)
@@ -97,13 +97,13 @@ def not_found(error):
 def addSong():
     if request.method == 'POST':
         data = request.get_json()
-        songName = data['songName']
-        songID = data['songID']
+        spotifySongID = data['spotifySongID']
         prevURL = data['prevURL']
         prevIMG = data['prevIMG']
+        songName = data['songName']
         artist = data['artist']
         album = data['album']
-        newSong = Playlist(songName=songName, songID=songID,prevURL=prevURL, prevIMG=prevIMG, artist=artist,album=album)
+        newSong = Song(songName=songName, spotifySongID=spotifySongID,prevURL=prevURL, prevIMG=prevIMG, artist=artist,album=album)
         db.session.add(newSong)
         db.session.commit()
         return 'Added song!'
@@ -114,7 +114,7 @@ def addSong():
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
     i = request.form.getlist('songName')
-    for r in db.session.query(Playlist).filter(Playlist.songName.in_(i)):
+    for r in db.session.query(Song).filter(Song.songName.in_(i)):
         db.session.delete(r)
 
     db.session.commit()

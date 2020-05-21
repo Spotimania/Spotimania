@@ -64,6 +64,12 @@ class User(UserMixin, BaseAutoPrimary):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def is_admin(self):
+        try:
+            return self.role.name == "Administrator"
+        except:
+            return False
+
     # New instance instantiation procedure
     def __init__(self, username, email, password, role=None):
         self.username = username
