@@ -1,35 +1,34 @@
-{% extends 'layout.html' %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block content %}
 
 <!-- No Hint or Image has been added. Does Spotify API provide such an image or we have to get it from somewhere else? -->
-
+<div id="toasts"></div>
 <div class="mainContent" style="background-position: bottom left;">
-    <div class="row">
-        <div class="col-md-5">
-            <h1 class="sub-headline" style="font-size: 40px;">Guess the Song...</h1>
-        </div>
-        <div class="col-md-7">
-            <div class="innerContent">
-                <div class="musicContent">
-                    <audio controls>
-                        <source src="https://p.scdn.co/mp3-preview/4901df6e0f8bf6ce93e08df7d98a50e220c45799?cid=b060111d7a074485871624166dbd16ce">
-                    Your browser does not support the audio element.
-                    </audio>
-                </div>
-                <br><br>
-                <fieldset>
-                    <label class="inputLabel">What song is it?</label>
-                    <input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess">
-                    <br><br>
-                    <label class="inputLabel">Who is the artist?</label>
-                    <input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess">
-                    <br><br><br>
-                    <input type="submit" class="btn inputSubmit">
-                </fieldset>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-md-5">
+			<h1 class="sub-headline" style="font-size: 40px;">Guess the Song...</h1>
+			<h3>{{playlist.playlistName}}</h3>
+		</div>
+		<div class="col-md-7">
+			<div class="innerContent">
+				<div class="musicContent">
+					<audio controls>
+						<source src="https://p.scdn.co/mp3-preview/4901df6e0f8bf6ce93e08df7d98a50e220c45799?cid=b060111d7a074485871624166dbd16ce" />
+						Your browser does not support the audio element.
+					</audio>
+				</div>
+				<br /><br />
+				<fieldset>
+					<label class="inputLabel">What song is it?</label>
+					<input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess" />
+					<br /><br />
+					<label class="inputLabel">Who is the artist?</label>
+					<input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess" />
+					<br /><br /><br />
+					<input type="submit" class="btn inputSubmit" />
+				</fieldset>
+			</div>
+		</div>
+	</div>
 </div>
 
 {% endblock %}

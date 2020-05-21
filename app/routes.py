@@ -6,6 +6,7 @@ from app.forms import *
 from app.controllers import *
 from flask_login import current_user, login_user, logout_user
 from flask import jsonify
+from app import socketio
 
 def redirectToLastVisitedPage():
     next_page = request.args.get('next')
@@ -123,7 +124,11 @@ def handle_data():
     db.session.commit()
     return 'success'
 
+#SOCKET PAGES
 @app.route('/quiz/<playlistId>')
 def quiz(playlistId):
-    print(playlistId)
-    return render_template("quiz.html", title="Quiz Page")
+    songs = getSongsInPlaylist(playlistId)
+    playlist = Playlist.query.get(playlistId)
+    return render_template("quiz.html", title="Quiz Page", async_mode=socketio.async_mode, sockets=True, playlist=playlist, songs=songs)
+
+# Connect SOCKETS
