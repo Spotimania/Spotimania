@@ -34,6 +34,8 @@
 {% endblock %}
 
 {% block content %}
+
+{if current_user.is_anonymous %}
 <!---------- App Introduction ---------->
 <section class="home-intro" id="home-intro" style="padding: 0;">
 	<div class="intro-info">
@@ -55,5 +57,6 @@
 		</div>
 	</div>
 </section>
-
+{% else %}
+{% endfor %}
 {% endblock %}
