@@ -6,9 +6,15 @@
 				<i class="fas fa-times"></i>
 			</div>
 			<ul class="nav-list">
-				<li class="nav-item">
+                {% if current_user.is_anonymous %}
+                <li class="nav-item">
 					<a href="{{ url_for('index') }}" class="nav-link">Home</a>
-				</li>
+                </li>
+                {% else %}
+                <li class="nav-item">
+					<a href="{{ url_for('index') }}" class="nav-link">{{ current_user.username }}</a>
+                </li>
+                {% endif %}
 			</ul>
 			<ul class="nav-list">
 				{% if current_user.is_anonymous %}
@@ -18,12 +24,12 @@
 				<li class="nav-item">
 					<a href="{{ url_for('register') }}" class="nav-link">Register</a>
 				</li>
-				{% else %}
+                {% else %}
 				<li class="nav-item">
 					<a href="{{ url_for('playlists') }}" class="nav-link">Quiz</a>
 				</li>
 				<li class="nav-item">
-					<a href="#" class="nav-link">Results</a>
+					<a href=" {{ url_for('results') }}" class="nav-link">Results</a>
 				</li>
 				<li class="nav-item">
 					<a href="{{ url_for('logout') }}" class="nav-link">Logout</a>

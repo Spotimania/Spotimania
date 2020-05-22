@@ -127,3 +127,7 @@ def handle_data():
 def quiz(playlistId):
     print(playlistId)
     return render_template("quiz.html", title="Quiz Page")
+
+@app.route('/results')
+def results():
+    return render_template("results.html", title="Results Page")
