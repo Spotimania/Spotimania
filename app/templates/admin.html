@@ -33,16 +33,16 @@
 	<div class="row">
 		<div class="col-md-6">
 			<div class="innerContent">
-				<form>
+				<form onsubmit="searchSong(this); return false;">
 					<label class="inputLabel">Search</label>
 					<div class="input-group-prepend">
-						<label class="input-group-text" for="inputGroupSelect01">Options</label>
+						<label >Search by</label>
 					</div>
 					<select class="custom-select" id="searchOption" name="searchOption">
 						<option value="artist" selected>Artist</option>
 						<option value="track">Track</option>
 					</select>
-
+					<br><br>
 					<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
 					<br /><br /><br />
 					<button type="button" onclick="searchSong(this)" id="submitSongSearch" class="inputSubmit">Search</button>
