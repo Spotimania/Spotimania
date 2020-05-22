@@ -15,17 +15,28 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">{{playlist.playlistName}}</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+				<h5 class="modal-title" id="modalTitle">{{playlist.playlistName}}</h5>
+			</div>
+			<div>
+				<table style="width: 100%;" id="scoreboard">
+					<tr>
+						<th>Username</th>
+						<th>Scores</th>
+					</tr>
+					<tr>
+						<td>John</td>
+						<td>Doe</td>
+					</tr>
+				</table>
 			</div>
 			<div class="modal-body" id="joinModalContent">
 				<a class="btn" onclick="getJoinLink(this)">Copy Join Link</a>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" onclick="window.history.back();">Close</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="startTheGame(this)">Start The Game</button>
+			<div class="modal-footer" id="buttonContainer">
+				<button type="button" class="btn btn-secondary" onclick="window.history.back();" id="modalSecondary">Close</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="startTheGame(this)" id="modalPrimary">
+					Start The Game
+				</button>
 			</div>
 		</div>
 	</div>
@@ -53,13 +64,13 @@
 				</div>
 				<br /><br />
 				<fieldset>
-					<label class="inputLabel">What song is it?</label>
+					<label class="inputLabel">What song is it? (5 points)</label>
 					<input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess" />
 					<br /><br />
-					<label class="inputLabel">Who is the artist?</label>
+					<label class="inputLabel">Who is the artist? (5 points)</label>
 					<input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess" />
 					<br /><br /><br />
-					<input type="submit" class="btn inputSubmit" />
+					<input type="submit" class="btn inputSubmit" onclick="submitAnswer(this)" />
 					<button class="btn" onclick="showImageHint(this)">Hint</button>
 				</fieldset>
 			</div>

@@ -26,7 +26,7 @@
 		{% include 'components/footer.html' %}
 		<!-- FLASK RENDERED FOR IDENTITY-->
 		<script>
-			{% if (not(current_user.is_anonymous) and sockets ) %}
+			{% if ((not(current_user.is_anonymous)) and session==true) %}
 						sessionStorage.setItem('userId', '{{ current_user.id }}');
 						sessionStorage.setItem('username', '{{ current_user.username }}');
 						sessionStorage.setItem('playlistId', '{{ playlist.id }}');

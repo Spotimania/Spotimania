@@ -5,74 +5,126 @@ from flask import render_template, session, request, \
 from flask_socketio import SocketIO, emit, join_room, leave_room, \
     close_room, rooms, disconnect
 
-# SessionStrucure:
+# sharedVar Strucure:
 # -> dict: playerRooms: rooms, [playerIds]
 # -> dict: roomPlaylist, playlistId
 # -> dict: playerId, score
 # ->
 
+global playerRooms
+global scores
+global roomPlaylist
+global songs
+global songsFiltered
+global currentSongIndex
+playerRooms = {}
+scores = {}
+roomPlaylist = {}
+songs = {}
+songsFiltered = {}
+currentSongIndex={}
+
 #SOCKETS
 @socketio.on('connectFirstTime', namespace='/sockets')
 def connectFirstTime(message):
-    if not("playerRooms" in session):
-        session["playerRooms"] = {}
-    if not("scores" in session):
-        session["scores"] = {}
-    if not("roomPlaylist" in session):
-        session["roomPlaylist"] = {}
+    # sharedVar setters
 
-    print(message)
-    print(message['room'])
-    print(message['userId'])
-    print(message['username'])
-    print(message['playlistId'])
-    # CHECK IF ROOM ALREADY EXIST
-    if message['room'] in session["playerRooms"]:
-        session["playerRooms"][message['room']].append(message['userId'])
-    else:
-        session["playerRooms"][message['room']] = [message['userId']]
-        session["roomPlaylist"][message['room']]= message['playlistId']
+    if not(message['room']  in playerRooms):
+        playerRooms[message['room']] = []
+        roomPlaylist[message['room']]= message['playlistId']
+
+
+    # add only unique players
+    if(not(message['userId'] in playerRooms[message['room']] )):
+        playerRooms[message['room']]+=message['userId']
+    print(playerRooms[message['room']])
 
     # RESET USER SCORE
-    session["scores"]["playerId"] = 0
+    scores[message['userId']] = 0
 
-    session[message["username"]] = 0;
     join_room(message['room'])
-    emit('onUserJoin',{'username': message['username']},room=message['room'])
+    emit('onUserJoin',{'username': message['username'],'userId': message['userId']},room=message['room'])
+
+    # SEND A PACKAGED SYNCING OF USERS
+    def sendUserDetails():
+        print("SENDING USER DETAILS")
+        # GET ALL USERS OF THE ROOM
+        allUserIds = playerRooms[message['room']]
+        print(allUserIds)
+        # MAP CALLBACK FUNCTION
+        def getDictUserIdsAndName(userId):
+            username = getUsername(userId)
+            return  {"username":username,"userId":userId}
+
+        users = list(map(getDictUserIdsAndName,allUserIds))
+        print(users)
+        emit("syncUsers", users, room=message['room'])
+
+    sendUserDetails()
 
 @socketio.on('startGame', namespace='/sockets')
 def startGame(message):
     room = message["room"]
-    playlistId = session["roomPlaylist"][room]
+    playlistId =roomPlaylist[room]
 
-    session["songs"] = {}
-    session["songsFiltered"] = {}
-    session["songs"][room] = getSongsInPlaylist(playlistId)
-    session["songsFiltered"][room] = getSongsInPlaylist(playlistId)
-    session["currentSongIndex"] = {}
-    session["currentSongIndex"][room] = 1
+    songs[room] = getSongsInPlaylist(playlistId)
+    songsFiltered[room] = getSongsInPlaylist(playlistId)
+    currentSongIndex = {}
+    currentSongIndex[room] = 1
 
-    for song in session["songsFiltered"][room]:
+    for song in songsFiltered[room]:
         del song["songName"]
         del song["artist"]
         del song["date_created"]
         del song["date_modified"]
         del song["spotifySongID"]
-    jsonDump = json.dumps(session["songsFiltered"][room])
-    print(jsonDump)
-    print(jsonify(jsonDump))
-    emit('receivesSongData',session["songsFiltered"][room][0],room=message['room'])
+    emit('receivesSongData', songsFiltered[room][0], room=room)
 
 
-@socketio.on('leave', namespace='/sockets')
-def leave(message):
-    leave_room(message['room'])
-    emit('my_response',
-         {'data': 'Left rooms: ' + ', '.join(rooms())})
 
-@socketio.on('my_room_event', namespace='/sockets')
-def send_room_message(message):
-    emit('my_response',{'data': message['data'] + " By: " + str(message["userId"]) + " *score = " + str(session[str(message["userId"])])},room=message['room'])
+@socketio.on('nextSong', namespace='/sockets')
+def nextSong(message):
+    room = message["room"]
+    print(room)
+    currentSongIndex = currentSongIndex[room]
+
+    # END OF THE SONG
+    songFiltered = songsFiltered[room]
+    if (len(songFiltered) <= currentSongIndex):
+        print("END OF SONG")
+    else:
+        currentSongFiltered = songFiltered[currentSongIndex]
+        emit('receivesSongData',currentSongFiltered,room=room)
+        currentSongIndex[room] += 1
+
+@socketio.on("submitAnswer", namespace='/sockets')
+def submitAnswer(message):
+    print(message["artist"])
+    print(message["song"])
+    print(message["userId"])
+    print(message["room"])
+    print(message["songId"])
+
+    username = getUsername(message["userId"])
+    playlistId =roomPlaylist[message["room"]]
+    song = getSongDetails(message["songId"])
+    print(song.songName)
+    print(song.artist)
+    isAnswerArtistCorrect = doesThisMatch(message["artist"],song.artist)
+    isAnswerSongCorrect = doesThisMatch(message["song"], song.songName)
+
+    print(isAnswerArtistCorrect)
+    print(isAnswerSongCorrect)
+
+    #CONSTANTS
+    CORRECT_SONG_POINTS = 5
+    CORRECT_ARTIST_POINTS = 5
+    score = isAnswerArtistCorrect *CORRECT_SONG_POINTS + isAnswerSongCorrect*CORRECT_ARTIST_POINTS
+    scores[message['userId']] += score
+
+    # DATA BASE STORAGE
+
+    emit('receivesScoreData',{"scoreReceived":score,"newScore": scores[message['userId']],"username":username,'userId': message['userId']},room=message['room'])
 
 @socketio.on('disconnect', namespace='/sockets')
 def test_disconnect():

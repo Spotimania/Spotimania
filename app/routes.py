@@ -121,7 +121,7 @@ def playlist(playlistId):
         return redirectTo404()
 
     songs = getSongsInPlaylist(playlistId)
-    return render_template("admin.html", title="Admin Home",playlist=playlist,songs=songs)
+    return render_template("admin.html", title="Admin Home",playlist=playlist,songs=songs,session=True)
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
@@ -139,6 +139,6 @@ def quiz(playlistId):
     songs = getSongsInPlaylist(playlistId)
 
     playlist = Playlist.query.get(playlistId)
-    return render_template("quiz.html", title="Quiz Page", async_mode=socketio.async_mode, sockets=True, playlist=playlist, songs=songs)
+    return render_template("quiz.html", title="Quiz Page", async_mode=socketio.async_mode, session=True, sockets=True, playlist=playlist, songs=songs)
 
 # Connect SOCKETS
