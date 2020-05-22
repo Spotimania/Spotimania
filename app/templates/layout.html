@@ -6,15 +6,6 @@
 <body>
 	{% include 'components/nav.html' %}
 
-	<div>
-		{% with messages = get_flashed_messages(with_categories=true)%} {% if messages %}
-		{% for category,message in messages %}
-		<div class="alert alert-{{category}}">
-			<p>{{message}}</p>
-		</div>
-		{% endfor %} {% endif %} {% endwith %}
-	</div>
-
 	{% block home%} {% endblock %}
 	<!-- Home Block can be Empty, to be used ONLY in Homepage (index.html) -->
 
