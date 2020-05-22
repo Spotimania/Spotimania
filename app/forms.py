@@ -29,5 +29,9 @@ class RegisterForm(FlaskForm):
         if (isUsernameTaken(username.data)):
             raise ValidationError("Username Is Already In Use")
 
+class CreateNewPlaylistForm(FlaskForm):
+    playlistName = StringField('Playlist Name', [DataRequired()])
+    submit = SubmitField("Create New Playlist")
+
 class RegisterAdminForm(RegisterForm):
     specialPassword = PasswordField("Special Password", [DataRequired()])

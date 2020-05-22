@@ -2,11 +2,12 @@
 
 {% block content %}
 
+{% include 'components/alerts.html' %}
 <div class="mainContent" style="background-position: top right;">
     <div class="row">
         <div class="col-md-7">
 			<h1 class="sub-headline" style="font-size: 40px;">{{title}}</h1>
-			<div class="innerContent" style="margin: 15px;">
+			<div class="innerContent">
 				<form name="login" action="" method="POST" novalidate>
 					<fieldset class="form-group">
 						{{form.hidden_tag()}}

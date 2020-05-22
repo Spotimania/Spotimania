@@ -5,8 +5,8 @@ from werkzeug.urls import url_parse
 from app.forms import *
 from app.controllers import *
 from flask_login import current_user, login_user, logout_user
-from app.models import Playlist
 from flask import jsonify
+
 def redirectToLastVisitedPage():
     next_page = request.args.get('next')
     print(next_page)
@@ -16,6 +16,9 @@ def redirectToLastVisitedPage():
         next_page = url_for('index')
     print(next_page)
     return redirect(next_page)
+
+def redirectTo404():
+    return redirect(url_for('page404'),404)
 
 @app.route("/")
 @app.route("/home")
@@ -79,47 +82,52 @@ def registerAdmin():
             flash("Your Admin Key Is Wrong")
     return render_template("register.html", title="Register Admin", form=form)
 
-@app.route("/admin")
-def adminPage():
-        return render_template("admin.html", title="Admin Home")
-
-
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
 @app.errorhandler(404)
-def not_found(error):
+@app.route('/404')
+def page404(error=404):
     return render_template('404.html'), 404
 
-@app.route('/playlist', methods=['GET', 'POST'])
-def addSong():
-    if request.method == 'POST':
-        data = request.get_json()
-        songName = data['songName']
-        songID = data['songID']
-        prevURL = data['prevURL']
-        prevIMG = data['prevIMG']
-        artist = data['artist']
-        album = data['album']
-        newSong = Playlist(songName=songName, songID=songID,prevURL=prevURL, prevIMG=prevIMG, artist=artist,album=album)
-        db.session.add(newSong)
-        db.session.commit()
-        return 'Added song!'
-    else:
-        results = Playlist.query.all()
-        return render_template('playlist.html', title='Songs', results=results)
+
+@app.route('/playlists', methods=['GET', 'POST'])
+def playlists():
+
+    form = CreateNewPlaylistForm()
+    if (form.validate_on_submit()):
+        playlistName = form.playlistName.data
+        newPlaylist = createNewPlaylist(playlistName)
+        return redirect(url_for('playlist',playlistId=newPlaylist.id))
+
+    playlistsCollection = getAllPlaylists();
+    return render_template('playlist.html', title='Songs', playlists = playlistsCollection, form=form)
+
+@app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
+def playlist(playlistId):
+    playlist = getPlaylist(playlistId)
+    if (playlist is None):
+        return redirectTo404()
+
+    songs = getSongsInPlaylist(playlistId)
+    return render_template("admin.html", title="Admin Home",playlist=playlist,songs=songs)
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
     i = request.form.getlist('songName')
-    for r in db.session.query(Playlist).filter(Playlist.songName.in_(i)):
+    for r in db.session.query(Song).filter(Song.songName.in_(i)):
         db.session.delete(r)
 
     db.session.commit()
     return 'success'
 
-@app.route('/quiz')
-def quiz():
+@app.route('/quiz/<playlistId>')
+def quiz(playlistId):
+    print(playlistId)
     return render_template("quiz.html", title="Quiz Page")
+
+@app.route('/results')
+def results():
+    return render_template("results.html", title="Results Page")
