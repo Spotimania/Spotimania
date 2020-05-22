@@ -137,8 +137,9 @@ def handle_data():
 @login_required
 def quiz(playlistId):
     songs = getSongsInPlaylist(playlistId)
-
     playlist = Playlist.query.get(playlistId)
     return render_template("quiz.html", title="Quiz Page", async_mode=socketio.async_mode, session=True, sockets=True, playlist=playlist, songs=songs)
 
-# Connect SOCKETS
+@app.route('/results')
+def results():
+    return render_template("results.html", title="Results Page")

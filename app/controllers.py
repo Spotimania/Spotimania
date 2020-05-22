@@ -95,6 +95,18 @@ def getResultsOfUser(userId):
 
     return collection
 
+# Individual Results
+def addIndividualResults(userId, playlistId, songId, answerArtist, answerSong, isAnswerArtistCorrect, isAnswerSongCorrect):
+    result = Results.query.filter_by(userId=userId, playlistId=playlistId).first()
+    song = Song.query.get(songId)
+
+    if (result is None):
+        result = Results(Playlist.query.get(playlistId), User.query.get(userId))
+    
+    individualResults = IndividualResults(answerArtist, answerSong, isAnswerArtistCorrect, isAnswerSongCorrect, result, song)
+    commitToDatabase(individualResults)
+    return individualResults
+
 # Playlist and Playlist/Song Controllers
 
 def createNewPlaylist(playlistName):

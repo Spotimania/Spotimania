@@ -18,13 +18,13 @@
 <section class="hero">
     <div class="container">
         <h2 class="sub-headline">
-            <span class="first-letter">W</span>elcome!
+            <span class="first-letter">W</span>elcome {{ current_user.username }} !
         </h2>
-        <h1 class="headline">{{ current_user.username }}</h1>
+        <h2 class="sub-headline">
+            
+        </h2>
         <div class="headline-description">
             <div class="single-animation">
-                <h5>Ready to Play?</h5>
-                <a href="#home-intro" class="btn cta-btn">Explore</a>
                 <a href="{{ url_for('playlists') }}" class="btn cta-btn">Start a Quiz</a>
             </div>
         </div>
@@ -34,6 +34,7 @@
 {% endblock %}
 
 {% block content %}
+
 <!---------- App Introduction ---------->
 <section class="home-intro" id="home-intro" style="padding: 0;">
 	<div class="intro-info">
@@ -46,9 +47,12 @@
 				Hello! This application tests your knowledge on how well you really know your music. At first you will be required to create an
 				account, where then you will be able to partake in the Quiz with short demo clips obtained from the Spotify API. You will then
 				answer a variety of questions based on those clips, and will be able to see how well you did in the results section. This app can be
-				navigated using the navgation bar above, if you have not yet created an account, click on the button below to get started!
-			</p>
-			<a href="{{ url_for('register') }}" class="btn body-btn">Get Registered</a>
+				navigated using the navgation bar above, to start off, please login/create a new account!
+            </p>
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('register') }}" class="btn body-btn">Get Registered</a>
+            {% else %}
+            {% endif %}
 		</div>
 		<div class="intro-image">
 			<img src="{{ url_for('static', filename='images/spotify.gif') }}" alt="Spotify GIF" />
