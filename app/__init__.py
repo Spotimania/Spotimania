@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_socketio import SocketIO
+import eventlet
+eventlet.monkey_patch()
 
 
 #Set up of Flask App
@@ -12,7 +14,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 #Socket IO
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='eventlet')
 
 #Setup of Database
 db = SQLAlchemy(app)
