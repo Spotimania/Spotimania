@@ -4,7 +4,7 @@ from flask import render_template, redirect, flash, url_for, request
 from werkzeug.urls import url_parse
 from app.forms import *
 from app.controllers import *
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from flask import jsonify
 from app import socketio
 
@@ -25,11 +25,6 @@ def redirectTo404():
 @app.route("/home")
 @app.route("/index")
 def index():
-    print(current_user)
-    try:
-        print(current_user.role)
-    except AttributeError:
-        pass
     return render_template("index.html", index=True)
 
 @app.route("/login",methods=["GET","POST"])
@@ -84,6 +79,7 @@ def registerAdmin():
     return render_template("register.html", title="Register Admin", form=form)
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
@@ -95,6 +91,7 @@ def page404(error=404):
 
 
 @app.route('/playlists', methods=['GET', 'POST'])
+@login_required
 def playlists():
 
     form = CreateNewPlaylistForm()
@@ -104,10 +101,21 @@ def playlists():
         return redirect(url_for('playlist',playlistId=newPlaylist.id))
 
     playlistsCollection = getAllPlaylists();
+    if (not(current_user.is_admin())): #filter empty playlist if not admin
+        playlistsCollection = list(filter(lambda playlist: len(getSongsInPlaylist(playlist.id)),playlistsCollection))
+
+    print(playlistsCollection)
     return render_template('playlist.html', title='Songs', playlists = playlistsCollection, form=form)
 
 @app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
+@login_required
 def playlist(playlistId):
+
+    # admin exclusive page
+    if (not (current_user.is_admin())):
+        return redirectTo404()
+
+    #playlist does not exist
     playlist = getPlaylist(playlistId)
     if (playlist is None):
         return redirectTo404()
@@ -126,8 +134,10 @@ def handle_data():
 
 #SOCKET PAGES
 @app.route('/quiz/<playlistId>')
+@login_required
 def quiz(playlistId):
     songs = getSongsInPlaylist(playlistId)
+
     playlist = Playlist.query.get(playlistId)
     return render_template("quiz.html", title="Quiz Page", async_mode=socketio.async_mode, sockets=True, playlist=playlist, songs=songs)
 
