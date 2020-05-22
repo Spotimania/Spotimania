@@ -40,6 +40,9 @@ def validateUserLogin(username, password):
 
     return False
 
+def getUsername(userId):
+    return User.query.get(userId).username
+
 def isUsernameTaken(username):
     user = User.query.filter_by(username=username.strip()).first()
     return  bool(user)

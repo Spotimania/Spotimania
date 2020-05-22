@@ -4,11 +4,15 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_socketio import SocketIO
 
 
 #Set up of Flask App
 app = Flask(__name__)
 app.config.from_object(Config)
+
+#Socket IO
+socketio = SocketIO(app)
 
 #Setup of Database
 db = SQLAlchemy(app)
@@ -19,7 +23,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 
 #Getting All Routes and Database Models
-from app import routes, models
+from app import routes, models, sockets
 
 #Setup api
 from app.api import api

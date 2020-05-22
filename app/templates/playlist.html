@@ -30,10 +30,12 @@
 	}
 </style>
 <h1>Playlist</h1>
+{% if current_user.is_admin() %}
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
 	Create A New Playlist
 </button>
+{% endif %}
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -86,7 +88,7 @@
 			<td>{{ playlist.date_created|datetimeformat  }}</th>
 			<td>{{ playlist.date_modified|datetimeformat }}</th>
 			<td>
-				{% if current_user.is_admin %}
+				{% if current_user.is_admin() %}
 				<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}">Edit</a>
 				{% endif %}
 
