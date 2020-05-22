@@ -29,3 +29,10 @@ function myFunction() {
     navbar.classList.remove("sticky");
   }
 };
+
+function updateDiv() {
+  setTimeout(
+    function() {
+      $( "#forloop" ).load(document.URL + " #forloop" );
+    }, 1000);
+}

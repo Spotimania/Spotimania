@@ -60,7 +60,7 @@ const searchSong = async (e) => {
 		responseData.tracks.items.forEach((track) => {
 			document.getElementById(
 				'results'
-			).innerHTML += `<li><button class='inputSubmit' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
+			).innerHTML += `<li><button class='inputSubmit' id='${id}' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
 		});
 	}
 };
@@ -72,14 +72,15 @@ const onClickNavigateArtist = async (id) => {
 	responseData.tracks.forEach((track) => {
 		document.getElementById(
 			'results'
-		).innerHTML += `<li><button class='inputSubmit' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
+		).innerHTML += `<li><button class='inputSubmit' id='${track.id}' onclick="updateDiv(); onClickTrack('${track.id}');">${track.name}</button></li>`;
 	});
 };
 
 const onClickTrack = async (id) => {
 	const data = await (await spotifyFetchAPI(`tracks/${id}?market=au`)).json();
 	console.log(data);
-
+	var x = document.getElementById(`${id}`)
+	x.style.display = 'none';
 	const playlistId = sessionStorage.getItem('playlistId');
 	const payload = {
 		spotifySongID: data.id,
@@ -96,3 +97,7 @@ const onClickTrack = async (id) => {
 		console.log(err);
 	}
 };
+
+
+
+

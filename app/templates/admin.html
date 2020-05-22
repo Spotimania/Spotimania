@@ -27,6 +27,7 @@
 	}
 </style>
 
+
 <div class="mainContent" style="background-position: bottom right;">
 	<h1 class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
 	<div class="row">
@@ -56,6 +57,7 @@
 		<div class="col-md-6">
 			<div class="innerContent">
 				<label class="inputLabel">Currently In The List</label>
+				<div id='forloop'>
 				{% for song in songs %}
 				<div>
 					<div class="avatar-root">
@@ -68,8 +70,9 @@
 						Your browser does not support the audio element.
 					</audio>
 				</div>
-				<a id="{{song['id']}}" onclick="deleteSong(this,'{{playlist.id}}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
+				<a id="{{song['id']}}" onclick="updateDiv(); deleteSong(this,'{{playlist.id}}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
 				{% endfor %}
+				</div>
 			</div>
 		</div>
 	</div>
