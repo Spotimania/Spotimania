@@ -1,1 +1,1 @@
-web: flask db upgrade; flask translate compile; gunicorn app:app
+web: flask db upgrade; flask translate compile; gunicorn --worker-class eventlet app:app
