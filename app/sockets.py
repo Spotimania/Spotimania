@@ -69,7 +69,6 @@ def startGame(message):
 
     songs[room] = getSongsInPlaylist(playlistId)
     songsFiltered[room] = getSongsInPlaylist(playlistId)
-    currentSongIndex = {}
     currentSongIndex[room] = 1
 
     for song in songsFiltered[room]:
@@ -86,14 +85,14 @@ def startGame(message):
 def nextSong(message):
     room = message["room"]
     print(room)
-    currentSongIndex = currentSongIndex[room]
+    currentSongIndexLocal = currentSongIndex[room]
 
     # END OF THE SONG
     songFiltered = songsFiltered[room]
-    if (len(songFiltered) <= currentSongIndex):
+    if (len(songFiltered) <= currentSongIndexLocal):
         print("END OF SONG")
     else:
-        currentSongFiltered = songFiltered[currentSongIndex]
+        currentSongFiltered = songFiltered[currentSongIndexLocal]
         emit('receivesSongData',currentSongFiltered,room=room)
         currentSongIndex[room] += 1
 
@@ -105,7 +104,8 @@ def submitAnswer(message):
     print(message["room"])
     print(message["songId"])
 
-    username = getUsername(message["userId"])
+    userId=message["userId"]
+    username = getUsername(userId)
     playlistId =roomPlaylist[message["room"]]
     song = getSongDetails(message["songId"])
     print(song.songName)
@@ -123,6 +123,7 @@ def submitAnswer(message):
     scores[message['userId']] += score
 
     # DATA BASE STORAGE
+    addIndividualResults(userId,playlistId,song.id,message["artist"],message["song"],isAnswerArtistCorrect,isAnswerSongCorrect)
 
     emit('receivesScoreData',{"scoreReceived":score,"newScore": scores[message['userId']],"username":username,'userId': message['userId']},room=message['room'])
 
