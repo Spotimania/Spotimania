@@ -64,14 +64,16 @@
 				</div>
 				<br /><br />
 				<fieldset>
-					<label class="inputLabel">What song is it? (5 points)</label>
-					<input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess" />
-					<br /><br />
-					<label class="inputLabel">Who is the artist? (5 points)</label>
-					<input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess" />
-					<br /><br /><br />
-					<input type="submit" class="btn inputSubmit" onclick="submitAnswer(this)" />
-					<button class="btn" onclick="showImageHint(this)">Hint</button>
+					<form action="" onSubmit="event.preventDefault();submitAnswer(this)">
+						<label class="inputLabel">What song is it? (5 points)</label>
+						<input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess" />
+						<br /><br />
+						<label class="inputLabel">Who is the artist? (5 points)</label>
+						<input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess" />
+						<br /><br /><br />
+						<input type="submit" class="btn inputSubmit" onclick="submitAnswer(this)" />
+						<button class="btn" onclick="showImageHint(this)">Hint</button>
+					</form>
 				</fieldset>
 			</div>
 		</div>
