@@ -19,8 +19,9 @@ def routeAddSongsInPlaylist(playlistId):
         abort(Response("Something Went Wrong"))
 
 
-@api.route("/playlist/<playlistId>/<songId>", methods=['DELETE'])
-def routeDeleteSongsInPlaylist(playlistId, songId):
+@api.route("/playlist/<playlistId>/<spotifySongId>", methods=['DELETE'])
+def routeDeleteSongsInPlaylist(playlistId, spotifySongId):
+    songId = getSongDetailsBySpotifySongId(spotifySongId).id
     try:
         deleteSongInPlaylist(songId, playlistId)
         return ({"message": "Success!"})

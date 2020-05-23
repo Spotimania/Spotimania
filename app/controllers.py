@@ -163,6 +163,9 @@ def getSongDetails(songId):
     song = Song.query.get(songId)
     return song
 
+def getSongDetailsBySpotifySongId(spotifySongId):
+    return Song.query.filter_by(spotifySongID=spotifySongId).first()
+
 def addSongDetails(spotifySongID, prevURL, prevIMG, songName, artist, album):
     song =Song.query.filter_by(spotifySongID=spotifySongID).first()
     if bool(song): # the song exist
