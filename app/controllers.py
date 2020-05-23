@@ -40,6 +40,9 @@ def validateUserLogin(username, password):
 
     return False
 
+def getUsername(userId):
+    return User.query.get(userId).username
+
 def isUsernameTaken(username):
     user = User.query.filter_by(username=username.strip()).first()
     return  bool(user)
@@ -91,6 +94,18 @@ def getResultsOfUser(userId):
         collection.append(hashMap)
 
     return collection
+
+# Individual Results
+def addIndividualResults(userId, playlistId, songId, answerArtist, answerSong, isAnswerArtistCorrect, isAnswerSongCorrect):
+    result = Results.query.filter_by(userId=userId, playlistId=playlistId).first()
+    song = Song.query.get(songId)
+
+    if (result is None):
+        result = Results(Playlist.query.get(playlistId), User.query.get(userId))
+    
+    individualResults = IndividualResults(answerArtist, answerSong, isAnswerArtistCorrect, isAnswerSongCorrect, result, song)
+    commitToDatabase(individualResults)
+    return individualResults
 
 # Playlist and Playlist/Song Controllers
 
@@ -147,6 +162,9 @@ def getSongsInPlaylist(playlistId):
 def getSongDetails(songId):
     song = Song.query.get(songId)
     return song
+
+def getSongDetailsBySpotifySongId(spotifySongId):
+    return Song.query.filter_by(spotifySongID=spotifySongId).first()
 
 def addSongDetails(spotifySongID, prevURL, prevIMG, songName, artist, album):
     song =Song.query.filter_by(spotifySongID=spotifySongID).first()
