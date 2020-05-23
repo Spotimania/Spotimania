@@ -1,4 +1,6 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %}
+
+{% block content %}
 
 <style>
 	ul {
@@ -11,31 +13,15 @@
 		display: flex;
 		justify-content: center;
 	}
-
-	.searchResultHeading {
-		font-family: var(--Rubik);
-		font-size: 30px;
-
-		width: 100%;
-		text-align: center;
-
-		margin: 0;
-		margin-bottom: 15px;
-	}
-
-	.searchResultDescription {
-	}
 </style>
-
-{% include 'components/alerts.html' %}
 
 <div class="mainContent" style="background-position: bottom right;">
 	<h1 class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
 	<div class="row">
 		<div class="col-md-6">
 			<div class="innerContent">
+                <h2 class="searchResultHeading">Search</h2>
 				<form onsubmit="searchSong(this); return false;">
-					<label class="inputLabel">Search</label>
 					<div class="input-group-prepend">
 						<label>Search by</label>
 					</div>
@@ -45,7 +31,17 @@
 					</select>
 					<br /><br />
 					<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
-					<br /><br /><br />
+					<br><br>
+					<div class="d-flex justify-content-end">
+						<div class="btn-group btn-group-toggle" data-toggle="buttons">
+							<label class="btn radioToggle active">
+								<input type="radio" name="options" id="option1" checked> Artists
+							</label>
+							<label class="btn radioToggle">
+								<input type="radio" name="options" id="option2"> Songs
+							</label>
+						</div>
+					</div>
 					<button type="button" onclick="searchSong(this)" id="submitSongSearch" class="inputSubmit">Search</button>
 				</form>
 			</div>
@@ -57,7 +53,7 @@
 		</div>
 		<div class="col-md-6">
 			<div class="innerContent">
-				<label class="inputLabel">Currently In The List</label>
+				<h2 class="searchResultHeading">Currently In The List</h2>
 				<div id="forloop">
 					{% for song in songs %}
 					<div id="{{song['spotifySongID']}}">
