@@ -18,39 +18,34 @@
 <div class="mainContent" style="background-position: bottom right;">
 	<h1 class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
 	<div class="row">
+		<!-- Search + Search Results -->
 		<div class="col-md-6">
+			<!-- Search -->
 			<div class="innerContent">
                 <h2 class="searchResultHeading">Search</h2>
 				<form onsubmit="searchSong(this); return false;">
-					<div class="input-group-prepend">
-						<label>Search by</label>
-					</div>
-					<select class="custom-select" id="searchOption" name="searchOption">
-						<option value="artist" selected>Artist</option>
-						<option value="track">Track</option>
-					</select>
-					<br /><br />
 					<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
 					<br><br>
 					<div class="d-flex justify-content-end">
 						<div class="btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn radioToggle active">
-								<input type="radio" name="options" id="option1" checked> Artists
+								<input type="radio" name="radioSearchOption" id="artistOption" value="artist" checked> Artists
 							</label>
 							<label class="btn radioToggle">
-								<input type="radio" name="options" id="option2"> Songs
+								<input type="radio" name="radioSearchOption" id="trackOption" value="track"> Songs
 							</label>
 						</div>
 					</div>
 					<button type="button" onclick="searchSong(this)" id="submitSongSearch" class="inputSubmit">Search</button>
 				</form>
 			</div>
+			<!-- Search Results -->
 			<div class="innerContent">
 				<h2 class="searchResultHeading">Search Results</h2>
-				<p class="searchResultDescription" id="SRDescription"></p>
 				<ul id="results"></ul>
 			</div>
 		</div>
+		<!-- Currently In The List -->
 		<div class="col-md-6">
 			<div class="innerContent">
 				<h2 class="searchResultHeading">Currently In The List</h2>

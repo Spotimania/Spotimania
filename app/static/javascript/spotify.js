@@ -50,7 +50,13 @@ const deleteSongDom = (songId) => {
 
 const searchSong = async (e) => {
 	document.getElementById('results').innerHTML = '';
-	const searchOption = $('#searchOption').val();
+
+	let searchOption = $('#artistOption').val();
+	if ($('#trackOption').prop('checked')) {
+		searchOption = $('#trackOption').val();
+	}
+	console.log(searchOption);
+
 	const searchInput = $('#searchInput').val();
 
 	const responseData = await (await spotifyFetchAPI(`search?q=${searchInput}&type=${searchOption}`)).json();
@@ -65,7 +71,7 @@ const searchSong = async (e) => {
 		responseData.tracks.items.forEach((track) => {
 			document.getElementById(
 				'results'
-			).innerHTML += `<li><button class='inputSubmit' id='${id}' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
+			).innerHTML += `<li><button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
 		});
 	}
 };
