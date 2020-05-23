@@ -83,6 +83,7 @@ class UserControllerCase(unittest.TestCase):
         playlist1 = createNewPlaylist('Juice Wrld')
         song1 = addSongDetails('1', '#', '#', 'Robbery', 'Juice Wrld', 'Death Race for Love')
         addSongInPlaylist(song1.id, playlist1.id)
+        self.assertTrue(len(getSongsInPlaylist(playlist1.id))>0)
         deleteSongInPlaylist(song1.id, playlist1.id)
         self.assertFalse(len(getSongsInPlaylist(playlist1.id))>0)
 
@@ -108,6 +109,8 @@ class UserControllerCase(unittest.TestCase):
         all = Song.query.all()
         self.assertEqual(song1,all[0])
         self.assertEqual(song2,all[1])
+
+
 
 
 if __name__ == "__main__":
