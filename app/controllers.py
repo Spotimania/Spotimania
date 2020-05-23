@@ -78,7 +78,7 @@ def getResultsOfUser(userId):
     for playlist in userPlayedPlaylist:
         hashMap = playlist.to_dict()
         hashMap["results"] = []
-
+        hashMap["playlistName"] = getPlaylist(playlist.playlistId).playlistName
         # Parse all the question sets in the playlist
         individualResultsCollection = playlist.resultsIndividual
         for individualResult in individualResultsCollection:
@@ -102,7 +102,7 @@ def addIndividualResults(userId, playlistId, songId, answerArtist, answerSong, i
 
     if (result is None):
         result = Results(Playlist.query.get(playlistId), User.query.get(userId))
-    
+
     individualResults = IndividualResults(answerArtist, answerSong, isAnswerArtistCorrect, isAnswerSongCorrect, result, song)
     commitToDatabase(individualResults)
     return individualResults
