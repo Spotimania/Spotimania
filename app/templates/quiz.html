@@ -17,7 +17,8 @@
 			<div class="modal-header">
 				<h5 class="modal-title" id="modalTitle">{{playlist.playlistName}}</h5>
 			</div>
-			<div>
+			<div></div>
+			<div class="modal-body" id="joinModalContent">
 				<table style="width: 100%;" id="scoreboard">
 					<tr>
 						<th>Username</th>
@@ -28,9 +29,8 @@
 						<td>Doe</td>
 					</tr>
 				</table>
-			</div>
-			<div class="modal-body" id="joinModalContent">
-				<a class="btn" onclick="getJoinLink(this)">Copy Join Link</a>
+				<p id="modalTextContent"></p>
+				<a class="btn" onclick="getJoinLink(this)" id="joinlink">Copy Join Link</a>
 			</div>
 			<div class="modal-footer" id="buttonContainer">
 				<button type="button" class="btn btn-secondary" onclick="window.history.back();" id="modalSecondary">Close</button>

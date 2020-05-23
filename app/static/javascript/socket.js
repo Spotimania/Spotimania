@@ -144,11 +144,15 @@ $(document).ready(function () {
 		const users = JSON.parse(sessionStorage.getItem('users'));
 		const userToUpdate = users.find((user) => user.userId === userId);
 		userToUpdate.score = newScore;
-		console.log(users);
-		console.log(userToUpdate);
-		// CAN ONLY STORAGE JSON
+
+		// CAN ONLY STORE STRING
 		sessionStorage.setItem('users', JSON.stringify(users));
+
 		updateScoreBoard();
+	});
+	socket.on('gameOver', (data) => {
+		console.log('GAME OVER');
+		gameOver();
 	});
 });
 
@@ -168,6 +172,24 @@ const startTheGame = () => {
 	const primaryButton = document.querySelector('#modalPrimary');
 	primaryButton.textContent = 'Next';
 	primaryButton.onclick = nextSong;
+};
+
+const gameOver = () => {
+	//MODAL INTERACTION
+	$('#joinModal').modal('show');
+	$('#joinlink').hide();
+
+	const userId = sessionStorage.getItem('userId');
+	const users = JSON.parse(sessionStorage.getItem('users'));
+	const score = users.find((user) => user.userId === userId).score;
+	//SCORE
+	const modalTextContent = document.querySelector('#modalTextContent');
+	modalTextContent.textContent = `The game is finished. You have Scored ${score} points. Thank you for playing the game`;
+
+	//CHANGE BUTTON FUNCTION
+	const primaryButton = document.querySelector('#modalPrimary');
+	primaryButton.textContent = 'Play Other Playlists';
+	primaryButton.onclick = window.history.back;
 };
 
 const nextSong = () => {
@@ -247,6 +269,9 @@ const hideButtonsForNonHost = () => {
 		return userId == room.split('Xr00mZ')[0];
 	};
 	if (!isHost()) {
+		// SET THE NEW MODAL
+		const modalTitle = document.querySelector('#modalTitle');
+		modalTitle.textContent = 'Scoreboard';
 		$('#modalSecondary').hide();
 		$('#modalPrimary').hide();
 	}

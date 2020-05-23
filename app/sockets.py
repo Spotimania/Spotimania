@@ -90,7 +90,7 @@ def nextSong(message):
     # END OF THE SONG
     songFiltered = songsFiltered[room]
     if (len(songFiltered) <= currentSongIndexLocal):
-        print("END OF SONG")
+        emit('gameOver',{},room=room)
     else:
         currentSongFiltered = songFiltered[currentSongIndexLocal]
         emit('receivesSongData',currentSongFiltered,room=room)
