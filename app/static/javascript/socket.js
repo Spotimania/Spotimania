@@ -211,7 +211,7 @@ const gameOver = () => {
 	//SCORE
 	const modalTextContent = document.querySelector('#modalTextContent');
 	modalTextContent.textContent = `The game is finished. You have Scored ${score} points. Thank you for playing the game`;
-
+	sayBasedOnOption(modalTextContent.textContent);
 	//CHANGE BUTTON FUNCTION
 	const primaryButton = document.querySelector('#modalPrimary');
 	primaryButton.textContent = 'Play Other Playlists';
