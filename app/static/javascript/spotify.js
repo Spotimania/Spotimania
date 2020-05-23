@@ -50,6 +50,7 @@ const deleteSongDom = (songId) => {
 
 const searchSong = async (e) => {
 	document.getElementById('results').innerHTML = '';
+	document.getElementById('RSDescription').innerHTML = 'Loading...';
 
 	let searchOption = $('#artistOption').val();
 	if ($('#trackOption').prop('checked')) {
@@ -62,28 +63,52 @@ const searchSong = async (e) => {
 	const responseData = await (await spotifyFetchAPI(`search?q=${searchInput}&type=${searchOption}`)).json();
 	console.log(responseData);
 	if (searchOption === 'artist') {
-		responseData.artists.items.forEach((item) => {
-			document.getElementById(
-				'results'
-			).innerHTML += `<li><button class='inputSubmit' type='button' onclick="onClickNavigateArtist('${item.id}')">${item.name}</button></li>`;
+		responseData.artists.items.forEach((artist) => {
+			document.getElementById('RSDescription').innerHTML = 'Click on Artist to Show their Top Songs...';
+			if (artist.images.length == 0) {
+				document.getElementById('results').innerHTML += 
+				`<li class="searchResultList">
+					<button type="button" class="inputSubmit" onclick="onClickNavigateArtist('${artist.id}')" style="font-size: 20px;">
+						${artist.name}
+					</button>
+				</li>`;
+			}
+			else {
+				document.getElementById('results').innerHTML += 
+				`<li class="searchResultList">
+					<button type="button" class="inputSubmit" onclick="onClickNavigateArtist('${artist.id}')" style="font-size: 20px;">
+						<img src="${artist.images[0].url}" class="artistArt">
+						${artist.name}
+					</button>
+				</li>`;
+			}
 		});
 	} else if (searchOption === 'track') {
 		responseData.tracks.items.forEach((track) => {
-			document.getElementById(
-				'results'
-			).innerHTML += `<li><button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
+			document.getElementById('RSDescription').innerHTML = 'Click on Song to Add to Playlist...';
+			document.getElementById('results').innerHTML += 
+			`<li class="searchResultList">
+				<button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}')">
+				${track.name}
+				</button>
+			</li>`;
 		});
 	}
 };
 
 const onClickNavigateArtist = async (id) => {
 	document.getElementById('results').innerHTML = '';
+	document.getElementById('RSDescription').innerHTML = 'Loading...';
 	const responseData = await (await spotifyFetchAPI(`artists/${id}/top-tracks?country=AU`)).json();
 	console.log(responseData);
 	responseData.tracks.forEach((track) => {
-		document.getElementById(
-			'results'
-		).innerHTML += `<li><button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}');">${track.name}</button></li>`;
+		document.getElementById('RSDescription').innerHTML = 'Click on Song to Add to Playlist...';
+		document.getElementById('results').innerHTML += 
+		`<li class="searchResultList">
+			<button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}');">
+				${track.name}
+			</button>
+		</li>`;
 	});
 };
 

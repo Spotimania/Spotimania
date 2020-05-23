@@ -2,19 +2,6 @@
 
 {% block content %}
 
-<style>
-	ul {
-		max-height: 80vh;
-		overflow: scroll;
-	}
-
-	li {
-		margin: 5px;
-		display: flex;
-		justify-content: center;
-	}
-</style>
-
 <div class="mainContent" style="background-position: bottom right;">
 	<h1 class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
 	<div class="row">
@@ -36,13 +23,21 @@
 							</label>
 						</div>
 					</div>
-					<button type="button" onclick="searchSong(this)" id="submitSongSearch" class="inputSubmit">Search</button>
+					<button type="button" onclick="searchSong(this);document.getElementById('results').scrollIntoView();" id="submitSongSearch" class="inputSubmit">Search</button>
 				</form>
 			</div>
 			<!-- Search Results -->
 			<div class="innerContent">
 				<h2 class="searchResultHeading">Search Results</h2>
-				<ul id="results"></ul>
+				<p id="RSDescription" class="searchResultDescription">Search your favourite Artist or Song above... </p>
+				<ul id="results" style="max-height: 200vh; overflow: scroll;">
+					<li class="searchResultList">
+						<button type="button" class="inputSubmit" style="font-size: 20px;">
+							<img src="https://i.scdn.co/image/51dad9aaabe5643818840207a9a8957c2ad91bf2" class="artistArt">
+							Michael Jackson
+						</button>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<!-- Currently In The List -->
@@ -75,7 +70,7 @@
 
 <script>
 	sessionStorage.setItem('playlistId', '{{playlist.id}}');
-	console.log('SESION SAVED');
+	console.log('SESsION SAVED');
 </script>
 
 {% endblock %}

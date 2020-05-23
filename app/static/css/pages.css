@@ -95,3 +95,27 @@ span.error-message{
     margin: 0;
     margin-bottom: 15px;
 }
+
+li.searchResultList {
+    display: flex;
+    justify-content: center;
+
+    margin: 10px;
+}
+
+img.artistArt {
+    width: 200px;
+    /* height: 120px; */
+
+    display: block;
+    margin: 10px auto;
+    border-radius: 35px;
+}
+
+p.searchResultDescription {
+    font-family: var(--Rubik);
+    font-size: 20px;
+
+    width: 100%;
+    text-align: center;
+}
