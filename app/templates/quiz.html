@@ -33,6 +33,7 @@
 				<a class="btn" onclick="getJoinLink(this)" id="joinlink">Copy Join Link</a>
 			</div>
 			<div class="modal-footer" id="buttonContainer">
+				<button type="button" class="btn btn-info" onclick="toggleNarrator(this)">Turn Off Narrator</button>
 				<button type="button" class="btn btn-secondary" onclick="window.history.back();" id="modalSecondary">Close</button>
 				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="startTheGame(this)" id="modalPrimary">
 					Start The Game
@@ -64,7 +65,7 @@
 				</div>
 				<br /><br />
 				<fieldset>
-					<form action="" onSubmit="event.preventDefault();submitAnswer(this)">
+					<form action="" onSubmit="event.preventDefault();">
 						<label class="inputLabel">What song is it? (5 points)</label>
 						<input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess" />
 						<br /><br />

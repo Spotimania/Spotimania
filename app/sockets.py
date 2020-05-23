@@ -127,7 +127,7 @@ def submitAnswer(message):
 
     if (isAllPlayerInRoomSubmitted(room)):
         resetSubmittedForAllPlayers(room)
-        emit('ready',{},room=room)
+        emit('ready',{"songName": song.songName,"artist":song.artist},room=room)
 
 @socketio.on('disconnect', namespace='/sockets')
 def test_disconnect():

@@ -1,3 +1,10 @@
+// ROBOT VOICE OPTION
+window.narrator = true;
+const toggleNarrator = (e) => {
+	window.narrator = !window.narrator;
+	e.textContent = `Turn ${window.narrator ? 'off' : 'on'} Narrator`;
+};
+
 // TIMERS
 const setTimer = () => {
 	let timeleft = 60;
@@ -58,10 +65,12 @@ const getJoinLink = () => {
 	showToast('Sharing is Caring!!', `Link Has Been Copied To Your Clipboard`);
 };
 
+// CREEPY ROBOT VOICE RIGHT HERE!! - Narrations
+const say = (text) => speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+const sayBasedOnOption = (text) => window.narrator && say(text);
+
 const showToast = (title, message) => {
-	// CREEPY ROBOT VOICE RIGHT HERE!!
-	// const say = (text) => speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-	// say(message);
+	sayBasedOnOption(message);
 	const toasts = document.querySelector('#toasts');
 	toasts.outerHTML = `<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toasts" style="position: absolute; top: 100px; right: 100px;">
   <div class="toast-header">
@@ -154,9 +163,11 @@ $(document).ready(function () {
 		console.log('GAME OVER');
 		gameOver();
 	});
-	socket.on('ready', () => {
+	socket.on('ready', (data) => {
 		console.log('All Players Ready');
-
+		const { songName, artist } = data;
+		const attemptedSongName = sessionStorage.getItem('attemptedSongName');
+		const attemptedArtist = sessionStorage.getItem('attemptedArtist');
 		//CHANGE TEXT
 		const modalTextContent = document.querySelector('#modalTextContent');
 		if (isHost()) {
@@ -164,6 +175,11 @@ $(document).ready(function () {
 		} else {
 			modalTextContent.textContent = `Waiting For Host To Press Next`;
 		}
+
+		modalTextContent.innerHTML += `<br> The Song Was <strong>${songName}</strong> by <strong>${artist}</strong> `;
+		modalTextContent.innerHTML += `<br> Your Answer Was <strong>${attemptedSongName}</strong> by <strong>${attemptedArtist}</strong> `;
+
+		sayBasedOnOption(modalTextContent.textContent);
 		//ENABLE BUTTON
 		const primaryButton = document.querySelector('#modalPrimary');
 		primaryButton.disabled = false;
@@ -237,6 +253,11 @@ const submitAnswer = () => {
 	const artist = document.querySelector('#artistName').value;
 	const songSelectors = document.querySelector('#songName');
 	const song = document.querySelector('#songName').value;
+
+	sessionStorage.setItem('attemptedSongName', song);
+	sessionStorage.setItem('attemptedArtist', artist);
+
+	console.log('SUBMITTING');
 	console.log({ artist, song, userId, room, songId });
 	socket.emit('submitAnswer', { artist, song, userId, room, songId });
 
