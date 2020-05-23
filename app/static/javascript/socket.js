@@ -17,6 +17,7 @@ const setTimer = () => {
 		}
 		timeleft -= 1;
 	}, 1000);
+	window.Timer = songTimer;
 };
 
 // WITH MODIFCATION FROM
@@ -209,6 +210,9 @@ const submitAnswer = () => {
 
 	// SHOW MODAL
 	$('#joinModal').modal('show');
+
+	// CLEAR TIMER
+	clearTimeout(window.Timer);
 };
 
 const showImageHint = () => {
