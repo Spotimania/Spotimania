@@ -93,7 +93,7 @@ $(document).ready(function () {
 	audioPlayer.volume = 0.5;
 
 	//SOCKET CONNECTION
-	socket = io.connect('https://' + document.domain + ':' + location.port + '/sockets');
+	socket = io.connect('http://' + document.domain + ':' + location.port + '/sockets');
 
 	socket.on('connect', () => {
 		// REGISTER ON THE SERVER SESSION
