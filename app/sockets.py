@@ -23,6 +23,7 @@ roomPlaylist = {}
 songs = {}
 songsFiltered = {}
 currentSongIndex={}
+submitted = {}
 
 #SOCKETS
 @socketio.on('connectFirstTime', namespace='/sockets')
@@ -33,31 +34,27 @@ def connectFirstTime(message):
         playerRooms[message['room']] = []
         roomPlaylist[message['room']]= message['playlistId']
 
-
     # add only unique players
     if(not(message['userId'] in playerRooms[message['room']] )):
-        playerRooms[message['room']]+=message['userId']
-    print(playerRooms[message['room']])
+        playerRooms[message['room']].append(message['userId'])
 
     # RESET USER SCORE
     scores[message['userId']] = 0
+    submitted[message['userId']] = False
 
     join_room(message['room'])
     emit('onUserJoin',{'username': message['username'],'userId': message['userId']},room=message['room'])
 
     # SEND A PACKAGED SYNCING OF USERS
     def sendUserDetails():
-        print("SENDING USER DETAILS")
         # GET ALL USERS OF THE ROOM
         allUserIds = playerRooms[message['room']]
-        print(allUserIds)
         # MAP CALLBACK FUNCTION
         def getDictUserIdsAndName(userId):
             username = getUsername(userId)
             return  {"username":username,"userId":userId}
 
         users = list(map(getDictUserIdsAndName,allUserIds))
-        print(users)
         emit("syncUsers", users, room=message['room'])
 
     sendUserDetails()
@@ -79,53 +76,58 @@ def startGame(message):
         del song["spotifySongID"]
     emit('receivesSongData', songsFiltered[room][0], room=room)
 
-
-
 @socketio.on('nextSong', namespace='/sockets')
 def nextSong(message):
     room = message["room"]
-    print(room)
     currentSongIndexLocal = currentSongIndex[room]
 
     # END OF THE SONG
     songFiltered = songsFiltered[room]
     if (len(songFiltered) <= currentSongIndexLocal):
-        emit('gameOver',{},room=room)
+        emit('gameOver', {}, room=room)
+        playerRooms[room]=[]
     else:
         currentSongFiltered = songFiltered[currentSongIndexLocal]
         emit('receivesSongData',currentSongFiltered,room=room)
         currentSongIndex[room] += 1
 
+def isAllPlayerInRoomSubmitted(room):
+    print(playerRooms[room])
+    print(submitted)
+    for userId in playerRooms[room]:
+        print(userId,submitted[userId])
+        if (not(submitted[userId])): return False
+    return True
+
+def resetSubmittedForAllPlayers(room):
+    for userId in playerRooms[room]:
+        submitted[userId]=False
+
 @socketio.on("submitAnswer", namespace='/sockets')
 def submitAnswer(message):
-    print(message["artist"])
-    print(message["song"])
-    print(message["userId"])
-    print(message["room"])
-    print(message["songId"])
-
     userId=message["userId"]
     username = getUsername(userId)
-    playlistId =roomPlaylist[message["room"]]
+    room=message["room"]
+    playlistId =roomPlaylist[room]
     song = getSongDetails(message["songId"])
-    print(song.songName)
-    print(song.artist)
     isAnswerArtistCorrect = doesThisMatch(message["artist"],song.artist)
     isAnswerSongCorrect = doesThisMatch(message["song"], song.songName)
-
-    print(isAnswerArtistCorrect)
-    print(isAnswerSongCorrect)
 
     #CONSTANTS
     CORRECT_SONG_POINTS = 5
     CORRECT_ARTIST_POINTS = 5
     score = isAnswerArtistCorrect *CORRECT_SONG_POINTS + isAnswerSongCorrect*CORRECT_ARTIST_POINTS
-    scores[message['userId']] += score
+    scores[userId] += score
+    submitted[userId] = True
 
     # DATA BASE STORAGE
     addIndividualResults(userId,playlistId,song.id,message["artist"],message["song"],isAnswerArtistCorrect,isAnswerSongCorrect)
 
     emit('receivesScoreData',{"scoreReceived":score,"newScore": scores[message['userId']],"username":username,'userId': message['userId']},room=message['room'])
+
+    if (isAllPlayerInRoomSubmitted(room)):
+        resetSubmittedForAllPlayers(room)
+        emit('ready',{},room=room)
 
 @socketio.on('disconnect', namespace='/sockets')
 def test_disconnect():

@@ -154,6 +154,20 @@ $(document).ready(function () {
 		console.log('GAME OVER');
 		gameOver();
 	});
+	socket.on('ready', () => {
+		console.log('All Players Ready');
+
+		//CHANGE TEXT
+		const modalTextContent = document.querySelector('#modalTextContent');
+		if (isHost()) {
+			modalTextContent.textContent = `Press "Next" for Next round`;
+		} else {
+			modalTextContent.textContent = `Waiting For Host To Press Next`;
+		}
+		//ENABLE BUTTON
+		const primaryButton = document.querySelector('#modalPrimary');
+		primaryButton.disabled = false;
+	});
 });
 
 const startTheGame = () => {
@@ -175,10 +189,6 @@ const startTheGame = () => {
 };
 
 const gameOver = () => {
-	//MODAL INTERACTION
-	$('#joinModal').modal('show');
-	$('#joinlink').hide();
-
 	const userId = sessionStorage.getItem('userId');
 	const users = JSON.parse(sessionStorage.getItem('users'));
 	const score = users.find((user) => user.userId === userId).score;
@@ -189,7 +199,15 @@ const gameOver = () => {
 	//CHANGE BUTTON FUNCTION
 	const primaryButton = document.querySelector('#modalPrimary');
 	primaryButton.textContent = 'Play Other Playlists';
-	primaryButton.onclick = window.history.back;
+	primaryButton.onclick = () => (window.location.href = '../');
+
+	//MODAL INTERACTION
+	// WORK AROUND - FORCE SHOW
+	setTimeout(() => {
+		$('#joinModal').modal('show');
+	}, 300);
+
+	$('#joinlink').hide();
 };
 
 const nextSong = () => {
@@ -235,6 +253,13 @@ const submitAnswer = () => {
 
 	// CLEAR TIMER
 	clearTimeout(window.Timer);
+
+	// WAITING FOR OTHER PLAYERS
+	//SCORE
+	const modalTextContent = document.querySelector('#modalTextContent');
+	modalTextContent.textContent = `Waiting For Other Players To Guess The Song`;
+	const primaryButton = document.querySelector('#modalPrimary');
+	primaryButton.disabled = true;
 };
 
 const showImageHint = () => {
@@ -262,12 +287,13 @@ const updateScoreBoard = () => {
 	scoreboard.innerHTML = `${header}${userString}`;
 };
 
+const isHost = () => {
+	const userId = sessionStorage.getItem('userId');
+	const hostUserId = sessionStorage.getItem('room').split('Xr00mZ')[0];
+	return userId == hostUserId;
+};
+
 const hideButtonsForNonHost = () => {
-	const isHost = () => {
-		const userId = sessionStorage.getItem('userId');
-		const room = sessionStorage.getItem('room');
-		return userId == room.split('Xr00mZ')[0];
-	};
 	if (!isHost()) {
 		// SET THE NEW MODAL
 		const modalTitle = document.querySelector('#modalTitle');
