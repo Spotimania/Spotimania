@@ -37,13 +37,13 @@
 				<form onsubmit="searchSong(this); return false;">
 					<label class="inputLabel">Search</label>
 					<div class="input-group-prepend">
-						<label >Search by</label>
+						<label>Search by</label>
 					</div>
 					<select class="custom-select" id="searchOption" name="searchOption">
 						<option value="artist" selected>Artist</option>
 						<option value="track">Track</option>
 					</select>
-					<br><br>
+					<br /><br />
 					<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
 					<br /><br /><br />
 					<button type="button" onclick="searchSong(this)" id="submitSongSearch" class="inputSubmit">Search</button>
@@ -58,21 +58,24 @@
 		<div class="col-md-6">
 			<div class="innerContent">
 				<label class="inputLabel">Currently In The List</label>
-				<div id='forloop'>
-				{% for song in songs %}
-				<div>
-					<div class="avatar-root">
-						<img class="avatar" src="{{song['prevIMG']}}" alt="" />
+				<div id="forloop">
+					{% for song in songs %}
+					<div id="{{song['spotifySongID']}}">
+						<div class="avatar-root">
+							<img class="avatar" src="{{song['prevIMG']}}" alt="" />
+						</div>
+						<p>{{song["songName"]}}</p>
+						<p>{{song["artist"]}}</p>
+						<audio controls>
+							<source src="{{song['prevURL']}}" />
+							Your browser does not support the audio element.
+						</audio>
+						<a id="{{song['spotifySongID']}}" onclick=" deleteSong(this,'{{playlist.id}}')"
+							><i class="fa fa-trash" aria-hidden="true"></i
+						></a>
 					</div>
-					<p>{{song["songName"]}}</p>
-					<p>{{song["artist"]}}</p>
-					<audio controls>
-						<source src="{{song['prevURL']}}" />
-						Your browser does not support the audio element.
-					</audio>
-				</div>
-				<a id="{{song['id']}}" onclick="updateDiv(); deleteSong(this,'{{playlist.id}}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
-				{% endfor %}
+
+					{% endfor %}
 				</div>
 			</div>
 		</div>

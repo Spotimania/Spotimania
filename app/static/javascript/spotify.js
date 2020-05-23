@@ -37,10 +37,15 @@ const spotifyFetchAPI = (
 const deleteSong = async (e, playlistId) => {
 	try {
 		sameOriginAPI(`playlist/${playlistId}/${e.id}`, (body = {}), (method = 'DELETE'));
+		deleteSongDom(e.id);
 		console.log('Successfully Deleted');
 	} catch (err) {
 		console.log(err);
 	}
+};
+
+const deleteSongDom = (songId) => {
+	$(`#${songId}`).remove();
 };
 
 const searchSong = async (e) => {
@@ -72,15 +77,15 @@ const onClickNavigateArtist = async (id) => {
 	responseData.tracks.forEach((track) => {
 		document.getElementById(
 			'results'
-		).innerHTML += `<li><button class='inputSubmit' id='${track.id}' onclick="updateDiv(); onClickTrack('${track.id}');">${track.name}</button></li>`;
+		).innerHTML += `<li><button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}');">${track.name}</button></li>`;
 	});
 };
 
 const onClickTrack = async (id) => {
 	const data = await (await spotifyFetchAPI(`tracks/${id}?market=au`)).json();
 	console.log(data);
-	var x = document.getElementById(`${id}`)
-	x.style.display = 'none';
+	var songElement = document.getElementById(`${id}`);
+	songElement.style.display = 'none';
 	const playlistId = sessionStorage.getItem('playlistId');
 	const payload = {
 		spotifySongID: data.id,
@@ -92,12 +97,27 @@ const onClickTrack = async (id) => {
 	};
 	try {
 		sameOriginAPI(`playlist/${playlistId}`, payload);
+		addSongDom(payload);
 		console.log('SUCCESS');
 	} catch (err) {
 		console.log(err);
 	}
 };
 
-
-
-
+const addSongDom = ({ spotifySongID, prevURL, prevIMG, songName, artist, album }) => {
+	const playlistId = sessionStorage.getItem('playlistId');
+	const container = document.querySelector('#forloop');
+	container.innerHTML += `				<div id="${spotifySongID}">
+					<div class="avatar-root">
+						<img class="avatar" src="${prevIMG}" alt="" />
+					</div>
+					<p>${songName}</p>
+					<p>${artist}</p>
+					<audio controls>
+						<source src="${prevURL}" />
+						Your browser does not support the audio element.
+					</audio>
+					<a id="${spotifySongID}" onclick="deleteSong(this,'${playlistId}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
+				</div>
+				`;
+};
