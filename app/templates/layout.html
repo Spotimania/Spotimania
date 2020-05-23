@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+	{% include 'components/head.html' %}
 
-{% include 'components/head.html' %}
+	<body>
+		{% include 'components/nav.html' %}
 
-<body>
-	{% include 'components/nav.html' %}
-
-	{% block home%} {% endblock %}
-	<!-- Home Block can be Empty, to be used ONLY in Homepage (index.html) -->
-
-	<section>
-		<div class="container">
-			{% block content%} {% endblock %}
-			<!-- Content Block CANNOT be Empty -->
+		<div>
+			{% with messages = get_flashed_messages(with_categories=true)%} {% if messages %} {% for category,message in messages %}
+			<div class="alert alert-{{category}}">
+				<p>{{message}}</p>
+			</div>
+			{% endfor %} {% endif %} {% endwith %}
 		</div>
-	</section>
 
-	{% include 'components/footer.html' %}
-</body>
+		{% block home%} {% endblock %}
+		<!-- Home Block can be Empty, to be used ONLY in Homepage (index.html) -->
 
+		<section>
+			<div class="container">
+				{% block content%} {% endblock %}
+				<!-- Content Block CANNOT be Empty -->
+			</div>
+		</section>
+
+		{% include 'components/footer.html' %}
+		<!-- FLASK RENDERED FOR IDENTITY-->
+		<script>
+			{% if ((not(current_user.is_anonymous)) and session==true) %}
+						sessionStorage.setItem('userId', '{{ current_user.id }}');
+						sessionStorage.setItem('username', '{{ current_user.username }}');
+						sessionStorage.setItem('playlistId', '{{ playlist.id }}');
+			{% else %}
+				sessionStorage.setItem('userId', '');
+				sessionStorage.setItem('username', '');
+				sessionStorage.setItem('playlistId', '');
+			{% endif %}
+		</script>
+	</body>
 </html>
