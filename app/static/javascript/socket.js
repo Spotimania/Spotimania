@@ -1,3 +1,10 @@
+// ROBOT VOICE OPTION
+window.narrator = true;
+const toggleNarrator = (e) => {
+	window.narrator = !window.narrator;
+	e.textContent = `Turn ${window.narrator ? 'off' : 'on'} Narrator`;
+};
+
 // TIMERS
 const setTimer = () => {
 	let timeleft = 60;
@@ -17,6 +24,7 @@ const setTimer = () => {
 		}
 		timeleft -= 1;
 	}, 1000);
+	window.Timer = songTimer;
 };
 
 // WITH MODIFCATION FROM
@@ -57,10 +65,12 @@ const getJoinLink = () => {
 	showToast('Sharing is Caring!!', `Link Has Been Copied To Your Clipboard`);
 };
 
+// CREEPY ROBOT VOICE RIGHT HERE!! - Narrations
+const say = (text) => speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+const sayBasedOnOption = (text) => window.narrator && say(text);
+
 const showToast = (title, message) => {
-	// CREEPY ROBOT VOICE RIGHT HERE!!
-	// const say = (text) => speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-	// say(message);
+	sayBasedOnOption(message);
 	const toasts = document.querySelector('#toasts');
 	toasts.outerHTML = `<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toasts" style="position: absolute; top: 100px; right: 100px;">
   <div class="toast-header">
@@ -143,11 +153,36 @@ $(document).ready(function () {
 		const users = JSON.parse(sessionStorage.getItem('users'));
 		const userToUpdate = users.find((user) => user.userId === userId);
 		userToUpdate.score = newScore;
-		console.log(users);
-		console.log(userToUpdate);
-		// CAN ONLY STORAGE JSON
+
+		// CAN ONLY STORE STRING
 		sessionStorage.setItem('users', JSON.stringify(users));
+
 		updateScoreBoard();
+	});
+	socket.on('gameOver', (data) => {
+		console.log('GAME OVER');
+		gameOver();
+	});
+	socket.on('ready', (data) => {
+		console.log('All Players Ready');
+		const { songName, artist } = data;
+		const attemptedSongName = sessionStorage.getItem('attemptedSongName');
+		const attemptedArtist = sessionStorage.getItem('attemptedArtist');
+		//CHANGE TEXT
+		const modalTextContent = document.querySelector('#modalTextContent');
+		if (isHost()) {
+			modalTextContent.textContent = `Press "Next" for Next round`;
+		} else {
+			modalTextContent.textContent = `Waiting For Host To Press Next`;
+		}
+
+		modalTextContent.innerHTML += `<br> The Song Was <strong>${songName}</strong> by <strong>${artist}</strong> `;
+		modalTextContent.innerHTML += `<br> Your Answer Was <strong>${attemptedSongName}</strong> by <strong>${attemptedArtist}</strong> `;
+
+		sayBasedOnOption(modalTextContent.textContent);
+		//ENABLE BUTTON
+		const primaryButton = document.querySelector('#modalPrimary');
+		primaryButton.disabled = false;
 	});
 });
 
@@ -167,6 +202,28 @@ const startTheGame = () => {
 	const primaryButton = document.querySelector('#modalPrimary');
 	primaryButton.textContent = 'Next';
 	primaryButton.onclick = nextSong;
+};
+
+const gameOver = () => {
+	const userId = sessionStorage.getItem('userId');
+	const users = JSON.parse(sessionStorage.getItem('users'));
+	const score = users.find((user) => user.userId === userId).score;
+	//SCORE
+	const modalTextContent = document.querySelector('#modalTextContent');
+	modalTextContent.textContent = `The game is finished. You have Scored ${score} points. Thank you for playing the game`;
+	sayBasedOnOption(modalTextContent.textContent);
+	//CHANGE BUTTON FUNCTION
+	const primaryButton = document.querySelector('#modalPrimary');
+	primaryButton.textContent = 'Play Other Playlists';
+	primaryButton.onclick = () => (window.location.href = '../');
+
+	//MODAL INTERACTION
+	// WORK AROUND - FORCE SHOW
+	setTimeout(() => {
+		$('#joinModal').modal('show');
+	}, 300);
+
+	$('#joinlink').hide();
 };
 
 const nextSong = () => {
@@ -196,6 +253,11 @@ const submitAnswer = () => {
 	const artist = document.querySelector('#artistName').value;
 	const songSelectors = document.querySelector('#songName');
 	const song = document.querySelector('#songName').value;
+
+	sessionStorage.setItem('attemptedSongName', song);
+	sessionStorage.setItem('attemptedArtist', artist);
+
+	console.log('SUBMITTING');
 	console.log({ artist, song, userId, room, songId });
 	socket.emit('submitAnswer', { artist, song, userId, room, songId });
 
@@ -209,6 +271,16 @@ const submitAnswer = () => {
 
 	// SHOW MODAL
 	$('#joinModal').modal('show');
+
+	// CLEAR TIMER
+	clearTimeout(window.Timer);
+
+	// WAITING FOR OTHER PLAYERS
+	//SCORE
+	const modalTextContent = document.querySelector('#modalTextContent');
+	modalTextContent.textContent = `Waiting For Other Players To Guess The Song`;
+	const primaryButton = document.querySelector('#modalPrimary');
+	primaryButton.disabled = true;
 };
 
 const showImageHint = () => {
@@ -236,13 +308,17 @@ const updateScoreBoard = () => {
 	scoreboard.innerHTML = `${header}${userString}`;
 };
 
+const isHost = () => {
+	const userId = sessionStorage.getItem('userId');
+	const hostUserId = sessionStorage.getItem('room').split('Xr00mZ')[0];
+	return userId == hostUserId;
+};
+
 const hideButtonsForNonHost = () => {
-	const isHost = () => {
-		const userId = sessionStorage.getItem('userId');
-		const room = sessionStorage.getItem('room');
-		return userId == room.split('Xr00mZ')[0];
-	};
 	if (!isHost()) {
+		// SET THE NEW MODAL
+		const modalTitle = document.querySelector('#modalTitle');
+		modalTitle.textContent = 'Scoreboard';
 		$('#modalSecondary').hide();
 		$('#modalPrimary').hide();
 	}
