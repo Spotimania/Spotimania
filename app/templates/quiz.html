@@ -49,7 +49,6 @@
 		<div class="col-md-5">
 			<h1 class="sub-headline" style="font-size: 40px;">Guess the Song...</h1>
 			<img src="{{ url_for('static', filename='images/song-placeholder.jpg') }}" alt="" id="quizImage" />
-			<div id="countdown"></div>
 		</div>
 		<div class="col-md-7">
 			<div class="innerContent">
@@ -65,14 +64,16 @@
 				<br /><br />
 				<fieldset>
 					<form action="" onSubmit="event.preventDefault();">
-						<label class="inputLabel">What song is it? (5 points)</label>
-						<input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess" />
-						<br /><br />
-						<label class="inputLabel">Who is the artist? (5 points)</label>
-						<input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess" />
-						<br /><br /><br />
-						<input type="submit" class="btn inputSubmit" onclick="submitAnswer(this)" />
-						<button class="btn" onclick="showImageHint(this)">Hint</button>
+					<label class="inputLabel">What song is it? (5 points)</label>
+					<input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess" />
+					<br /><br />
+					<label class="inputLabel">Who is the artist? (5 points)</label>
+					<input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess" />
+					<br /><br />
+					<div id="countdown" style="font-size: 1.5rem;"></div>
+					<br><br>
+					<input type="submit" class="btn inputSubmit" onclick="submitAnswer(this)" />
+					<button class="btn" onclick="showImageHint(this)">Hint</button>
 					</form>
 				</fieldset>
 			</div>
