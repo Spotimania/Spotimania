@@ -63,9 +63,11 @@ const searchSong = async (e) => {
 		});
 	} else if (searchOption === 'track') {
 		responseData.tracks.items.forEach((track) => {
+			if (`${track.preview_url}` !== 'null') {
 			document.getElementById(
 				'results'
-			).innerHTML += `<li><button class='inputSubmit' id='${id}' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
+			).innerHTML += `<li><button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
+		}
 		});
 	}
 };
@@ -75,9 +77,11 @@ const onClickNavigateArtist = async (id) => {
 	const responseData = await (await spotifyFetchAPI(`artists/${id}/top-tracks?country=AU`)).json();
 	console.log(responseData);
 	responseData.tracks.forEach((track) => {
+		if (`${track.preview_url}` !== 'null') {
 		document.getElementById(
 			'results'
 		).innerHTML += `<li><button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}');">${track.name}</button></li>`;
+		}
 	});
 };
 
