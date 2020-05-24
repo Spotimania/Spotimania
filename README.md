@@ -25,9 +25,48 @@ Spotimania uses 'fuzzy matching' of short answers as its primary assessment mech
 This application has been constructed using the python Flask microframeowork MVC. In terms of the Model View Controller Architecture, in our application, the model is represented by the SQLite database and SQLAlchemy, the View is represented by the server-side rendering template of jinja2 which assembles the HTML static content based on the request and the Controller is represented by the Python Flask library.
 
 <a name="appLaunch"></a>
-## Using Spotimania 
+## App Launching
 As with most Flask applications, launching this application requires running the Flask package using `$ flask run` in the directory of the application which will then result in the application being hosted on a local server, usually: http://127.0.0.1:5000/. However, Spotimania has also been deployed on Heroku, and therefore can be accessed directly from the web via the link: https://spotimania.herokuapp.com/.
 
+A more comprehensive guide to setting up the Flask environment and launching the app is listed below:
+
+#### Python prerequisite
+
+Download and install [python 3.8](https://www.python.org/downloads/)
+
+#### Virtual environment
+
+Download virtualenv
+```bash
+$ pip install virtualenv
+```
+If you have multiple versions of python installed, please run `pip3` instead
+
+A virtual environment ensure everyone working on this project will have the same dependencies
+installed and avoid the "it worked on my machine" bug. Create a new virtualenv with
+```bash
+$ virtualenv env
+```
+If you have multiple versions of python installed, run:
+```bash
+$ virtualenv -p python3.8 env
+```
+To activate the virtual environment, run
+```bash
+$ source env/bin/activate
+```
+You will need to run this command every time you run/develop this application.
+
+#### Requirements
+Installing all relevant requirements/packages:
+```bash
+$ pip install -r requirements.txt
+```
+
+#### Running Flask
+```bash
+$ flask run
+```
  <a name="appTest"></a>
 ## App Testing
 Our application has been contructed with testers for all the essential controllers that are based on the CRUD operations of the models. To run the tests, we can simply type `python tests/test.py` in the directory of the application as all of our test are contained in the test.py file. Some of the controllers that are writen are:
