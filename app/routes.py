@@ -128,7 +128,12 @@ def playlist(playlistId):
     return render_template("admin.html", title="Admin Home",playlist=playlist,songs=songs,session=True)
 
 @app.route('/playlist/delete/<playlistId>')
+@login_required
 def deletePlaylistRoute(playlistId):
+     # admin exclusive page
+    if (not (current_user.is_admin())):
+        return redirectTo404()
+
     deletePlaylist(playlistId)
     flash("Successfully Deleted Song", "success")
     return redirect( url_for('playlists') )
