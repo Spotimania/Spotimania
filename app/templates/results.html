@@ -2,16 +2,14 @@
 
 {% block content %}
 
-<h1>Your Results History {{ current_user.username }} !</h1>
-
+<h1 class="table-text">Your Results History <span class ="table-title">{{ current_user.username }}</span> !</h1>
 <div class="panel-group" >
     <div>
         {% for playlist in userPlayedPlaylist %}
         <div class="card">
-            <div class="card-header" id="headingOne">
+            <div class="card-header" id="headingOne"  style="background-color: rgb(69, 225, 159);">
                 <h2 class="mb-0">
                         Playlist - "{{ playlist.playlistName }}"
-                    </button>
                 </h2>
             </div>
 

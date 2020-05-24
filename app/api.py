@@ -10,7 +10,12 @@ def test():
 def routeAddSongsInPlaylist(playlistId):
     try:
         body = request.get_json(force=True)
-        song = addSongDetails(body["spotifySongID"], body["prevURL"], body["prevIMG"], body["songName"], body["artist"], body["album"])
+        songName = body["songName"]
+
+        # Filter Song Name " - " and "("
+        songName = songName.split(" - ")[0].split("(")[0]
+
+        song = addSongDetails(body["spotifySongID"], body["prevURL"], body["prevIMG"], songName, body["artist"], body["album"])
         addSongInPlaylist(song.id,playlistId)
         return ({"message": "Success!"})
     except Exception as err:
