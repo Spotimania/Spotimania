@@ -46,47 +46,47 @@
 			</button>
 		</div>
 	</div>
-	<div class="row">
-		<!-- Search + Search Results -->
-		<div class="col-md-6">
-			<!-- Search -->
-			<div class="innerContent">
-				<h2 class="searchResultHeading">Search</h2>
-				<form onsubmit="searchSong(this); return false;">
-					<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
-					<br /><br />
-					<div class="d-flex justify-content-end">
-						<div class="btn-group btn-group-toggle" data-toggle="buttons">
-							<label class="btn radioToggle active">
-								<input type="radio" name="radioSearchOption" id="artistOption" value="artist" checked /> Artists
-							</label>
-							<label class="btn radioToggle"> <input type="radio" name="radioSearchOption" id="trackOption" value="track" /> Songs </label>
-						</div>
-					</div>
-					<br />
-					<button
-						type="button"
-						onclick="searchSong(this);document.getElementById('SearchResults').scrollIntoView();"
-						id="submitSongSearch"
-						class="inputSubmit"
-					>
-						Search
-					</button>
-				</form>
+	<!-- Search -->
+	<div class="innerContent">
+		<h2 class="searchResultHeading">Search</h2>
+		<form onsubmit="searchSong(this); return false;">
+			<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
+			<br /><br />
+			<div class="d-flex justify-content-end">
+				<div class="btn-group btn-group-toggle" data-toggle="buttons">
+					<label class="btn radioToggle active">
+						<input type="radio" name="radioSearchOption" id="artistOption" value="artist" checked /> Artists
+					</label>
+					<label class="btn radioToggle"> <input type="radio" name="radioSearchOption" id="trackOption" value="track" /> Songs </label>
+				</div>
 			</div>
-			<!-- Search Results -->
+			<br />
+			<button
+				type="button"
+				onclick="searchSong(this);document.getElementById('SearchResults').scrollIntoView();"
+				id="submitSongSearch"
+				class="inputSubmit"
+			>
+				Search
+			</button>
+		</form>
+	</div>
+	<div class="row">
+		<!-- Search Results -->
+		<div class="col-md-6">
 			<div id="SearchResults" class="innerContent">
 				<h2 id="SRHeading" class="searchResultHeading">Search Results</h2>
 				<p id="RSDescription" class="searchResultDescription">Search your favourite Artist or Song above...</p>
-				<ul id="results" style="max-height: 300vh; overflow: scroll;">
+				<ul id="results" style="max-height: 200vh; overflow: scroll;">
 				</ul>
 			</div>
 		</div>
 		<!-- Currently In The List -->
-		<div class="col-md-6">
-			<div class="innerContent">
+		<div class="col-md-6"> 
+			<div id="SearchedSongsInPlaylist" class="innerContent">
 				<h2 class="searchResultHeading">Songs in Playlist</h2>
-				<div id="forloop" style="max-height: 350vh; overflow: scroll;">
+				<p class="searchResultDescription">View, Play or Delete Songs in Playlist...</p>
+				<div id="forloop" style="max-height: 200vh; overflow: scroll;">
 					{% for song in songs %}
 					<div id="{{song['spotifySongID']}}" class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
 						<div class="card-header">
