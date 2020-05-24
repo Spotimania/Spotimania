@@ -63,9 +63,10 @@ class UserControllerCase(unittest.TestCase):
 
     def test_deletePlaylist(self):
         playlist1 = createNewPlaylist('Juice Wrld')
+        self.assertTrue(getPlaylist(playlist1.id))
         deletePlaylist(playlist1.id)
-        self.assertTrue(getPlaylist(playlist1.id) is None)
         self.assertFalse(getPlaylist(playlist1.id))
+        
 
     def test_getPlaylistName(self):
         playlist1 = createNewPlaylist('Juice Wrld')
