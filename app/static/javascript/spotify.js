@@ -100,12 +100,14 @@ const searchSong = async (e) => {
 	} else if (searchOption === 'track') {
 		responseData.tracks.items.forEach((track) => {
 			document.getElementById('RSDescription').innerHTML = 'Click on Song to Add to Playlist...';
+			if (`${track.preview_url}` !== 'null') {
 			document.getElementById('results').innerHTML += 
 			`<li class="searchResultList">
 				<button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}')">
 				${track.name}
 				</button>
 			</li>`;
+		}
 		});
 	}
 };
@@ -117,12 +119,14 @@ const onClickNavigateArtist = async (id) => {
 	console.log(responseData);
 	responseData.tracks.forEach((track) => {
 		document.getElementById('RSDescription').innerHTML = 'Click on Song to Add to Playlist...';
+		if (`${track.preview_url}` !== 'null') {
 		document.getElementById('results').innerHTML += 
 		`<li class="searchResultList">
 			<button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}');">
 				${track.name}
 			</button>
 		</li>`;
+		}
 	});
 };
 

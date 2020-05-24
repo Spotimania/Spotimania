@@ -1,7 +1,7 @@
 import unittest, os
 
 import sys
-sys.path.append(".")
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from app import app, db
 from app.models import *
 from app.controllers import *
@@ -49,6 +49,71 @@ class UserControllerCase(unittest.TestCase):
         user1 = createNewUser("Frinze", "CorrectPassword", "Email@gmail.com")
         self.assertTrue(isEmailTaken("Email@gmail.com"))
         self.assertFalse(isEmailTaken("abc@gmail.com"))
+
+    def test_createNewPlaylist(self):
+        playlist1 = createNewPlaylist('Juice Wrld')
+        self.assertTrue(getPlaylist(playlist1.id))
+        self.assertFalse(getPlaylist(playlist1.id) is None)
+
+    def test_editPlaylistName(self):
+        playlist1 = createNewPlaylist('Juice Wrld')
+        editPlaylist1 = editPlaylistName(playlist1.id, 'Arcade Fire')
+        self.assertTrue(getPlaylistName(playlist1.id) == 'Arcade Fire')
+        self.assertFalse(getPlaylistName(playlist1.id) == 'Juice Wrld')
+
+    def test_deletePlaylist(self):
+        playlist1 = createNewPlaylist('Juice Wrld')
+        self.assertTrue(getPlaylist(playlist1.id))
+        deletePlaylist(playlist1.id)
+        self.assertFalse(getPlaylist(playlist1.id))
+        
+
+    def test_getPlaylistName(self):
+        playlist1 = createNewPlaylist('Juice Wrld')
+        playlist2 = createNewPlaylist('Arcade Fire')
+        self.assertEqual(getPlaylistName(playlist1.id),'Juice Wrld')
+        self.assertEqual(getPlaylistName(playlist2.id),'Arcade Fire')
+
+    def test_addSongInPlaylist(self):
+        playlist1 = createNewPlaylist('Juice Wrld')
+        song1 = addSongDetails('1', '#', '#', 'Robbery', 'Juice Wrld', 'Death Race for Love')
+        self.assertFalse(len(getSongsInPlaylist(playlist1.id))>0)
+        addSongInPlaylist(song1.id, playlist1.id)
+        self.assertTrue(len(getSongsInPlaylist(playlist1.id))>0)
+
+    def test_deleteSongInPlaylist(self):
+        playlist1 = createNewPlaylist('Juice Wrld')
+        song1 = addSongDetails('1', '#', '#', 'Robbery', 'Juice Wrld', 'Death Race for Love')
+        addSongInPlaylist(song1.id, playlist1.id)
+        self.assertTrue(len(getSongsInPlaylist(playlist1.id))>0)
+        deleteSongInPlaylist(song1.id, playlist1.id)
+        self.assertFalse(len(getSongsInPlaylist(playlist1.id))>0)
+
+    def test_getSongsInPlaylist(self):
+        playlist1 = createNewPlaylist('Juice Wrld')
+        song1 = addSongDetails('1', '#', '#', 'Robbery', 'Juice Wrld', 'Death Race for Love')
+        song2 = addSongDetails('2', '#', '#', 'Hurt Me', 'Juice Wrld', 'Goodbye & Good Riddance')
+        addSongInPlaylist(song1.id, playlist1.id)
+        addSongInPlaylist(song2.id, playlist1.id)
+        self.assertTrue(len(getSongsInPlaylist(playlist1.id))==2)
+        self.assertEqual(getSongsInPlaylist(playlist1.id)[0]['songName'],'Robbery')
+        self.assertEqual(getSongsInPlaylist(playlist1.id)[1]['songName'],'Hurt Me')
+
+    def test_getSongDetails(self):
+        song1 = addSongDetails('1', '#', '#', 'Robbery', 'Juice Wrld', 'Death Race for Love')
+        song2 = addSongDetails('2', '#', '#', 'Hurt Me', 'Juice Wrld', 'Goodbye & Good Riddance')
+        self.assertEqual(getSongDetails(song1.id).album,'Death Race for Love')
+        self.assertEqual(getSongDetails(song2.id).songName,'Hurt Me')
+
+    def test_addSongDetails(self):
+        song1 = addSongDetails('1', '#', '#', 'Robbery', 'Juice Wrld', 'Death Race for Love')
+        song2 = addSongDetails('2', '#', '#', 'Hurt Me', 'Juice Wrld', 'Goodbye & Good Riddance')
+        all = Song.query.all()
+        self.assertEqual(song1,all[0])
+        self.assertEqual(song2,all[1])
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
