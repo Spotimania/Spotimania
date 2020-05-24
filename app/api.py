@@ -9,9 +9,7 @@ def test():
 @api.route("/playlist/<playlistId>", methods=['POST'])
 def routeAddSongsInPlaylist(playlistId):
     try:
-        print(request.data)
         body = request.get_json(force=True)
-        print(body)
         song = addSongDetails(body["spotifySongID"], body["prevURL"], body["prevIMG"], body["songName"], body["artist"], body["album"])
         addSongInPlaylist(song.id,playlistId)
         return ({"message": "Success!"})

@@ -92,10 +92,7 @@ def nextSong(message):
         currentSongIndex[room] += 1
 
 def isAllPlayerInRoomSubmitted(room):
-    print(playerRooms[room])
-    print(submitted)
     for userId in playerRooms[room]:
-        print(userId,submitted[userId])
         if (not(submitted[userId])): return False
     return True
 

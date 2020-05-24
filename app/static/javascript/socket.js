@@ -112,7 +112,6 @@ $(document).ready(function () {
 		const playlistId = sessionStorage.getItem('playlistId');
 		const room = getParameterByName('room') || `${userId}Xr00mZ${username}${playlistId}`;
 		sessionStorage.setItem('room', room);
-		console.log(room);
 		socket.emit('connectFirstTime', { message: "I'm connected! ", userId, username, playlistId, room });
 		hideButtonsForNonHost();
 	});
@@ -122,7 +121,6 @@ $(document).ready(function () {
 	});
 	socket.on('syncUsers', (data) => {
 		const users = data.map((user) => ({ ...user, score: 0 }));
-		console.log(users);
 		sessionStorage.setItem('users', JSON.stringify(users));
 		updateScoreBoard();
 	});
@@ -132,7 +130,6 @@ $(document).ready(function () {
 		$('#joinModal').modal('hide');
 
 		//NEED TO DISPLAY SOMETHING
-		console.log(data);
 		const { prevIMG, prevURL, id, album } = data;
 		sessionStorage.setItem('prevIMG', prevIMG);
 		sessionStorage.setItem('prevURL', prevURL);
@@ -144,8 +141,6 @@ $(document).ready(function () {
 	});
 	socket.on('receivesScoreData', (data) => {
 		//NEED TO DISPLAY SOMETHING
-		console.log('Data Received');
-		console.log(data);
 		const { scoreReceived, newScore, username, userId } = data;
 		notifyScore(username, newScore, scoreReceived);
 
@@ -160,11 +155,9 @@ $(document).ready(function () {
 		updateScoreBoard();
 	});
 	socket.on('gameOver', (data) => {
-		console.log('GAME OVER');
 		gameOver();
 	});
 	socket.on('ready', (data) => {
-		console.log('All Players Ready');
 		const { songName, artist } = data;
 		const attemptedSongName = sessionStorage.getItem('attemptedSongName');
 		const attemptedArtist = sessionStorage.getItem('attemptedArtist');
@@ -188,7 +181,6 @@ $(document).ready(function () {
 
 const startTheGame = () => {
 	const room = sessionStorage.getItem('room');
-	console.log(room);
 	socket.emit('startGame', { room });
 
 	//MODAL INTERACTION
@@ -258,8 +250,6 @@ const submitAnswer = () => {
 	sessionStorage.setItem('attemptedSongName', song);
 	sessionStorage.setItem('attemptedArtist', artist);
 
-	console.log('SUBMITTING');
-	console.log({ artist, song, userId, room, songId });
 	socket.emit('submitAnswer', { artist, song, userId, room, songId });
 
 	// STOP SONG
@@ -297,7 +287,6 @@ const updateScoreBoard = () => {
 						<th>Scores</th>
 					</tr>`;
 	const users = JSON.parse(sessionStorage.getItem('users'));
-	console.log(users);
 	let userString = users
 		.map(
 			(user) => `<tr>
