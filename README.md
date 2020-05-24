@@ -8,6 +8,7 @@ Aditya Gupta, Frinze Lapuz, Hadi Navabi, Sarup Parajuli
 3. [App Architecture](#App-Architecture)
 4. [App Launching](#App-Launching)
 5. [App Testing](#App-Testing)
+6. [Design Process](#Design-Process)
 
 ## Introduction 
 "Spotimania" is a web application based on the Flask server side rendering micro-framework.
@@ -118,4 +119,45 @@ This controller creates a new admin account.
 ```
 This test simulates the creation of one admin user account and a normal user account. Then it tests if the account created is an admin account.
 
+## Design Process
+The planning and designing prior to development is important to prioritse high value objectives as well as the collaboration of multiple developers involved. Here are the design decisions that were involved in the planning process:
 
+#### App Functionality
+The app was developed to allow people of all ages to play a quiz-type game online together with friends/family regarding a certain topic that will appeal to many users. Having discovered the existence of the Spoitfy API, what better way to contruct a music quiz! 
+
+The Spotify API allows for the searching of songs and artists which contain multiple data such as a "preview URL", cover image, song name as well as the artist name. Using this API data, we have implemented the following functionalities:
+- Song/artist guessing quiz
+- Adding of songs to custom playlists
+- Real-time multiplayer quiz
+- Viewing of results from quizzes
+- Admin privaleges to register playlists
+
+#### Page Designs/Mock-ups
+Our selection of pages in our application consists of
+- Central homepage
+- A quizpage
+- A playlist page
+- A results page
+- Pages to allow for registration and login
+- Hidden page for admin registration.
+
+Some of our mockups include:
+
+![Playlist List](https://user-images.githubusercontent.com/62584922/82750171-ddf0c380-9de0-11ea-8dd2-6b1f81499a9b.png)
+![Playlist Admin](https://user-images.githubusercontent.com/62584922/82750173-e1844a80-9de0-11ea-8c5c-775a815a0be5.png)
+![ResultsPage](https://user-images.githubusercontent.com/62584922/82750174-e2b57780-9de0-11ea-88eb-e39ad84182ed.png)
+![Guess the song](https://user-images.githubusercontent.com/62584922/82750175-e2b57780-9de0-11ea-8dc0-450b8536fbd7.png)
+![Adding New Song](https://user-images.githubusercontent.com/62584922/82750176-e34e0e00-9de0-11ea-9624-25fec496a45d.png)
+
+#### Database Schema
+The app requires the following data relationships:
+- A User can either an admin or normal user
+- A user can play many playlists
+- A playlist can be played by many users
+- A played playlist by a user is called "results"
+- A single result will have many attempts for different songs
+- A playlist can have many songs
+- A song can belong to many playlists
+
+These relationships can be modelled by the following entity relationship diagram:
+![Entity Relationship Diagram](https://user-images.githubusercontent.com/62584922/82749902-fd86ec80-9dde-11ea-9922-6475d63bb051.png)
