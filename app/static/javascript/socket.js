@@ -284,7 +284,7 @@ const updateScoreBoard = () => {
 	const scoreboard = document.querySelector('#scoreboard');
 	const header = `<tr>
 						<th>Username</th>
-						<th>Scores</th>
+						<th>Total Scores</th>
 					</tr>`;
 	const users = JSON.parse(sessionStorage.getItem('users'));
 	let userString = users
