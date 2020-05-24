@@ -6,7 +6,6 @@ $.ajax({
 	type: 'GET',
 	dataType: 'json', // added data type
 	success: function (data) {
-		console.log(data.accessToken);
 		accessToken = data.accessToken;
 	},
 });
@@ -38,7 +37,6 @@ const deleteSong = async (e, playlistId) => {
 	try {
 		sameOriginAPI(`playlist/${playlistId}/${e.id}`, (body = {}), (method = 'DELETE'));
 		deleteSongDom(e.id);
-		console.log('Successfully Deleted');
 	} catch (err) {
 		console.log(err);
 	}
@@ -67,12 +65,10 @@ const searchSong = async (e) => {
 	if ($('#trackOption').prop('checked')) {
 		searchOption = $('#trackOption').val();
 	}
-	console.log(searchOption);
 
 	const searchInput = $('#searchInput').val();
 
 	const responseData = await (await spotifyFetchAPI(`search?q=${searchInput}&type=${searchOption}`)).json();
-	console.log(responseData);
 	if (searchOption === 'artist') {
 		responseData.artists.items.forEach((artist) => {
 			document.getElementById('RSDescription').innerHTML = 'Click on Artist to Show their Top Songs...';
@@ -123,7 +119,6 @@ const onClickNavigateArtist = async (id) => {
 	document.getElementById('results').innerHTML = '';
 	document.getElementById('RSDescription').innerHTML = 'Loading...';
 	const responseData = await (await spotifyFetchAPI(`artists/${id}/top-tracks?country=AU`)).json();
-	console.log(responseData);
 	responseData.tracks.forEach((track) => {
 		document.getElementById('RSDescription').innerHTML = 'Click on Song to Add to Playlist...';
 		if (`${track.preview_url}` !== 'null') {
@@ -138,7 +133,6 @@ const onClickNavigateArtist = async (id) => {
 
 const onClickTrack = async (id) => {
 	const data = await (await spotifyFetchAPI(`tracks/${id}?market=au`)).json();
-	console.log(data);
 	var songElement = document.getElementById(`${id}`);
 	$(`.inputSubmit#${id}`).remove();
 	songElement.style.display = 'none';
@@ -154,7 +148,6 @@ const onClickTrack = async (id) => {
 	try {
 		sameOriginAPI(`playlist/${playlistId}`, payload);
 		addSongDom(payload);
-		console.log('SUCCESS');
 	} catch (err) {
 		console.log(err);
 	}

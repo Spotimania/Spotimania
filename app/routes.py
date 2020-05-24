@@ -10,12 +10,9 @@ from app import socketio
 
 def redirectToLastVisitedPage():
     next_page = request.args.get('next')
-    print(next_page)
     # Allows only redirection to site itself and relative path
     if not next_page or url_parse(next_page).netloc != '':
-        print("REDIRECT TO INDEX")
         next_page = url_for('index')
-    print(next_page)
     return redirect(next_page)
 
 def redirectTo404():
@@ -105,16 +102,13 @@ def playlists():
     if (not(current_user.is_admin())): #filter empty playlist if not admin
         playlistsCollection = list(filter(lambda playlist: len(getSongsInPlaylist(playlist.id)),playlistsCollection))
 
-    print(playlistsCollection)
     return render_template('playlist.html', title='Songs', playlists = playlistsCollection, form=form)
 
 @app.route('/results')
 @login_required
 def results():
-
     userId = current_user.id
     resultsCollection = getResultsOfUser(userId);
-    print(resultsCollection)
     return render_template("results.html", title="Results Page", userPlayedPlaylist=resultsCollection)
 
 @app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
