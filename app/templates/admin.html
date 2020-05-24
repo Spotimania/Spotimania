@@ -43,24 +43,29 @@
 		<!-- Currently In The List -->
 		<div class="col-md-6">
 			<div class="innerContent">
-				<h2 class="searchResultHeading">Currently In The List</h2>
+				<h2 class="searchResultHeading">Songs in Playlist</h2>
 				<div id="forloop">
 					{% for song in songs %}
-					<div id="{{song['spotifySongID']}}">
-						<div class="avatar-root">
-							<img class="avatar" src="{{song['prevIMG']}}" alt="" />
+					<div class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
+						<div class="card-header">
+							<label class="inputLabel" style="font-weight: bold;">{{song["songName"]}}</label>
 						</div>
-						<p>{{song["songName"]}}</p>
-						<p>{{song["artist"]}}</p>
-						<audio controls>
-							<source src="{{song['prevURL']}}" />
-							Your browser does not support the audio element.
-						</audio>
-						<a id="{{song['spotifySongID']}}" onclick=" deleteSong(this,'{{playlist.id}}')"
-							><i class="fa fa-trash" aria-hidden="true"></i
-						></a>
+						<div class="card-body">
+							<img class="card-img-top" src="{{song['prevIMG']}}" style="width: 80%;">
+							<br><br>
+							<h4 class="card-title inputLabel" style="font-size: 15px;">by {{song["artist"]}}</h4>
+							<br>
+							<a id="{{song['spotifySongID']}}" onclick=" deleteSong(this,'{{playlist.id}}')" style="font-size: 25px;" class="btn text-muted">
+								<i class="fa fa-trash" aria-hidden="true"></i>
+							</a>
+						</div>
+						<div class="card-footer text-muted">
+							<audio controls>
+								<source src="{{song['prevURL']}}" />
+								Your browser does not support the audio element.
+							</audio>
+						</div>
 					</div>
-
 					{% endfor %}
 				</div>
 			</div>
