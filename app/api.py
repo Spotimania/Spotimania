@@ -18,6 +18,15 @@ def routeAddSongsInPlaylist(playlistId):
     except Exception as err:
         abort(Response("Something Went Wrong"))
 
+@api.route("/playlist/<playlistId>", methods=['PUT'])
+def routeEditPlaylistName(playlistId):
+    try:
+        body = request.get_json(force=True)
+        editPlaylistName(playlistId,body["playlistName"])
+        return ({"message": "Success!"})
+    except Exception as err:
+        abort(Response("Something Went Wrong"))
+
 
 @api.route("/playlist/<playlistId>/<spotifySongId>", methods=['DELETE'])
 def routeDeleteSongsInPlaylist(playlistId, spotifySongId):

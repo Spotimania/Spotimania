@@ -42,7 +42,6 @@ audio {
     font-size: 20px;
     width: 100%;
     margin: 0;
-    margin-left: 10px;
 }
 
 .inputSubmit {
@@ -50,14 +49,71 @@ audio {
 
     font-family: var(--Rubik);
     font-size: 15px;
+    color: black;
+    background-color: rgb(69, 225, 159);
+    border-radius: 25px;
+    padding: 10px 30px;
+
+    transition: color 0.25s, box-shadow 0.25s;
+}
+.inputSubmit:hover {
+    color: white;
+    box-shadow: 0 0 15px 0 rgb(69, 225, 159);
+}
+
+.radioToggle {
+    border: none;
+
+    font-family: var(--Rubik);
+    font-size: 15px;
+    color: white;
     background-color: rgb(69, 225, 159);
     border-radius: 25px;
     padding: 10px 30px;
 }
-.inputSubmit:hover {
-    box-shadow: 0 0 15px 0 rgb(69, 225, 159);
+.radioToggle.active {
+    background-color: rgb(35, 155, 110);
 }
+/* .radioToggle:hover {
+    color: blue;
+    background-color: red;
+} */
+
 
 span.error-message{
     color: salmon;
+}
+
+.searchResultHeading {
+    font-family: var(--Rubik);
+    font-size: 30px;
+
+    width: 100%;
+    text-align: center;
+
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+li.searchResultList {
+    display: flex;
+    justify-content: center;
+
+    margin: 10px;
+}
+
+img.artistArt {
+    width: 60%;
+
+    display: block;
+    margin: 10px auto;
+    border-radius: 35px;
+}
+
+p.searchResultDescription {
+    font-family: var(--Rubik);
+    font-size: 20px;
+
+    width: 100%;
+    text-align: center;
 }

@@ -44,40 +44,95 @@ const deleteSong = async (e, playlistId) => {
 	}
 };
 
+const changePlaylistName = async (e, playlistId) => {
+	const playlistName = document.querySelector('#newPlaylistName').value;
+	try {
+		sameOriginAPI(`playlist/${playlistId}`, (body = { playlistName }), (method = 'PUT'));
+		const headerTitle = document.querySelector('#headerTitle');
+		headerTitle.textContent = `Playlist: ${playlistName}`;
+	} catch (err) {
+		console.log(err);
+	}
+};
+
 const deleteSongDom = (songId) => {
-	$(`#${songId}`).remove();
+	$(`.card#${songId}`).remove();
 };
 
 const searchSong = async (e) => {
 	document.getElementById('results').innerHTML = '';
-	const searchOption = $('#searchOption').val();
+	document.getElementById('RSDescription').innerHTML = 'Loading...';
+
+	let searchOption = $('#artistOption').val();
+	if ($('#trackOption').prop('checked')) {
+		searchOption = $('#trackOption').val();
+	}
+	console.log(searchOption);
+
 	const searchInput = $('#searchInput').val();
 
 	const responseData = await (await spotifyFetchAPI(`search?q=${searchInput}&type=${searchOption}`)).json();
 	console.log(responseData);
 	if (searchOption === 'artist') {
-		responseData.artists.items.forEach((item) => {
-			document.getElementById(
-				'results'
-			).innerHTML += `<li><button class='inputSubmit' type='button' onclick="onClickNavigateArtist('${item.id}')">${item.name}</button></li>`;
+		responseData.artists.items.forEach((artist) => {
+			document.getElementById('RSDescription').innerHTML = 'Click on Artist to Show their Top Songs...';
+			if (artist.images.length == 0) {
+				document.getElementById('results').innerHTML += `<li class="searchResultList">
+					<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
+						<div class="card-header">
+							<h1 class="card-title inputLabel">${artist.name}</h1>
+							<h2 class="card-subtitle text-muted inputLabel"><small>Artist</small></h2>
+						</div>
+						<div class="card-footer">
+							<button type="button" onclick="onClickNavigateArtist('${artist.id}')" class="inputSubmit" style="font-size: 15px;">Get Top Songs</button>
+						</div>
+					</div>
+				</li>`;
+			} else {
+				document.getElementById('results').innerHTML += `<li class="searchResultList">
+					<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
+						<div class="card-header">
+							<h1 class="card-title inputLabel">${artist.name}</h1>
+							<h2 class="card-subtitle text-muted inputLabel"><small>Artist</small></h2>
+						</div>
+						<div class="card-body">
+							<img class="card-img-top artistArt" src="${artist.images[0].url}">
+						</div>
+						<div class="card-footer">
+							<button type="button" onclick="onClickNavigateArtist('${artist.id}')" class="inputSubmit" style="font-size: 15px;">Get Top Songs</button>
+						</div>
+					</div>
+				</li>`;
+			}
 		});
 	} else if (searchOption === 'track') {
 		responseData.tracks.items.forEach((track) => {
-			document.getElementById(
-				'results'
-			).innerHTML += `<li><button class='inputSubmit' id='${id}' onclick="onClickTrack('${track.id}')">${track.name}</button></li>`;
+			document.getElementById('RSDescription').innerHTML = 'Click on Song to Add to Playlist...';
+			if (`${track.preview_url}` !== 'null') {
+				document.getElementById('results').innerHTML += `<li class="searchResultList">
+				<button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}')">
+				${track.name}
+				</button>
+			</li>`;
+			}
 		});
 	}
 };
 
 const onClickNavigateArtist = async (id) => {
 	document.getElementById('results').innerHTML = '';
+	document.getElementById('RSDescription').innerHTML = 'Loading...';
 	const responseData = await (await spotifyFetchAPI(`artists/${id}/top-tracks?country=AU`)).json();
 	console.log(responseData);
 	responseData.tracks.forEach((track) => {
-		document.getElementById(
-			'results'
-		).innerHTML += `<li><button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}');">${track.name}</button></li>`;
+		document.getElementById('RSDescription').innerHTML = 'Click on Song to Add to Playlist...';
+		if (`${track.preview_url}` !== 'null') {
+			document.getElementById('results').innerHTML += `<li class="searchResultList">
+			<button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}');">
+				${track.name}
+			</button>
+		</li>`;
+		}
 	});
 };
 
@@ -85,6 +140,7 @@ const onClickTrack = async (id) => {
 	const data = await (await spotifyFetchAPI(`tracks/${id}?market=au`)).json();
 	console.log(data);
 	var songElement = document.getElementById(`${id}`);
+	$(`.inputSubmit#${id}`).remove();
 	songElement.style.display = 'none';
 	const playlistId = sessionStorage.getItem('playlistId');
 	const payload = {
@@ -106,18 +162,29 @@ const onClickTrack = async (id) => {
 
 const addSongDom = ({ spotifySongID, prevURL, prevIMG, songName, artist, album }) => {
 	const playlistId = sessionStorage.getItem('playlistId');
-	const container = document.querySelector('#forloop');
-	container.innerHTML += `				<div id="${spotifySongID}">
-					<div class="avatar-root">
-						<img class="avatar" src="${prevIMG}" alt="" />
-					</div>
-					<p>${songName}</p>
-					<p>${artist}</p>
-					<audio controls>
-						<source src="${prevURL}" />
-						Your browser does not support the audio element.
-					</audio>
-					<a id="${spotifySongID}" onclick="deleteSong(this,'${playlistId}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
-				</div>
-				`;
+	const element = document.querySelector('#forloop');
+	const temp = element.innerHTML;
+	const toBeAdded = `<div id="${spotifySongID}" class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
+		<div class="card-header">
+			<label class="inputLabel" style="font-weight: bold;">${songName}</label>
+		</div>
+		<div class="card-body">
+			<img class="card-img-top artistArt" src="${prevIMG}" style="width: 80%;">
+			<br>
+			<h4 class="card-title inputLabel" style="font-size: 15px;">by ${artist}</h4>
+			<br>
+			<a id="${spotifySongID}" onclick=" deleteSong(this,'${playlistId}')" style="font-size: 25px;" class="btn text-muted">
+				<i class="fa fa-trash" aria-hidden="true"></i>
+			</a>
+		</div>
+		<div class="card-footer text-muted">
+			<audio controls>
+				<source src="${prevURL}">
+				Your browser does not support the audio element.
+			</audio>
+		</div>
+	</div>`;
+
+	element.innerHTML = toBeAdded + temp;
+	element.scrollIntoView();
 };

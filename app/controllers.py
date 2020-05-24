@@ -65,7 +65,7 @@ def doesThisMatch(string1, string2):
 
 # Results Controllers
 def editPlaylistName(playlistId, playlistName):
-    playlist = Playlist.query.filter_by(playlistId=playlistId).first()
+    playlist = Playlist.query.filter_by(id=playlistId).first()
     playlist.playlistName = playlistName
     db.session.commit()
     return 'success'
@@ -78,7 +78,7 @@ def getResultsOfUser(userId):
     for playlist in userPlayedPlaylist:
         hashMap = playlist.to_dict()
         hashMap["results"] = []
-
+        hashMap["playlistName"] = getPlaylist(playlist.playlistId).playlistName
         # Parse all the question sets in the playlist
         individualResultsCollection = playlist.resultsIndividual
         for individualResult in individualResultsCollection:
@@ -102,7 +102,7 @@ def addIndividualResults(userId, playlistId, songId, answerArtist, answerSong, i
 
     if (result is None):
         result = Results(Playlist.query.get(playlistId), User.query.get(userId))
-    
+
     individualResults = IndividualResults(answerArtist, answerSong, isAnswerArtistCorrect, isAnswerSongCorrect, result, song)
     commitToDatabase(individualResults)
     return individualResults
@@ -129,7 +129,7 @@ def getPlaylist(playlistId):
 
 def getPlaylistName(playlistId):
     playlist = Playlist.query.get(playlistId)
-    return playlist.name
+    return playlist.playlistName
 
 def addSongInPlaylist(songId, playlistId):
     playlist = Playlist.query.get(playlistId)

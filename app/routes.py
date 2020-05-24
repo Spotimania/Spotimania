@@ -37,8 +37,8 @@ def login():
     if (form.validate_on_submit()):
         userObject = validateUserLogin(form.username.data,form.password.data)
         if(userObject):
-            flash("You are successfully logged in", "success")
             login_user(userObject, remember=form.rememberMe.data)
+            flash("You have successfully logged in as \"" + current_user.username + "\"", "success")
 
             return redirectToLastVisitedPage()
 
@@ -82,6 +82,7 @@ def registerAdmin():
 @login_required
 def logout():
     logout_user()
+    flash("You have successfully logged out", "success")
     return redirect(url_for('index'))
 
 @app.errorhandler(404)
@@ -107,6 +108,15 @@ def playlists():
     print(playlistsCollection)
     return render_template('playlist.html', title='Songs', playlists = playlistsCollection, form=form)
 
+@app.route('/results')
+@login_required
+def results():
+
+    userId = current_user.id
+    resultsCollection = getResultsOfUser(userId);
+    print(resultsCollection)
+    return render_template("results.html", title="Results Page", userPlayedPlaylist=resultsCollection)
+
 @app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
 @login_required
 def playlist(playlistId):
@@ -123,14 +133,11 @@ def playlist(playlistId):
     songs = getSongsInPlaylist(playlistId)
     return render_template("admin.html", title="Admin Home",playlist=playlist,songs=songs,session=True)
 
-@app.route('/handle_data', methods=['POST'])
-def handle_data():
-    i = request.form.getlist('songName')
-    for r in db.session.query(Song).filter(Song.songName.in_(i)):
-        db.session.delete(r)
-
-    db.session.commit()
-    return 'success'
+@app.route('/playlist/delete/<playlistId>')
+def deletePlaylistRoute(playlistId):
+    deletePlaylist(playlistId)
+    flash("Successfully Deleted Song", "success")
+    return redirect( url_for('playlists') )
 
 #SOCKET PAGES
 @app.route('/quiz/<playlistId>')
@@ -139,7 +146,3 @@ def quiz(playlistId):
     songs = getSongsInPlaylist(playlistId)
     playlist = Playlist.query.get(playlistId)
     return render_template("quiz.html", title="Quiz Page", async_mode=socketio.async_mode, session=True, sockets=True, playlist=playlist, songs=songs)
-
-@app.route('/results')
-def results():
-    return render_template("results.html", title="Results Page")
