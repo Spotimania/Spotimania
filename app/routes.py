@@ -111,7 +111,7 @@ def playlists():
 @app.route('/results')
 @login_required
 def results():
-    
+
     userId = current_user.id
     resultsCollection = getResultsOfUser(userId);
     print(resultsCollection)
@@ -133,14 +133,11 @@ def playlist(playlistId):
     songs = getSongsInPlaylist(playlistId)
     return render_template("admin.html", title="Admin Home",playlist=playlist,songs=songs,session=True)
 
-@app.route('/handle_data', methods=['POST'])
-def handle_data():
-    i = request.form.getlist('songName')
-    for r in db.session.query(Song).filter(Song.songName.in_(i)):
-        db.session.delete(r)
-
-    db.session.commit()
-    return 'success'
+@app.route('/playlist/delete/<playlistId>')
+def deletePlaylistRoute(playlistId):
+    deletePlaylist(playlistId)
+    flash("Successfully Deleted Song", "success")
+    return redirect( url_for('playlists') )
 
 #SOCKET PAGES
 @app.route('/quiz/<playlistId>')

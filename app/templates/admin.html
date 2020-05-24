@@ -1,36 +1,44 @@
-{% extends 'layout.html' %}
-
-{% block content %}
+{% extends 'layout.html' %} {% block content %}
 
 <div class="mainContent" style="background-position: bottom right;">
-	<h1 class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
+	<div class="d-flex justify-content-between">
+		<h1 class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
+		<a type="button" class="btn playlist-btn" href="{{url_for('deletePlaylistRoute',playlistId=playlist.id) }}">
+			Delete Playlist
+		</a>
+	</div>
 	<div class="row">
 		<!-- Search + Search Results -->
 		<div class="col-md-6">
 			<!-- Search -->
 			<div class="innerContent">
-                <h2 class="searchResultHeading">Search</h2>
+				<h2 class="searchResultHeading">Search</h2>
 				<form onsubmit="searchSong(this); return false;">
 					<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
-					<br><br>
+					<br /><br />
 					<div class="d-flex justify-content-end">
 						<div class="btn-group btn-group-toggle" data-toggle="buttons">
 							<label class="btn radioToggle active">
-								<input type="radio" name="radioSearchOption" id="artistOption" value="artist" checked> Artists
+								<input type="radio" name="radioSearchOption" id="artistOption" value="artist" checked /> Artists
 							</label>
-							<label class="btn radioToggle">
-								<input type="radio" name="radioSearchOption" id="trackOption" value="track"> Songs
-							</label>
+							<label class="btn radioToggle"> <input type="radio" name="radioSearchOption" id="trackOption" value="track" /> Songs </label>
 						</div>
 					</div>
-					<br>
-					<button type="button" onclick="searchSong(this);document.getElementById('results').scrollIntoView();" id="submitSongSearch" class="inputSubmit">Search</button>
+					<br />
+					<button
+						type="button"
+						onclick="searchSong(this);document.getElementById('results').scrollIntoView();"
+						id="submitSongSearch"
+						class="inputSubmit"
+					>
+						Search
+					</button>
 				</form>
 			</div>
 			<!-- Search Results -->
 			<div class="innerContent">
 				<h2 class="searchResultHeading">Search Results</h2>
-				<p id="RSDescription" class="searchResultDescription">Search your favourite Artist or Song above... </p>
+				<p id="RSDescription" class="searchResultDescription">Search your favourite Artist or Song above...</p>
 				<ul id="results" style="max-height: 300vh; overflow: scroll;">
 					<li class="searchResultList">
 						<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
@@ -39,7 +47,7 @@
 								<h2 class="card-subtitle text-muted inputLabel"><small>Artist</small></h2>
 							</div>
 							<div class="card-body">
-								<img class="card-img-top artistArt" src="https://i.scdn.co/image/51dad9aaabe5643818840207a9a8957c2ad91bf2">
+								<img class="card-img-top artistArt" src="https://i.scdn.co/image/51dad9aaabe5643818840207a9a8957c2ad91bf2" />
 							</div>
 							<div class="card-footer">
 								<button type="button" class="inputSubmit" style="font-size: 15px;">Get Top Songs</button>
@@ -60,7 +68,7 @@
 
 					<li class="searchResultList">
 						<button type="button" class="inputSubmit" style="font-size: 20px;">
-							<img src="https://i.scdn.co/image/51dad9aaabe5643818840207a9a8957c2ad91bf2" class="artistArt">
+							<img src="https://i.scdn.co/image/51dad9aaabe5643818840207a9a8957c2ad91bf2" class="artistArt" />
 							Michael Jackson
 						</button>
 					</li>
@@ -78,11 +86,16 @@
 							<label class="inputLabel" style="font-weight: bold;">{{song["songName"]}}</label>
 						</div>
 						<div class="card-body">
-							<img class="card-img-top artistArt" src="{{song['prevIMG']}}" style="width: 80%;">
-							<br>
+							<img class="card-img-top artistArt" src="{{song['prevIMG']}}" style="width: 80%;" />
+							<br />
 							<h4 class="card-title inputLabel" style="font-size: 15px;">by {{song["artist"]}}</h4>
-							<br>
-							<a id="{{song['spotifySongID']}}" onclick=" deleteSong(this,'{{playlist.id}}')" style="font-size: 25px;" class="btn text-muted">
+							<br />
+							<a
+								id="{{song['spotifySongID']}}"
+								onclick=" deleteSong(this,'{{playlist.id}}')"
+								style="font-size: 25px;"
+								class="btn text-muted"
+							>
 								<i class="fa fa-trash" aria-hidden="true"></i>
 							</a>
 						</div>
