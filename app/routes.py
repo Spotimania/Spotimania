@@ -37,8 +37,8 @@ def login():
     if (form.validate_on_submit()):
         userObject = validateUserLogin(form.username.data,form.password.data)
         if(userObject):
-            flash("You are successfully logged in", "success")
             login_user(userObject, remember=form.rememberMe.data)
+            flash("You have successfully logged in as \"" + current_user.username + "\"", "success")
 
             return redirectToLastVisitedPage()
 
@@ -82,6 +82,7 @@ def registerAdmin():
 @login_required
 def logout():
     logout_user()
+    flash("You have successfully logged out", "success")
     return redirect(url_for('index'))
 
 @app.errorhandler(404)

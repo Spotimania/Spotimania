@@ -81,3 +81,11 @@
 ul	{
 	list-style-type: none;
 }
+
+.alert {
+    margin: 0;
+    padding: 15px 60px;
+}
+.alert-success {
+    background-color:  rgb(69, 225, 159);
+}
