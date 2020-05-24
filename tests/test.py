@@ -50,7 +50,19 @@ class UserControllerCase(unittest.TestCase):
         user1 = createNewUser("Frinze", "CorrectPassword", "Email@gmail.com")
         self.assertTrue(isEmailTaken("Email@gmail.com"))
         self.assertFalse(isEmailTaken("abc@gmail.com"))
+   
+    def test_deleteUser(self):
+        user1 = createNewUser("Frinze", "CorrectPassword", "Email@gmail.com")
+        all = len(User.query.all())
+        self.assertEqual(1, all)
+        deleteUser(user1.username)
+        all = len(User.query.all())
+        self.assertEqual(0, all)
 
+    def test_doesThisMatch(self):
+        self.assertTrue(doesThisMatch("Taylor Swift", "Tayla Swift"))
+        self.assertFalse(doesThisMatch("Taylor", "Hello"))
+       
     # Playlist Test
     def test_createNewPlaylist(self):
         playlist1 = createNewPlaylist('Juice Wrld')
