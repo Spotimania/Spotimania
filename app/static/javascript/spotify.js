@@ -44,6 +44,17 @@ const deleteSong = async (e, playlistId) => {
 	}
 };
 
+const changePlaylistName = async (e, playlistId) => {
+	const playlistName = document.querySelector('#newPlaylistName').value;
+	try {
+		sameOriginAPI(`playlist/${playlistId}`, (body = { playlistName }), (method = 'PUT'));
+		const headerTitle = document.querySelector('#headerTitle');
+		headerTitle.textContent = `Playlist: ${playlistName}`;
+	} catch (err) {
+		console.log(err);
+	}
+};
+
 const deleteSongDom = (songId) => {
 	$(`.card#${songId}`).remove();
 };
