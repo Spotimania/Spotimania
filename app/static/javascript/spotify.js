@@ -45,7 +45,7 @@ const deleteSong = async (e, playlistId) => {
 };
 
 const deleteSongDom = (songId) => {
-	$(`#${songId}`).remove();
+	$(`.card#${songId}`).remove();
 };
 
 const searchSong = async (e) => {
@@ -66,8 +66,7 @@ const searchSong = async (e) => {
 		responseData.artists.items.forEach((artist) => {
 			document.getElementById('RSDescription').innerHTML = 'Click on Artist to Show their Top Songs...';
 			if (artist.images.length == 0) {
-				document.getElementById('results').innerHTML += 
-				`<li class="searchResultList">
+				document.getElementById('results').innerHTML += `<li class="searchResultList">
 					<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
 						<div class="card-header">
 							<h1 class="card-title inputLabel">${artist.name}</h1>
@@ -78,10 +77,8 @@ const searchSong = async (e) => {
 						</div>
 					</div>
 				</li>`;
-			}
-			else {
-				document.getElementById('results').innerHTML += 
-				`<li class="searchResultList">
+			} else {
+				document.getElementById('results').innerHTML += `<li class="searchResultList">
 					<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
 						<div class="card-header">
 							<h1 class="card-title inputLabel">${artist.name}</h1>
@@ -101,13 +98,12 @@ const searchSong = async (e) => {
 		responseData.tracks.items.forEach((track) => {
 			document.getElementById('RSDescription').innerHTML = 'Click on Song to Add to Playlist...';
 			if (`${track.preview_url}` !== 'null') {
-			document.getElementById('results').innerHTML += 
-			`<li class="searchResultList">
+				document.getElementById('results').innerHTML += `<li class="searchResultList">
 				<button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}')">
 				${track.name}
 				</button>
 			</li>`;
-		}
+			}
 		});
 	}
 };
@@ -120,8 +116,7 @@ const onClickNavigateArtist = async (id) => {
 	responseData.tracks.forEach((track) => {
 		document.getElementById('RSDescription').innerHTML = 'Click on Song to Add to Playlist...';
 		if (`${track.preview_url}` !== 'null') {
-		document.getElementById('results').innerHTML += 
-		`<li class="searchResultList">
+			document.getElementById('results').innerHTML += `<li class="searchResultList">
 			<button class='inputSubmit' id='${track.id}' onclick="onClickTrack('${track.id}');">
 				${track.name}
 			</button>
@@ -134,6 +129,7 @@ const onClickTrack = async (id) => {
 	const data = await (await spotifyFetchAPI(`tracks/${id}?market=au`)).json();
 	console.log(data);
 	var songElement = document.getElementById(`${id}`);
+	$(`.inputSubmit#${id}`).remove();
 	songElement.style.display = 'none';
 	const playlistId = sessionStorage.getItem('playlistId');
 	const payload = {
@@ -157,8 +153,7 @@ const addSongDom = ({ spotifySongID, prevURL, prevIMG, songName, artist, album }
 	const playlistId = sessionStorage.getItem('playlistId');
 	const element = document.querySelector('#forloop');
 	const temp = element.innerHTML;
-	const toBeAdded = 
-	`<div id="${spotifySongID}" class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
+	const toBeAdded = `<div id="${spotifySongID}" class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
 		<div class="card-header">
 			<label class="inputLabel" style="font-weight: bold;">${songName}</label>
 		</div>
@@ -178,7 +173,7 @@ const addSongDom = ({ spotifySongID, prevURL, prevIMG, songName, artist, album }
 			</audio>
 		</div>
 	</div>`;
-	
+
 	element.innerHTML = toBeAdded + temp;
 	element.scrollIntoView();
 };
