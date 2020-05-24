@@ -3,28 +3,24 @@
 Aditya Gupta, Frinze Lapuz, Hadi Navabi, Sarup Parajuli
 
 ## Table of Contents
-1. [Introduction](#intro)
-2. [Assessment Mechanism](#assMech)
-3. [App Architecture](#appArch)
-4. [App Launch](#appLaunch)
-5. [App Testing](#appTest)
+1. [Introduction](#introduction)
+2. [Assessment Mechanism](#Assessment-Mechanism)
+3. [App Architecture](#App-Architecture)
+4. [App Launching](#App-Launching)
+5. [App Testing](#App-Testing)
 
-<a name="intro"></a>
 ## Introduction 
 "Spotimania" is a web application based on the Flask server side rendering micro-framework.
 The inspiration for this app comes from the Spotify API which has been used here to create song quizzes for anyone who registers into the application with a personal acccount. The user is then able to play certain pre-made playlists with multiple people in real-time (through sockets). The quiz itself will require the user to guess the name and the artist for the 30 second demo of the song, and at the end of each question they will receive instant feedback comprising of the correct answers and the scores of all the users that are playing together.
 
 After all the questions have been answered, the user can then click on the results page to see his/her full history of results of every playlist that has been attempted by them. The application also provides administration privileges that allows an admin to add/delete/customise playlists that are available to users. This application provides an excellent and fun quiz for both music lovers and just the casual listener to not only test their knowledge of certain music genres, artists, etc, but also a chance to delve into different music cultures.
 
-<a name="assMech"></a>
 ## Assessment Mechanism
 Spotimania uses 'fuzzy matching' of short answers as its primary assessment mechanism. The python module of 'fuzzywuzzy' has been imported into the flask application which is then used to check if the short answer provided by the user obtains a similarity score of greater than 80/100 based on the fuzzy matching algorithm when compared to the actual answer. We have chosen 80 as our benchmark as when testing the fuzzy algortihm, we found it is quite sensitive in scenarios when even a single letter has been accidentally left out or misspelt compared to the answer and we did not wish to penalise users based on minor spelling errors if it was clear they had identified the correct answer.
 
- <a name="appArch"></a>
 ## App Architecture (Flask)
 This application has been constructed using the python Flask microframeowork MVC. In terms of the Model View Controller Architecture, in our application, the model is represented by the SQLite database and SQLAlchemy, the View is represented by the server-side rendering template of jinja2 which assembles the HTML static content based on the request and the Controller is represented by the Python Flask library.
 
-<a name="appLaunch"></a>
 ## App Launching
 As with most Flask applications, launching this application requires running the Flask package using `$ flask run` in the directory of the application which will then result in the application being hosted on a local server, usually: http://127.0.0.1:5000/. However, Spotimania has also been deployed on Heroku, and therefore can be accessed directly from the web via the link: https://spotimania.herokuapp.com/.
 
@@ -67,7 +63,6 @@ $ pip install -r requirements.txt
 ```bash
 $ flask run
 ```
- <a name="appTest"></a>
 ## App Testing
 Our application has been contructed with testers for all the essential controllers that are based on the CRUD operations of the models. To run the tests, we can simply type `python tests/test.py` in the directory of the application as all of our test are contained in the test.py file. Some of the controllers that are writen are:
 #### getResultsOfUser(userId):
