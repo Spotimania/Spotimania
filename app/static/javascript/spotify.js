@@ -68,18 +68,32 @@ const searchSong = async (e) => {
 			if (artist.images.length == 0) {
 				document.getElementById('results').innerHTML += 
 				`<li class="searchResultList">
-					<button type="button" class="inputSubmit" onclick="onClickNavigateArtist('${artist.id}')" style="font-size: 20px;">
-						${artist.name}
-					</button>
+					<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
+						<div class="card-header">
+							<h1 class="card-title inputLabel">${artist.name}</h1>
+							<h2 class="card-subtitle text-muted inputLabel"><small>Artist</small></h2>
+						</div>
+						<div class="card-footer">
+							<button type="button" onclick="onClickNavigateArtist('${artist.id}')" class="inputSubmit" style="font-size: 15px;">Get Top Songs</button>
+						</div>
+					</div>
 				</li>`;
 			}
 			else {
 				document.getElementById('results').innerHTML += 
 				`<li class="searchResultList">
-					<button type="button" class="inputSubmit" onclick="onClickNavigateArtist('${artist.id}')" style="font-size: 20px;">
-						<img src="${artist.images[0].url}" class="artistArt">
-						${artist.name}
-					</button>
+					<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
+						<div class="card-header">
+							<h1 class="card-title inputLabel">${artist.name}</h1>
+							<h2 class="card-subtitle text-muted inputLabel"><small>Artist</small></h2>
+						</div>
+						<div class="card-body">
+							<img class="card-img-top artistArt" src="${artist.images[0].url}">
+						</div>
+						<div class="card-footer">
+							<button type="button" onclick="onClickNavigateArtist('${artist.id}')" class="inputSubmit" style="font-size: 15px;">Get Top Songs</button>
+						</div>
+					</div>
 				</li>`;
 			}
 		});
@@ -137,18 +151,30 @@ const onClickTrack = async (id) => {
 
 const addSongDom = ({ spotifySongID, prevURL, prevIMG, songName, artist, album }) => {
 	const playlistId = sessionStorage.getItem('playlistId');
-	const container = document.querySelector('#forloop');
-	container.innerHTML += `				<div id="${spotifySongID}">
-					<div class="avatar-root">
-						<img class="avatar" src="${prevIMG}" alt="" />
-					</div>
-					<p>${songName}</p>
-					<p>${artist}</p>
-					<audio controls>
-						<source src="${prevURL}" />
-						Your browser does not support the audio element.
-					</audio>
-					<a id="${spotifySongID}" onclick="deleteSong(this,'${playlistId}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
-				</div>
-				`;
+	const element = document.querySelector('#forloop');
+	const temp = element.innerHTML;
+	const toBeAdded = 
+	`<div id="${spotifySongID}" class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
+		<div class="card-header">
+			<label class="inputLabel" style="font-weight: bold;">${songName}</label>
+		</div>
+		<div class="card-body">
+			<img class="card-img-top artistArt" src="${prevIMG}" style="width: 80%;">
+			<br>
+			<h4 class="card-title inputLabel" style="font-size: 15px;">by ${artist}</h4>
+			<br>
+			<a id="${spotifySongID}" onclick=" deleteSong(this,'${playlistId}')" style="font-size: 25px;" class="btn text-muted">
+				<i class="fa fa-trash" aria-hidden="true"></i>
+			</a>
+		</div>
+		<div class="card-footer text-muted">
+			<audio controls>
+				<source src="${prevURL}">
+				Your browser does not support the audio element.
+			</audio>
+		</div>
+	</div>`;
+	
+	element.innerHTML = toBeAdded + temp;
+	element.scrollIntoView();
 };

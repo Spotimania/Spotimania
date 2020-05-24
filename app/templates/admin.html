@@ -23,6 +23,7 @@
 							</label>
 						</div>
 					</div>
+					<br>
 					<button type="button" onclick="searchSong(this);document.getElementById('results').scrollIntoView();" id="submitSongSearch" class="inputSubmit">Search</button>
 				</form>
 			</div>
@@ -30,7 +31,33 @@
 			<div class="innerContent">
 				<h2 class="searchResultHeading">Search Results</h2>
 				<p id="RSDescription" class="searchResultDescription">Search your favourite Artist or Song above... </p>
-				<ul id="results" style="max-height: 200vh; overflow: scroll;">
+				<ul id="results" style="max-height: 300vh; overflow: scroll;">
+					<li class="searchResultList">
+						<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
+							<div class="card-header">
+								<h1 class="card-title inputLabel">Michael Jackson</h1>
+								<h2 class="card-subtitle text-muted inputLabel"><small>Artist</small></h2>
+							</div>
+							<div class="card-body">
+								<img class="card-img-top artistArt" src="https://i.scdn.co/image/51dad9aaabe5643818840207a9a8957c2ad91bf2">
+							</div>
+							<div class="card-footer">
+								<button type="button" class="inputSubmit" style="font-size: 15px;">Get Top Songs</button>
+							</div>
+						</div>
+					</li>
+					<li class="searchResultList">
+						<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
+							<div class="card-header">
+								<h1 class="card-title inputLabel">Michael Jackson</h1>
+								<h2 class="card-subtitle text-muted inputLabel"><small>Artist</small></h2>
+							</div>
+							<div class="card-footer">
+								<button type="button" class="inputSubmit" style="font-size: 15px;">Get Top Songs</button>
+							</div>
+						</div>
+					</li>
+
 					<li class="searchResultList">
 						<button type="button" class="inputSubmit" style="font-size: 20px;">
 							<img src="https://i.scdn.co/image/51dad9aaabe5643818840207a9a8957c2ad91bf2" class="artistArt">
@@ -44,15 +71,15 @@
 		<div class="col-md-6">
 			<div class="innerContent">
 				<h2 class="searchResultHeading">Songs in Playlist</h2>
-				<div id="forloop">
+				<div id="forloop" style="max-height: 350vh; overflow: scroll;">
 					{% for song in songs %}
-					<div class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
+					<div id="{{song['spotifySongID']}}" class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
 						<div class="card-header">
 							<label class="inputLabel" style="font-weight: bold;">{{song["songName"]}}</label>
 						</div>
 						<div class="card-body">
-							<img class="card-img-top" src="{{song['prevIMG']}}" style="width: 80%;">
-							<br><br>
+							<img class="card-img-top artistArt" src="{{song['prevIMG']}}" style="width: 80%;">
+							<br>
 							<h4 class="card-title inputLabel" style="font-size: 15px;">by {{song["artist"]}}</h4>
 							<br>
 							<a id="{{song['spotifySongID']}}" onclick=" deleteSong(this,'{{playlist.id}}')" style="font-size: 25px;" class="btn text-muted">
