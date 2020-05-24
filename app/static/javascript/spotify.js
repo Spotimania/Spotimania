@@ -167,7 +167,7 @@ const addSongDom = ({ spotifySongID, prevURL, prevIMG, songName, artist, album }
 			<h4 class="card-title inputLabel" style="font-size: 15px;">by ${artist}</h4>
 			<br>
 			<a id="${spotifySongID}" onclick=" deleteSong(this,'${playlistId}')" style="font-size: 25px;" class="btn text-muted">
-				<i class="fa fa-trash" aria-hidden="true"></i>
+				<i class="fa fa-trash"></i>
 			</a>
 		</div>
 		<div class="card-footer text-muted">
