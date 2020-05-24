@@ -65,7 +65,7 @@ def doesThisMatch(string1, string2):
 
 # Results Controllers
 def editPlaylistName(playlistId, playlistName):
-    playlist = Playlist.query.filter_by(playlistId=playlistId).first()
+    playlist = Playlist.query.filter_by(id=playlistId).first()
     playlist.playlistName = playlistName
     db.session.commit()
     return 'success'
@@ -129,7 +129,7 @@ def getPlaylist(playlistId):
 
 def getPlaylistName(playlistId):
     playlist = Playlist.query.get(playlistId)
-    return playlist.name
+    return playlist.playlistName
 
 def addSongInPlaylist(songId, playlistId):
     playlist = Playlist.query.get(playlistId)
@@ -162,6 +162,9 @@ def getSongsInPlaylist(playlistId):
 def getSongDetails(songId):
     song = Song.query.get(songId)
     return song
+
+def getSongDetailsBySpotifySongId(spotifySongId):
+    return Song.query.filter_by(spotifySongID=spotifySongId).first()
 
 def addSongDetails(spotifySongID, prevURL, prevIMG, songName, artist, album):
     song =Song.query.filter_by(spotifySongID=spotifySongID).first()

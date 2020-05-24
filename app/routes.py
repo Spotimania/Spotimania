@@ -10,12 +10,9 @@ from app import socketio
 
 def redirectToLastVisitedPage():
     next_page = request.args.get('next')
-    print(next_page)
     # Allows only redirection to site itself and relative path
     if not next_page or url_parse(next_page).netloc != '':
-        print("REDIRECT TO INDEX")
         next_page = url_for('index')
-    print(next_page)
     return redirect(next_page)
 
 def redirectTo404():
@@ -37,8 +34,8 @@ def login():
     if (form.validate_on_submit()):
         userObject = validateUserLogin(form.username.data,form.password.data)
         if(userObject):
-            flash("You are successfully logged in", "success")
             login_user(userObject, remember=form.rememberMe.data)
+            flash("You have successfully logged in as \"" + current_user.username + "\"", "success")
 
             return redirectToLastVisitedPage()
 
@@ -82,6 +79,7 @@ def registerAdmin():
 @login_required
 def logout():
     logout_user()
+    flash("You have successfully logged out", "success")
     return redirect(url_for('index'))
 
 @app.errorhandler(404)
@@ -104,16 +102,13 @@ def playlists():
     if (not(current_user.is_admin())): #filter empty playlist if not admin
         playlistsCollection = list(filter(lambda playlist: len(getSongsInPlaylist(playlist.id)),playlistsCollection))
 
-    print(playlistsCollection)
     return render_template('playlist.html', title='Songs', playlists = playlistsCollection, form=form)
 
 @app.route('/results')
 @login_required
 def results():
-    
     userId = current_user.id
     resultsCollection = getResultsOfUser(userId);
-    print(resultsCollection)
     return render_template("results.html", title="Results Page", userPlayedPlaylist=resultsCollection)
 
 @app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
@@ -132,14 +127,11 @@ def playlist(playlistId):
     songs = getSongsInPlaylist(playlistId)
     return render_template("admin.html", title="Admin Home",playlist=playlist,songs=songs,session=True)
 
-@app.route('/handle_data', methods=['POST'])
-def handle_data():
-    i = request.form.getlist('songName')
-    for r in db.session.query(Song).filter(Song.songName.in_(i)):
-        db.session.delete(r)
-
-    db.session.commit()
-    return 'success'
+@app.route('/playlist/delete/<playlistId>')
+def deletePlaylistRoute(playlistId):
+    deletePlaylist(playlistId)
+    flash("Successfully Deleted Song", "success")
+    return redirect( url_for('playlists') )
 
 #SOCKET PAGES
 @app.route('/quiz/<playlistId>')

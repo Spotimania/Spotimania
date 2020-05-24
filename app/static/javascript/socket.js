@@ -1,3 +1,10 @@
+// ROBOT VOICE OPTION
+window.narrator = true;
+const toggleNarrator = (e) => {
+	window.narrator = !window.narrator;
+	e.textContent = `Turn ${window.narrator ? 'off' : 'on'} Narrator`;
+};
+
 // TIMERS
 const setTimer = () => {
 	let timeleft = 60;
@@ -17,6 +24,7 @@ const setTimer = () => {
 		}
 		timeleft -= 1;
 	}, 1000);
+	window.Timer = songTimer;
 };
 
 // WITH MODIFCATION FROM
@@ -57,10 +65,12 @@ const getJoinLink = () => {
 	showToast('Sharing is Caring!!', `Link Has Been Copied To Your Clipboard`);
 };
 
+// CREEPY ROBOT VOICE RIGHT HERE!! - Narrations
+const say = (text) => speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+const sayBasedOnOption = (text) => window.narrator && say(text);
+
 const showToast = (title, message) => {
-	// CREEPY ROBOT VOICE RIGHT HERE!!
-	// const say = (text) => speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-	// say(message);
+	sayBasedOnOption(message);
 	const toasts = document.querySelector('#toasts');
 	toasts.outerHTML = `<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toasts" style="position: absolute; top: 100px; right: 100px;">
   <div class="toast-header">
@@ -102,7 +112,6 @@ $(document).ready(function () {
 		const playlistId = sessionStorage.getItem('playlistId');
 		const room = getParameterByName('room') || `${userId}Xr00mZ${username}${playlistId}`;
 		sessionStorage.setItem('room', room);
-		console.log(room);
 		socket.emit('connectFirstTime', { message: "I'm connected! ", userId, username, playlistId, room });
 		hideButtonsForNonHost();
 	});
@@ -112,7 +121,6 @@ $(document).ready(function () {
 	});
 	socket.on('syncUsers', (data) => {
 		const users = data.map((user) => ({ ...user, score: 0 }));
-		console.log(users);
 		sessionStorage.setItem('users', JSON.stringify(users));
 		updateScoreBoard();
 	});
@@ -122,7 +130,6 @@ $(document).ready(function () {
 		$('#joinModal').modal('hide');
 
 		//NEED TO DISPLAY SOMETHING
-		console.log(data);
 		const { prevIMG, prevURL, id, album } = data;
 		sessionStorage.setItem('prevIMG', prevIMG);
 		sessionStorage.setItem('prevURL', prevURL);
@@ -134,8 +141,6 @@ $(document).ready(function () {
 	});
 	socket.on('receivesScoreData', (data) => {
 		//NEED TO DISPLAY SOMETHING
-		console.log('Data Received');
-		console.log(data);
 		const { scoreReceived, newScore, username, userId } = data;
 		notifyScore(username, newScore, scoreReceived);
 
@@ -143,17 +148,39 @@ $(document).ready(function () {
 		const users = JSON.parse(sessionStorage.getItem('users'));
 		const userToUpdate = users.find((user) => user.userId === userId);
 		userToUpdate.score = newScore;
-		console.log(users);
-		console.log(userToUpdate);
-		// CAN ONLY STORAGE JSON
+
+		// CAN ONLY STORE STRING
 		sessionStorage.setItem('users', JSON.stringify(users));
+
 		updateScoreBoard();
+	});
+	socket.on('gameOver', (data) => {
+		gameOver();
+	});
+	socket.on('ready', (data) => {
+		const { songName, artist } = data;
+		const attemptedSongName = sessionStorage.getItem('attemptedSongName');
+		const attemptedArtist = sessionStorage.getItem('attemptedArtist');
+		//CHANGE TEXT
+		const modalTextContent = document.querySelector('#modalTextContent');
+		if (isHost()) {
+			modalTextContent.textContent = `Press "Next" for Next round`;
+		} else {
+			modalTextContent.textContent = `Waiting For Host To Press Next`;
+		}
+
+		modalTextContent.innerHTML += `<br> The Song Was <strong>${songName}</strong> by <strong>${artist}</strong> `;
+		modalTextContent.innerHTML += `<br> Your Answer Was <strong>${attemptedSongName}</strong> by <strong>${attemptedArtist}</strong> `;
+
+		sayBasedOnOption(modalTextContent.textContent);
+		//ENABLE BUTTON
+		const primaryButton = document.querySelector('#modalPrimary');
+		primaryButton.disabled = false;
 	});
 });
 
 const startTheGame = () => {
 	const room = sessionStorage.getItem('room');
-	console.log(room);
 	socket.emit('startGame', { room });
 
 	//MODAL INTERACTION
@@ -169,9 +196,32 @@ const startTheGame = () => {
 	primaryButton.onclick = nextSong;
 };
 
+const gameOver = () => {
+	const userId = sessionStorage.getItem('userId');
+	const users = JSON.parse(sessionStorage.getItem('users'));
+	const score = users.find((user) => user.userId === userId).score;
+	//SCORE
+	const modalTextContent = document.querySelector('#modalTextContent');
+	modalTextContent.textContent = `The game is finished. You have Scored ${score} points. Thank you for playing the game`;
+	sayBasedOnOption(modalTextContent.textContent);
+	//CHANGE BUTTON FUNCTION
+	const primaryButton = document.querySelector('#modalPrimary');
+	primaryButton.textContent = 'Play Other Playlists';
+	primaryButton.onclick = () => (window.location.href = '../');
+
+	//MODAL INTERACTION
+	// WORK AROUND - FORCE SHOW
+	setTimeout(() => {
+		$('#joinModal').modal('show');
+	}, 300);
+
+	$('#joinlink').hide();
+};
+
 const nextSong = () => {
 	const room = sessionStorage.getItem('room');
-	console.log('ABCDE');
+	const image = document.querySelector('#quizImage');
+	image.src = '/static/images/song-placeholder.jpg';
 	socket.emit('nextSong', { room });
 };
 
@@ -196,7 +246,10 @@ const submitAnswer = () => {
 	const artist = document.querySelector('#artistName').value;
 	const songSelectors = document.querySelector('#songName');
 	const song = document.querySelector('#songName').value;
-	console.log({ artist, song, userId, room, songId });
+
+	sessionStorage.setItem('attemptedSongName', song);
+	sessionStorage.setItem('attemptedArtist', artist);
+
 	socket.emit('submitAnswer', { artist, song, userId, room, songId });
 
 	// STOP SONG
@@ -209,6 +262,16 @@ const submitAnswer = () => {
 
 	// SHOW MODAL
 	$('#joinModal').modal('show');
+
+	// CLEAR TIMER
+	clearTimeout(window.Timer);
+
+	// WAITING FOR OTHER PLAYERS
+	//SCORE
+	const modalTextContent = document.querySelector('#modalTextContent');
+	modalTextContent.textContent = `Waiting For Other Players To Guess The Song`;
+	const primaryButton = document.querySelector('#modalPrimary');
+	primaryButton.disabled = true;
 };
 
 const showImageHint = () => {
@@ -224,7 +287,6 @@ const updateScoreBoard = () => {
 						<th>Scores</th>
 					</tr>`;
 	const users = JSON.parse(sessionStorage.getItem('users'));
-	console.log(users);
 	let userString = users
 		.map(
 			(user) => `<tr>
@@ -236,13 +298,17 @@ const updateScoreBoard = () => {
 	scoreboard.innerHTML = `${header}${userString}`;
 };
 
+const isHost = () => {
+	const userId = sessionStorage.getItem('userId');
+	const hostUserId = sessionStorage.getItem('room').split('Xr00mZ')[0];
+	return userId == hostUserId;
+};
+
 const hideButtonsForNonHost = () => {
-	const isHost = () => {
-		const userId = sessionStorage.getItem('userId');
-		const room = sessionStorage.getItem('room');
-		return userId == room.split('Xr00mZ')[0];
-	};
 	if (!isHost()) {
+		// SET THE NEW MODAL
+		const modalTitle = document.querySelector('#modalTitle');
+		modalTitle.textContent = 'Scoreboard';
 		$('#modalSecondary').hide();
 		$('#modalPrimary').hide();
 	}

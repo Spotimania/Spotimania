@@ -17,7 +17,8 @@
 			<div class="modal-header">
 				<h5 class="modal-title" id="modalTitle">{{playlist.playlistName}}</h5>
 			</div>
-			<div>
+			<div></div>
+			<div class="modal-body" id="joinModalContent">
 				<table style="width: 100%;" id="scoreboard">
 					<tr>
 						<th>Username</th>
@@ -28,11 +29,11 @@
 						<td>Doe</td>
 					</tr>
 				</table>
-			</div>
-			<div class="modal-body" id="joinModalContent">
-				<a class="btn" onclick="getJoinLink(this)">Copy Join Link</a>
+				<p id="modalTextContent"></p>
+				<a class="btn" onclick="getJoinLink(this)" id="joinlink">Copy Join Link</a>
 			</div>
 			<div class="modal-footer" id="buttonContainer">
+				<button type="button" class="btn btn-info" onclick="toggleNarrator(this)">Turn Off Narrator</button>
 				<button type="button" class="btn btn-secondary" onclick="window.history.back();" id="modalSecondary">Close</button>
 				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="startTheGame(this)" id="modalPrimary">
 					Start The Game
@@ -42,7 +43,6 @@
 	</div>
 </div>
 
-<!-- No Hint or Image has been added. Does Spotify API provide such an image or we have to get it from somewhere else? -->
 <div id="toasts"></div>
 <div class="mainContent" style="background-position: bottom left;">
 	<div class="row">
@@ -63,6 +63,7 @@
 				</div>
 				<br /><br />
 				<fieldset>
+					<form action="" onSubmit="event.preventDefault();">
 					<label class="inputLabel">What song is it? (5 points)</label>
 					<input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess" />
 					<br /><br />
@@ -73,6 +74,7 @@
 					<br><br>
 					<input type="submit" class="btn inputSubmit" onclick="submitAnswer(this)" />
 					<button class="btn" onclick="showImageHint(this)">Hint</button>
+					</form>
 				</fieldset>
 			</div>
 		</div>
