@@ -60,9 +60,8 @@ audio {
     color: white;
     box-shadow: 0 0 15px 0 rgb(69, 225, 159);
 }
-.inputHint:active {
-    color: white;
-    box-shadow: 0 0 100px 0 rgb(69, 225, 159);
+.inputSubmit:active {
+    box-shadow: 0 0 50px 0 rgb(69, 225, 159);
 }
 
 .inputHint {
@@ -82,8 +81,7 @@ audio {
     box-shadow: 0 0 15px 0 rgb(195, 195, 195);
 }
 .inputHint:active {
-    color: white;
-    box-shadow: 0 0 100px 0 rgb(195, 195, 195);
+    box-shadow: 0 0 50px 0 rgb(195, 195, 195);
 }
 
 .radioToggle {
