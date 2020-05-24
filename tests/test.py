@@ -76,6 +76,7 @@ class UserControllerCase(unittest.TestCase):
     def test_addSongInPlaylist(self):
         playlist1 = createNewPlaylist('Juice Wrld')
         song1 = addSongDetails('1', '#', '#', 'Robbery', 'Juice Wrld', 'Death Race for Love')
+        self.assertFalse(len(getSongsInPlaylist(playlist1.id))>0)
         addSongInPlaylist(song1.id, playlist1.id)
         self.assertTrue(len(getSongsInPlaylist(playlist1.id))>0)
 
