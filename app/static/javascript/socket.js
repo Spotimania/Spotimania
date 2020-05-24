@@ -228,7 +228,8 @@ const gameOver = () => {
 
 const nextSong = () => {
 	const room = sessionStorage.getItem('room');
-	console.log('ABCDE');
+	const image = document.querySelector('#quizImage');
+	image.src = '/static/images/song-placeholder.jpg';
 	socket.emit('nextSong', { room });
 };
 
