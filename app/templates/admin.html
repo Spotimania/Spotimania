@@ -1,77 +1,152 @@
 {% extends 'layout.html' %} {% block content %}
 
-<style>
-	ul {
-		max-height: 80vh;
-		overflow: scroll;
-	}
-
-	li {
-		margin: 5px;
-		display: flex;
-		justify-content: center;
-	}
-
-	.searchResultHeading {
-		font-family: var(--Rubik);
-		font-size: 30px;
-
-		width: 100%;
-		text-align: center;
-
-		margin: 0;
-		margin-bottom: 15px;
-	}
-
-	.searchResultDescription {
-	}
-</style>
-
-{% include 'components/alerts.html' %}
+<!-- Modal -->
+<div class="modal fade" id="playlistModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Edit Playlist</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form name="login" action="" method="POST">
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="newPlaylistName" class="inputLabel"></label>
+						<input type="text" id="newPlaylistName" class="inputGuess" />
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button
+						type="button"
+						class="btn btn-primary"
+						data-dismiss="modal"
+						onclick="changePlaylistName(this,{{playlist.id}})"
+						id="modalPrimary"
+					>
+						Save
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 
 <div class="mainContent" style="background-position: bottom right;">
-	<h1 class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
+	<div class="d-flex justify-content-between">
+		<h1 id="headerTitle" class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
+		<div id="headerButtons">
+			<a type="button" class="btn playlist-btn" href="{{url_for('deletePlaylistRoute',playlistId=playlist.id) }}">
+				Delete Playlist
+			</a>
+			<!-- Button trigger modal -->
+			<button type="button" class="btn playlist-btn" data-toggle="modal" data-target="#playlistModal">
+				Edit Playlist Name
+			</button>
+		</div>
+	</div>
 	<div class="row">
+		<!-- Search + Search Results -->
 		<div class="col-md-6">
+			<!-- Search -->
 			<div class="innerContent">
-				<form>
-					<label class="inputLabel">Search</label>
-					<div class="input-group-prepend">
-						<label class="input-group-text" for="inputGroupSelect01">Options</label>
-					</div>
-					<select class="custom-select" id="searchOption" name="searchOption">
-						<option value="artist" selected>Artist</option>
-						<option value="track">Track</option>
-					</select>
-
+				<h2 class="searchResultHeading">Search</h2>
+				<form onsubmit="searchSong(this); return false;">
 					<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
-					<br /><br /><br />
-					<button type="button" onclick="searchSong(this)" id="submitSongSearch" class="inputSubmit">Search</button>
+					<br /><br />
+					<div class="d-flex justify-content-end">
+						<div class="btn-group btn-group-toggle" data-toggle="buttons">
+							<label class="btn radioToggle active">
+								<input type="radio" name="radioSearchOption" id="artistOption" value="artist" checked /> Artists
+							</label>
+							<label class="btn radioToggle"> <input type="radio" name="radioSearchOption" id="trackOption" value="track" /> Songs </label>
+						</div>
+					</div>
+					<br />
+					<button
+						type="button"
+						onclick="searchSong(this);document.getElementById('results').scrollIntoView();"
+						id="submitSongSearch"
+						class="inputSubmit"
+					>
+						Search
+					</button>
 				</form>
 			</div>
+			<!-- Search Results -->
 			<div class="innerContent">
 				<h2 class="searchResultHeading">Search Results</h2>
-				<p class="searchResultDescription" id="SRDescription"></p>
-				<ul id="results"></ul>
+				<p id="RSDescription" class="searchResultDescription">Search your favourite Artist or Song above...</p>
+				<ul id="results" style="max-height: 300vh; overflow: scroll;">
+					<li class="searchResultList">
+						<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
+							<div class="card-header">
+								<h1 class="card-title inputLabel">Michael Jackson</h1>
+								<h2 class="card-subtitle text-muted inputLabel"><small>Artist</small></h2>
+							</div>
+							<div class="card-body">
+								<img class="card-img-top artistArt" src="https://i.scdn.co/image/51dad9aaabe5643818840207a9a8957c2ad91bf2" />
+							</div>
+							<div class="card-footer">
+								<button type="button" class="inputSubmit" style="font-size: 15px;">Get Top Songs</button>
+							</div>
+						</div>
+					</li>
+					<li class="searchResultList">
+						<div class="card text-center text-white bg-dark" style="border-radius: 25px; width: 100%;">
+							<div class="card-header">
+								<h1 class="card-title inputLabel">Michael Jackson</h1>
+								<h2 class="card-subtitle text-muted inputLabel"><small>Artist</small></h2>
+							</div>
+							<div class="card-footer">
+								<button type="button" class="inputSubmit" style="font-size: 15px;">Get Top Songs</button>
+							</div>
+						</div>
+					</li>
+
+					<li class="searchResultList">
+						<button type="button" class="inputSubmit" style="font-size: 20px;">
+							<img src="https://i.scdn.co/image/51dad9aaabe5643818840207a9a8957c2ad91bf2" class="artistArt" />
+							Michael Jackson
+						</button>
+					</li>
+				</ul>
 			</div>
 		</div>
+		<!-- Currently In The List -->
 		<div class="col-md-6">
 			<div class="innerContent">
-				<label class="inputLabel">Currently In The List</label>
-				{% for song in songs %}
-				<div>
-					<div class="avatar-root">
-						<img class="avatar" src="{{song['prevIMG']}}" alt="" />
+				<h2 class="searchResultHeading">Songs in Playlist</h2>
+				<div id="forloop" style="max-height: 350vh; overflow: scroll;">
+					{% for song in songs %}
+					<div id="{{song['spotifySongID']}}" class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
+						<div class="card-header">
+							<label class="inputLabel" style="font-weight: bold;">{{song["songName"]}}</label>
+						</div>
+						<div class="card-body">
+							<img class="card-img-top artistArt" src="{{song['prevIMG']}}" style="width: 80%;" />
+							<br />
+							<h4 class="card-title inputLabel" style="font-size: 15px;">by {{song["artist"]}}</h4>
+							<br />
+							<a
+								id="{{song['spotifySongID']}}"
+								onclick=" deleteSong(this,'{{playlist.id}}')"
+								style="font-size: 25px;"
+								class="btn text-muted"
+							>
+								<i class="fa fa-trash" aria-hidden="true"></i>
+							</a>
+						</div>
+						<div class="card-footer text-muted">
+							<audio controls>
+								<source src="{{song['prevURL']}}" />
+								Your browser does not support the audio element.
+							</audio>
+						</div>
 					</div>
-					<p>{{song["songName"]}}</p>
-					<p>{{song["artist"]}}</p>
-					<audio controls>
-						<source src="{{song['prevURL']}}" />
-						Your browser does not support the audio element.
-					</audio>
+					{% endfor %}
 				</div>
-				<a id="{{song['id']}}" onclick="deleteSong(this,'{{playlist.id}}')"><i class="fa fa-trash" aria-hidden="true"></i></a>
-				{% endfor %}
 			</div>
 		</div>
 	</div>
@@ -79,7 +154,6 @@
 
 <script>
 	sessionStorage.setItem('playlistId', '{{playlist.id}}');
-	console.log('SESION SAVED');
 </script>
 
 {% endblock %}

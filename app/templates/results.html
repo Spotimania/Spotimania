@@ -2,6 +2,47 @@
 
 {% block content %}
 
-<h1>Your Results {{ current_user.username }} !</h1>
+<h1 class="table-text">Your Results History <span class ="table-title">{{ current_user.username }}</span> !</h1>
+<div class="panel-group" >
+    <div>
+        {% for playlist in userPlayedPlaylist %}
+        <div class="card">
+            <div class="card-header" id="headingOne"  style="background-color: rgb(69, 225, 159);">
+                <h2 class="mb-0">
+                        Playlist - "{{ playlist.playlistName }}"
+                </h2>
+            </div>
 
+            <div id="{{ playlist.playlistId }}">
+                <div class="card-body">
+                    <table  class= "table table-hover" style="width:100%; font-size: 1.3rem;">
+                        <tr>
+                        <th> Your Song Answer </th>
+                        <th> Was your song correct? </th>
+                        <th> Correct Song </th>
+                        <th> Your Artist Answer </th>
+                        <th> Was your artist correct? </th>
+                        <th> Correct Artist </th>
+                        <th> Marks Scored (/10) </th>
+                        <th> Date Attempted </th>
+                        </tr>
+                    {% for result in playlist.results %}
+                        <tr>
+                        <td>{{ result.answerSong }}</td>
+                        <td>{{ "Yes" if result.isAnswerSongCorrect else "No" }}</td>
+                        <td>{{ result.correctSongName }}</td>
+                        <td>{{ result.answerArtist }}</td>
+                        <td>{{ "Yes" if result.isAnswerArtistCorrect else "No" }}</td>
+                        <td>{{ result.correctArtist }}</td>
+                        <td>{{ result.isAnswerArtistCorrect*5 + result.isAnswerSongCorrect*5}}</td>
+                        <td>{{ result.date_created|datetimeformat }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

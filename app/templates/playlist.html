@@ -1,43 +1,17 @@
 {% extends 'layout.html' %} {% block content %}
 
-<script language="JavaScript">
-	//checkbox to check all boxes
-	function toggle(source) {
-		checkboxes = document.getElementsByName('songName');
-		for (var i = 0, n = checkboxes.length; i < n; i++) {
-			checkboxes[i].checked = source.checked;
-		}
-	}
-</script>
-<!--Style table-->
-<style type="text/css">
-	th {
-		background-color: black;
-		color: white;
-	}
-
-	td,
-	th {
-		text-align: center;
-	}
-
-	tr:nth-child(even) {
-		background-color: #dddddd;
-	}
-
-	div.playlistTable {
-		overflow: auto;
-	}
-</style>
-<h1>Playlist</h1>
+<div class="d-flex justify-content-between">
+<h1 class="table-text">List of Playlists</h1>
+{% if current_user.is_admin() %}
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-	Create A New Playlist
+<button type="button" class="btn playlist-btn" style="border-radius: initial;"data-toggle="modal" data-target="#playlistModal">
+	Create New Playlist
 </button>
+{% endif %}
+</div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-	aria-hidden="true">
+<div class="modal fade" id="playlistModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -61,15 +35,14 @@
 
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 				{{form.submit(class="inputSubmit")}}
 			</div>
 			</form>
 		</div>
 	</div>
 </div>
-<div class="playlistTable">
-	<table style="width: 100%;">
+<div class="table table-hover">
+	<table style="width: 100%; font-size: 1.5rem">
 		<tr>
 			<th>Playlist Id</th>
 			<th>Playlist Name</th>
@@ -77,24 +50,23 @@
 			<th>Date Last Modified</th>
 			<th></th>
 		</tr>
-
 		<tr>
 			{% for playlist in playlists %}
+		</tr>
 		<tr>
-			<td>{{ playlist.id }}</th>
-			<td>{{ playlist.playlistName }}</th>
-			<td>{{ playlist.date_created|datetimeformat  }}</th>
-			<td>{{ playlist.date_modified|datetimeformat }}</th>
+			<td>{{ playlist.id }}</td>
+			<td>{{ playlist.playlistName }}</td>
+			<td>{{ playlist.date_created|datetimeformat  }}</td>
+			<td>{{ playlist.date_modified|datetimeformat }}</td>
 			<td>
-				{% if current_user.is_admin %}
-				<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}">Edit</a>
+				{% if current_user.is_admin() %}
+				<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}"><i class="fa-2x fas fa-edit"></i></a>
 				{% endif %}
 
-				<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}">Play</a></th>
+				<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}"><i class="fa-2x fas fa-gamepad"></i></a>
+			</td>
 		</tr>
-
 		{% endfor %}
-		</tr>
 	</table>
 </div>
 

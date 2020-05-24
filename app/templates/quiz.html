@@ -1,35 +1,84 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block content %}
 
-{% block content %}
+<!-- ON OPEN MODAL -->
+<!-- Modal -->
+<div
+	class="modal fade"
+	data-keyboard="false"
+	data-backdrop="static"
+	id="joinModal"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="exampleModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalTitle">{{playlist.playlistName}}</h5>
+			</div>
+			<div></div>
+			<div class="modal-body" id="joinModalContent">
+				<table style="width: 100%;" id="scoreboard">
+					<tr>
+						<th>Username</th>
+						<th>Scores</th>
+					</tr>
+					<tr>
+						<td>John</td>
+						<td>Doe</td>
+					</tr>
+				</table>
+				<p id="modalTextContent"></p>
+				<a class="btn" onclick="getJoinLink(this)" id="joinlink">Copy Join Link</a>
+			</div>
+			<div class="modal-footer" id="buttonContainer">
+				<button type="button" class="btn btn-info" onclick="toggleNarrator(this)">Turn Off Narrator</button>
+				<button type="button" class="btn btn-secondary" onclick="window.history.back();" id="modalSecondary">Close</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="startTheGame(this)" id="modalPrimary">
+					Start The Game
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
 
-<!-- No Hint or Image has been added. Does Spotify API provide such an image or we have to get it from somewhere else? -->
-
+<div id="toasts"></div>
 <div class="mainContent" style="background-position: bottom left;">
-    <div class="row">
-        <div class="col-md-5">
-            <h1 class="sub-headline" style="font-size: 40px;">Guess the Song...</h1>
-        </div>
-        <div class="col-md-7">
-            <div class="innerContent">
-                <div class="musicContent">
-                    <audio controls>
-                        <source src="https://p.scdn.co/mp3-preview/4901df6e0f8bf6ce93e08df7d98a50e220c45799?cid=b060111d7a074485871624166dbd16ce">
-                    Your browser does not support the audio element.
-                    </audio>
-                </div>
-                <br><br>
-                <fieldset>
-                    <label class="inputLabel">What song is it?</label>
-                    <input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess">
-                    <br><br>
-                    <label class="inputLabel">Who is the artist?</label>
-                    <input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess">
-                    <br><br><br>
-                    <input type="submit" class="btn inputSubmit">
-                </fieldset>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-md-5">
+			<h1 class="sub-headline" style="font-size: 40px;">Guess the Song...</h1>
+			<img src="{{ url_for('static', filename='images/song-placeholder.jpg') }}" alt="" id="quizImage" />
+		</div>
+		<div class="col-md-7">
+			<div class="innerContent">
+				<div class="musicContent">
+					<audio controls id="quizAudioPlayer" loop>
+						<source
+							src="https://p.scdn.co/mp3-preview/4901df6e0f8bf6ce93e08df7d98a50e220c45799?cid=b060111d7a074485871624166dbd16ce"
+							id="quizSong"
+						/>
+						Your browser does not support the audio element.
+					</audio>
+				</div>
+				<br /><br />
+				<fieldset>
+					<form action="" onSubmit="event.preventDefault();">
+					<label class="inputLabel">What song is it? (5 points)</label>
+					<input id="songName" type="text" placeholder="e.g. Despacito" class="inputGuess" />
+					<br /><br />
+					<label class="inputLabel">Who is the artist? (5 points)</label>
+					<input id="artistName" type="text" placeholder="e.g. Micheal Jackson" class="inputGuess" />
+					<br /><br />
+					<div id="countdown" style="font-size: 1.5rem;"></div>
+					<br><br>
+					<input type="submit" class="btn inputSubmit" onclick="submitAnswer(this)" />
+					<button class="btn" onclick="showImageHint(this)">Hint</button>
+					</form>
+				</fieldset>
+			</div>
+		</div>
+	</div>
 </div>
 
 {% endblock %}

@@ -58,6 +58,7 @@
     font-family: var(--Livvic);
 }
 
+.playlist-btn,
 .cta-btn{
     display: initial;
     font-size: 1.5rem;
@@ -75,6 +76,14 @@
 .cta-btn:hover,
 .cta-btn:focus{
     background: transparent;
+    border: 1.5px solid var(--secondary-font-color);
+    color: white;
+    transform: translateY(-4px);
+}
+
+.playlist-btn:hover,
+.playlist-btn:focus{
+    background: rgb(0, 3, 2);
     border: 1.5px solid var(--secondary-font-color);
     color: white;
     transform: translateY(-4px);
