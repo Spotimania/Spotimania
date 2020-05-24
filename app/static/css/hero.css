@@ -83,7 +83,7 @@
 
 .playlist-btn:hover,
 .playlist-btn:focus{
-    background: rgb(5, 63, 39);
+    background: rgb(0, 3, 2);
     border: 1.5px solid var(--secondary-font-color);
     color: white;
     transform: translateY(-4px);

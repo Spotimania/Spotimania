@@ -61,3 +61,15 @@ audio {
 span.error-message{
     color: salmon;
 }
+
+.table-text{
+    font-family: var(--Rubik);
+    font-size: 3rem;
+    margin-bottom: 3rem; 
+}
+
+.table-title{
+    font-weight: 5rem; 
+    color: rgb(211, 72, 62);
+}
+   
