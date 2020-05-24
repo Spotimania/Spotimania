@@ -19,6 +19,7 @@ class UserControllerCase(unittest.TestCase):
         db.session.remove()
         db.drop_all()
 
+    # User Test
     def test_createNewUser(self):
         user1 = createNewUser("Frinze", "Password", "Email@gmail.com")
         user2 = createNewUser("Sarup", "SomePass", "Email2@gmail.com")
@@ -50,6 +51,7 @@ class UserControllerCase(unittest.TestCase):
         self.assertTrue(isEmailTaken("Email@gmail.com"))
         self.assertFalse(isEmailTaken("abc@gmail.com"))
 
+    # Playlist Test
     def test_createNewPlaylist(self):
         playlist1 = createNewPlaylist('Juice Wrld')
         self.assertTrue(getPlaylist(playlist1.id))
@@ -66,7 +68,6 @@ class UserControllerCase(unittest.TestCase):
         self.assertTrue(getPlaylist(playlist1.id))
         deletePlaylist(playlist1.id)
         self.assertFalse(getPlaylist(playlist1.id))
-        
 
     def test_getPlaylistName(self):
         playlist1 = createNewPlaylist('Juice Wrld')
@@ -74,6 +75,7 @@ class UserControllerCase(unittest.TestCase):
         self.assertEqual(getPlaylistName(playlist1.id),'Juice Wrld')
         self.assertEqual(getPlaylistName(playlist2.id),'Arcade Fire')
 
+    # Songs Test
     def test_addSongInPlaylist(self):
         playlist1 = createNewPlaylist('Juice Wrld')
         song1 = addSongDetails('1', '#', '#', 'Robbery', 'Juice Wrld', 'Death Race for Love')
@@ -110,7 +112,74 @@ class UserControllerCase(unittest.TestCase):
         song2 = addSongDetails('2', '#', '#', 'Hurt Me', 'Juice Wrld', 'Goodbye & Good Riddance')
         all = Song.query.all()
         self.assertEqual(song1,all[0])
-        self.assertEqual(song2,all[1])
+        self.assertEqual(song2, all[1])
+
+    # Results Test
+    def test_addIndividualResults(self):
+        user1 = createNewUser("Frinze", "CorrectPassword", "Email@gmail.com")
+        playlist1 = createNewPlaylist("Some Hits")
+        song1 = addSongDetails("someId", "someURL", "someIMG", "someName", "someArtist", "someAlbum")
+        addSongInPlaylist(song1.id, playlist1.id)
+
+        self.assertFalse(len(Results.query.all())==1)
+        self.assertFalse(len(IndividualResults.query.all())==2)
+
+        addIndividualResults(user1.id, playlist1.id, "wrongAnswer", "wrongAnswer", song1.id, False, False)
+        addIndividualResults(user1.id, playlist1.id, "someName", "someArtist", song1.id,True, True)
+
+        self.assertTrue(len(Results.query.all())==1)
+        self.assertTrue(len(IndividualResults.query.all())==2)
+
+    def test_getResultsOfUser(self):
+        user1 = createNewUser("Frinze", "CorrectPassword", "Email@gmail.com")
+        playlist1 = createNewPlaylist("Some Hits")
+        playlist2 = createNewPlaylist("Another Playlist")
+
+        song1 = addSongDetails("someId","someURL","someIMG","someName","someArtist","someAlbum")
+        song2 = addSongDetails("someId2","someURL2","someIMG2","someName2","someArtist2","someAlbum2")
+
+        # 2 different playlist played by User
+        addSongInPlaylist(song1.id, playlist1.id)
+        addSongInPlaylist(song2.id, playlist2.id)
+
+        individualResult1=addIndividualResults(user1.id, playlist1.id, song1.id, "wrongAnswer", "wrongAnswer", False, False)
+        individualResult2=addIndividualResults(user1.id, playlist2.id, song2.id, "someName", "someArtist", True, True)
+
+        compiledResultDict = getResultsOfUser(1)
+
+        playlistResult1 = compiledResultDict[0]
+        playlistResult2 = compiledResultDict[1]
+
+        self.assertTrue(playlistResult1["playlistId"],1)
+        self.assertTrue(playlistResult2["playlistId"], 2)
+
+        self.assertTrue(playlistResult1["userId"],1)
+        self.assertTrue(playlistResult2["userId"], 1)
+
+        individualResult1= playlistResult1["results"][0]
+        individualResult2 = playlistResult2["results"][0]
+
+        self.assertTrue(individualResult1["answerArtist"],"wrongAnswer")
+        self.assertTrue(individualResult2["answerArtist"], "someName")
+
+    def test_deleteResults(self):
+        user1 = createNewUser("Frinze", "CorrectPassword", "Email@gmail.com")
+        playlist1 = createNewPlaylist("Some Hits")
+        song1 = addSongDetails("someId", "someURL", "someIMG", "someName", "someArtist", "someAlbum")
+        addSongInPlaylist(song1.id, playlist1.id)
+
+        addIndividualResults(user1.id, playlist1.id, "wrongAnswer", "wrongAnswer", song1.id, False, False)
+        addIndividualResults(user1.id, playlist1.id, "someName", "someArtist", song1.id,True, True)
+
+        self.assertTrue(len(Results.query.all())==1)
+        self.assertTrue(len(IndividualResults.query.all()) == 2)
+
+        deleteResults(1)
+
+        self.assertTrue(len(Results.query.all())==0)
+        self.assertTrue(len(IndividualResults.query.all()) == 0)
+
+
 
 
 
