@@ -3,32 +3,26 @@
 <!-- Modal -->
 <div class="modal fade" id="playlistModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
+		<div class="modal-content" style="padding: 5px 10px; border-radius: 25px;">
 			<div class="modal-header">
-				<h5 class="modal-title" id="ModalLabel">Edit Playlist</h5>
-				<button type="button" class="close" data-dismiss="modal">
+				<h5 class="modal-title searchResultHeading" id="ModalLabel">Edit Playlist Name</h5>
+				<button class="close" data-dismiss="modal" style="font-size: 25px;">
 					<span>&times;</span>
 				</button>
 			</div>
-			<form name="login" action="" onsubmit="changePlaylistName(this,{{playlist.id}});" method="POST">
-				<div class="modal-body">
-					<div class="form-group">
-						<label for="newPlaylistName" class="inputLabel"></label>
-						<input type="text" id="newPlaylistName" class="inputGuess" />
-					</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="newPlaylistName" class="inputLabel">New Playlist Name</label>
+					<input type="text" id="newPlaylistName" class="inputGuess" placeholder="Enter New Name...">
 				</div>
-				<div class="modal-footer">
-					<button
-						type="button"
-						class="btn btn-primary"
-						data-dismiss="modal"
-						onclick="changePlaylistName(this,{{playlist.id}})"
-						id="modalPrimary"
-					>
-						Save
-					</button>
-				</div>
-			</form>
+			</div>
+			<div class="modal-footer">
+				<button class="btn inputSubmit"
+					data-dismiss="modal"
+					onclick="changePlaylistName(this,{{playlist.id}})"
+					id="modalPrimary"
+				>Save</button>
+			</div>
 		</div>
 	</div>
 </div>
