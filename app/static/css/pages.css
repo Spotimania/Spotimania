@@ -60,6 +60,31 @@ audio {
     color: white;
     box-shadow: 0 0 15px 0 rgb(69, 225, 159);
 }
+.inputSubmit:active {
+    box-shadow: 0 0 50px 0 rgb(69, 225, 159);
+}
+
+.inputHint {
+    border: none; /* To Remove the weird effect */
+
+    font-family: var(--Rubik);
+    font-size: 15px;
+    color: black;
+    background-color: rgb(195, 195, 195);
+    border-radius: 25px;
+    padding: 10px 30px;
+
+    transition: color 0.25s, box-shadow 0.25s;
+}
+.join-btn,
+.inputHint:hover {
+    color: white;
+    box-shadow: 0 0 15px 0 rgb(195, 195, 195);
+}
+.join-btn,
+.inputHint:active {
+    box-shadow: 0 0 50px 0 rgb(195, 195, 195);
+}
 
 .radioToggle {
     border: none;
@@ -74,11 +99,6 @@ audio {
 .radioToggle.active {
     background-color: rgb(35, 155, 110);
 }
-/* .radioToggle:hover {
-    color: blue;
-    background-color: red;
-} */
-
 
 span.error-message{
     color: salmon;
@@ -128,4 +148,26 @@ p.searchResultDescription {
     font-weight: 5rem; 
     color: rgb(211, 72, 62);
 }
-   
+
+ul#results {
+    max-height: 200vh;
+    overflow: scroll; 
+    margin: 0;
+}
+
+div#forloop > div {
+    border-radius: 25px;
+    margin: 10px;
+}
+
+.join-btn{
+    border: none; /* To Remove the weird effect */
+
+    font-family: var(--Rubik);
+    font-size: 10px;
+    color: black;
+    background-color: rgb(195, 195, 195);
+    padding: 5px 15px;
+
+    transition: color 0.25s;
+}

@@ -1,7 +1,7 @@
 {% extends 'layout.html' %} {% block content %}
 
 <div class="d-flex justify-content-between">
-<h1 class="table-text">List of Playlists</h1>
+<h1 class="table-text">List of Quizzes</h1>
 {% if current_user.is_admin() %}
 <!-- Button trigger modal -->
 <button type="button" class="btn playlist-btn" style="border-radius: initial;"data-toggle="modal" data-target="#playlistModal">
@@ -44,20 +44,25 @@
 <div class="table table-hover">
 	<table style="width: 100%; font-size: 1.5rem">
 		<tr>
+			{% if current_user.is_admin() %}
 			<th>Playlist Id</th>
-			<th>Playlist Name</th>
+			{% endif %}
 			<th>Date Created</th>
 			<th>Date Last Modified</th>
+			<th>Playlist Name</th>
+			<th>Quizzes</th>
 			<th></th>
 		</tr>
 		<tr>
 			{% for playlist in playlists %}
 		</tr>
 		<tr>
+			{% if current_user.is_admin() %}
 			<td>{{ playlist.id }}</td>
-			<td>{{ playlist.playlistName }}</td>
+			{% endif %}
 			<td>{{ playlist.date_created|datetimeformat  }}</td>
 			<td>{{ playlist.date_modified|datetimeformat }}</td>
+			<td>{{ playlist.playlistName }}</td>
 			<td>
 				{% if current_user.is_admin() %}
 				<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}"><i class="fa-2x fas fa-edit"></i></a>

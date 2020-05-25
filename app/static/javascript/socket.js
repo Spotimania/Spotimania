@@ -207,7 +207,7 @@ const gameOver = () => {
 	//CHANGE BUTTON FUNCTION
 	const primaryButton = document.querySelector('#modalPrimary');
 	primaryButton.textContent = 'Play Other Playlists';
-	primaryButton.onclick = () => (window.location.href = '../');
+	primaryButton.onclick = () => (window.location.href = '../playlists');$('#modalPrimary').show();
 
 	//MODAL INTERACTION
 	// WORK AROUND - FORCE SHOW
@@ -284,7 +284,7 @@ const updateScoreBoard = () => {
 	const scoreboard = document.querySelector('#scoreboard');
 	const header = `<tr>
 						<th>Username</th>
-						<th>Scores</th>
+						<th>Total Scores</th>
 					</tr>`;
 	const users = JSON.parse(sessionStorage.getItem('users'));
 	let userString = users

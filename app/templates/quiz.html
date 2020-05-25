@@ -20,15 +20,15 @@
 				<table style="width: 100%;" id="scoreboard">
 					<tr>
 						<th>Username</th>
-						<th>Scores</th>
+						<th>Total Scores</th>
 					</tr>
 					<tr>
-						<td>John</td>
-						<td>Doe</td>
+						<td>Loading</td>
+						<td>Loading</td>
 					</tr>
 				</table>
 				<p id="modalTextContent"></p>
-				<a class="btn" onclick="getJoinLink(this)" id="joinlink">Copy Join Link</a>
+				<a class="btn join-btn" onclick="getJoinLink(this)" id="joinlink">Copy Join Link</a>
 			</div>
 			<div class="modal-footer" id="buttonContainer">
 				<button type="button" class="btn btn-info" onclick="toggleNarrator(this)">Turn Off Narrator</button>
@@ -71,7 +71,7 @@
 					<div id="countdown" style="font-size: 1.5rem;"></div>
 					<br><br>
 					<input type="submit" class="btn inputSubmit" onclick="submitAnswer(this)" />
-					<button class="btn" onclick="showImageHint(this)">Hint</button>
+					<button class="btn inputHint" onclick="showImageHint(this)">Hint</button>
 					</form>
 				</fieldset>
 			</div>

@@ -29,11 +29,9 @@
 }
 
 .headline{
-    /* color: rgb(8, 242, 215); */
     color: rgb(69, 225, 159);
     font-size: 2.5rem;
     font-family: var(--Livvic);
-    /* text-transform: uppercase; */
     font-weight: 400;
     letter-spacing: 0.2rem;
     margin-right: -0.5rem;
@@ -62,8 +60,6 @@
 .cta-btn{
     display: initial;
     font-size: 1.5rem;
-    /* background-color:  rgb(130, 227, 215); */
-    /* background-color: rgb(8, 242, 215); */
     background-color: rgb(69, 225, 159);
     padding: 1rem 3rem;
     color: black;
