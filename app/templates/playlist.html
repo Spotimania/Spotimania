@@ -46,12 +46,11 @@
 		<tr>
 			{% if current_user.is_admin() %}
 			<th>Playlist Id</th>
+			{% endif %}
 			<th>Date Created</th>
 			<th>Date Last Modified</th>
 			<th>Playlist Name</th>
-			{% else %}
 			<th>Quizzes</th>
-			{% endif %}
 			<th></th>
 		</tr>
 		<tr>
@@ -60,9 +59,9 @@
 		<tr>
 			{% if current_user.is_admin() %}
 			<td>{{ playlist.id }}</td>
+			{% endif %}
 			<td>{{ playlist.date_created|datetimeformat  }}</td>
 			<td>{{ playlist.date_modified|datetimeformat }}</td>
-			{% endif %}
 			<td>{{ playlist.playlistName }}</td>
 			<td>
 				{% if current_user.is_admin() %}
