@@ -22,7 +22,7 @@ def redirectTo404():
 @app.route("/home")
 @app.route("/index")
 def index():
-    return render_template("index.html", index=True)
+    return render_template("index.html", index=True, title="Spotimania")
 
 @app.route("/login",methods=["GET","POST"])
 def login():
@@ -85,7 +85,7 @@ def logout():
 @app.errorhandler(404)
 @app.route('/404')
 def page404(error=404):
-    return render_template('404.html'), 404
+    return render_template('404.html', title="Page not found"), 404
 
 
 @app.route('/playlists', methods=['GET', 'POST'])
