@@ -76,10 +76,12 @@ audio {
 
     transition: color 0.25s, box-shadow 0.25s;
 }
+.join-btn,
 .inputHint:hover {
     color: white;
     box-shadow: 0 0 15px 0 rgb(195, 195, 195);
 }
+.join-btn,
 .inputHint:active {
     box-shadow: 0 0 50px 0 rgb(195, 195, 195);
 }
@@ -156,4 +158,16 @@ ul#results {
 div#forloop > div {
     border-radius: 25px;
     margin: 10px;
+}
+
+.join-btn{
+    border: none; /* To Remove the weird effect */
+
+    font-family: var(--Rubik);
+    font-size: 10px;
+    color: black;
+    background-color: rgb(195, 195, 195);
+    padding: 5px 15px;
+
+    transition: color 0.25s;
 }
