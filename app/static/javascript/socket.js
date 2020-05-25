@@ -207,7 +207,7 @@ const gameOver = () => {
 	//CHANGE BUTTON FUNCTION
 	const primaryButton = document.querySelector('#modalPrimary');
 	primaryButton.textContent = 'Play Other Playlists';
-	primaryButton.onclick = () => (window.location.href = '../');
+	primaryButton.onclick = () => (window.location.href = '../playlists');$('#modalPrimary').show();
 
 	//MODAL INTERACTION
 	// WORK AROUND - FORCE SHOW
