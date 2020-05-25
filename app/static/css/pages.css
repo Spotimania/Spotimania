@@ -146,4 +146,14 @@ p.searchResultDescription {
     font-weight: 5rem; 
     color: rgb(211, 72, 62);
 }
-   
+
+ul#results {
+    max-height: 200vh;
+    overflow: scroll; 
+    margin: 0;
+}
+
+div#forloop > div {
+    border-radius: 25px;
+    margin: 10px;
+}

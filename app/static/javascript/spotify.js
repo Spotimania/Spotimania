@@ -157,7 +157,7 @@ const addSongDom = ({ spotifySongID, prevURL, prevIMG, songName, artist, album }
 	const playlistId = sessionStorage.getItem('playlistId');
 	const element = document.querySelector('#forloop');
 	const temp = element.innerHTML;
-	const toBeAdded = `<div id="${spotifySongID}" class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
+	const toBeAdded = `<div id="${spotifySongID}" class="card text-center text-white bg-dark">
 		<div class="card-header">
 			<label class="inputLabel" style="font-weight: bold;">${songName}</label>
 			<h2 class="card-subtitle text-success inputLabel"><small>Newly Added!</small></h2>

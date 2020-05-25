@@ -73,22 +73,22 @@
 	</div>
 	<div class="row">
 		<!-- Search Results -->
-		<div class="col-md-6">
+		<div class="col-md-6" style="padding: 0;">
 			<div id="SearchResults" class="innerContent">
 				<h2 id="SRHeading" class="searchResultHeading">Search Results</h2>
 				<p id="RSDescription" class="searchResultDescription">Search your favourite Artist or Song above...</p>
-				<ul id="results" style="max-height: 200vh; overflow: scroll;">
+				<ul id="results">
 				</ul>
 			</div>
 		</div>
 		<!-- Currently In The List -->
-		<div class="col-md-6"> 
+		<div class="col-md-6" style="padding: 0;"> 
 			<div id="SearchedSongsInPlaylist" class="innerContent">
 				<h2 class="searchResultHeading">Songs in Playlist</h2>
 				<p class="searchResultDescription">View, Play or Delete Songs in Playlist...</p>
 				<div id="forloop" style="max-height: 200vh; overflow: scroll;">
 					{% for song in songs %}
-					<div id="{{song['spotifySongID']}}" class="card text-center text-white bg-dark" style="border-radius: 25px; margin: 10px 0;">
+					<div id="{{song['spotifySongID']}}" class="card text-center text-white bg-dark">
 						<div class="card-header">
 							<label class="inputLabel" style="font-weight: bold;">{{song["songName"]}}</label>
 						</div>
