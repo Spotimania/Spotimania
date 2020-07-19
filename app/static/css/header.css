@@ -85,16 +85,20 @@ header{
 
 .nav-link{
     display: block;
-    color: white;
+    color: lightgrey;
     text-transform: uppercase;
     font-family: var(--Livvic);
     font-size: 1.4rem;
     letter-spacing: 0.5px;
     margin-right: -1px;
     font-weight: 1000;
-    transition: color .5s;
+    transition: color .15s;
 }
 
 .nav-link:hover{
     color: var(--secondary-font-color);
+}
+
+.dropdown-item:hover {
+    background-color: transparent;
 }

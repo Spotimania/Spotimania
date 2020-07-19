@@ -7,7 +7,7 @@
 			</div>
 			<ul class="nav-list">
 				<li class="nav-item">
-					<a href="{{ url_for('index') }}" class="btn nav-link">Spotimania</a>
+					<a href="{{ url_for('index') }}" class="btn nav-link" style="color: white;">Spotimania</a>
                 </li>
 
 				<!-- {% if current_user.is_authenticated %}
@@ -35,10 +35,10 @@
 				<li class="nav-item">
 					<div class="dropdown">
 						<button class="btn nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<h1 class="dropdown-header">Logged in as "{{ current_user.username }}"</h1>
-							<a href="" class="dropdown-item">Profile</a>
-							<a href="{{ url_for('logout') }}" class="dropdown-item">Logout</a>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color: rgb(18, 18, 18); padding: 10px;">
+							<label class="dropdown-header nav-link" style="text-transform: none; font-weight: lighter; margin: 0; color: lightgrey;">Logged in as "{{ current_user.username }}"</label>
+							<a href="" class="dropdown-item nav-link">Profile</a>
+							<a href="{{ url_for('logout') }}" class="dropdown-item nav-link">Logout</a>
 						</div>
 					</div>
 				</li>
