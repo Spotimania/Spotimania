@@ -111,6 +111,24 @@ def results():
     resultsCollection = getResultsOfUser(userId)
     return render_template("results.html", title="Results Page", userPlayedPlaylist=resultsCollection)
 
+@app.route('/profile')
+@login_required
+def profile():
+    userId = current_user.id
+    profile = getProfile(userId)
+    return render_template("profile.html", title="Your Profile", userProfile=profile)
+
+@app.route('/users')
+@login_required
+def user():
+
+    # admin exclusive page
+    if (not (current_user.is_admin())):
+        return redirectTo404()
+        
+    usersCollection = getAllUsers()
+    return render_template("user.html", title="Manage Users", allUsers=usersCollection)
+
 @app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
 @login_required
 def playlist(playlistId):

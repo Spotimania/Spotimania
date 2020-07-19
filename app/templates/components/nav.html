@@ -37,7 +37,10 @@
 						<button class="btn nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</button>
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="background-color: rgb(18, 18, 18); padding: 10px;">
 							<label class="dropdown-header nav-link" style="text-transform: none; font-weight: lighter; margin: 0; color: lightgrey;">Logged in as "{{ current_user.username }}"</label>
-							<a href="" class="dropdown-item nav-link">Profile</a>
+							<a href="{{ url_for('profile') }}" class="dropdown-item nav-link">Profile</a>
+							{% if current_user.is_admin() %}
+							<a href="{{ url_for('user') }}" class="dropdown-item nav-link">Manage Users</a>
+							{% endif %}
 							<a href="{{ url_for('logout') }}" class="dropdown-item nav-link">Logout</a>
 						</div>
 					</div>
