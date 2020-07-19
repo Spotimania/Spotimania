@@ -98,7 +98,7 @@ def playlists():
         newPlaylist = createNewPlaylist(playlistName)
         return redirect(url_for('playlist',playlistId=newPlaylist.id))
 
-    playlistsCollection = getAllPlaylists();
+    playlistsCollection = getAllPlaylists()
     if (not(current_user.is_admin())): #filter empty playlist if not admin
         playlistsCollection = list(filter(lambda playlist: len(getSongsInPlaylist(playlist.id)),playlistsCollection))
 
@@ -108,7 +108,7 @@ def playlists():
 @login_required
 def results():
     userId = current_user.id
-    resultsCollection = getResultsOfUser(userId);
+    resultsCollection = getResultsOfUser(userId)
     return render_template("results.html", title="Results Page", userPlayedPlaylist=resultsCollection)
 
 @app.route('/playlist/<playlistId>', methods=['GET', 'POST'])

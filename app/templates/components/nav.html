@@ -6,19 +6,16 @@
 				<i class="fas fa-times"></i>
 			</div>
 			<ul class="nav-list">
-                {% if current_user.is_anonymous %}
-                <li class="nav-item">
-					<a href="{{ url_for('index') }}" class="nav-link">Home</a>
-                </li>
-                {% else %}
 				<li class="nav-item">
 					<a href="{{ url_for('index') }}" class="nav-link">Home</a>
                 </li>
-                <li class="nav-item">
-					<label class="nav-link" style="text-transform: none; font-weight: lighter; margin: 0;">Logged in as "{{ current_user.username }}"</label>
-					<!-- <a href="{{ url_for('index') }}" class="nav-link">{{ current_user.username }}</a> -->
-                </li>
-                {% endif %}
+
+				{% if current_user.is_authenticated %}
+					<li class="nav-item">
+						<label class="nav-link" style="text-transform: none; font-weight: lighter; margin: 0;">Logged in as "{{ current_user.username }}"</label>
+						<!-- <a href="{{ url_for('index') }}" class="nav-link">{{ current_user.username }}</a> -->
+					</li>
+				{% endif %}
 			</ul>
 			<ul class="nav-list">
 				{% if current_user.is_anonymous %}
