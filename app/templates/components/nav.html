@@ -7,33 +7,40 @@
 			</div>
 			<ul class="nav-list">
 				<li class="nav-item">
-					<a href="{{ url_for('index') }}" class="nav-link">Home</a>
+					<a href="{{ url_for('index') }}" class="btn nav-link">Spotimania</a>
                 </li>
 
-				{% if current_user.is_authenticated %}
+				<!-- {% if current_user.is_authenticated %}
 					<li class="nav-item">
 						<label class="nav-link" style="text-transform: none; font-weight: lighter; margin: 0;">Logged in as "{{ current_user.username }}"</label>
 						<!-- <a href="{{ url_for('index') }}" class="nav-link">{{ current_user.username }}</a> -->
 					</li>
-				{% endif %}
+				{% endif %} -->
 			</ul>
 			<ul class="nav-list">
 				{% if current_user.is_anonymous %}
 				<li class="nav-item">
-					<a href="{{ url_for('login') }}" class="nav-link">Login</a>
+					<a href="{{ url_for('login') }}" class="btn nav-link">Login</a>
 				</li>
 				<li class="nav-item">
-					<a href="{{ url_for('register') }}" class="nav-link">Register</a>
+					<a href="{{ url_for('register') }}" class="btn nav-link">Register</a>
 				</li>
                 {% else %}
 				<li class="nav-item">
-					<a href="{{ url_for('playlists') }}" class="nav-link">Quiz</a>
+					<a href="{{ url_for('playlists') }}" class="btn nav-link">Quiz</a>
 				</li>
 				<li class="nav-item">
-					<a href=" {{ url_for('results') }}" class="nav-link">Results</a>
+					<a href=" {{ url_for('results') }}" class="btn nav-link">Results</a>
 				</li>
 				<li class="nav-item">
-					<a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+					<div class="dropdown">
+						<button class="btn nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<h1 class="dropdown-header">Logged in as "{{ current_user.username }}"</h1>
+							<a href="" class="dropdown-item">Profile</a>
+							<a href="{{ url_for('logout') }}" class="dropdown-item">Logout</a>
+						</div>
+					</div>
 				</li>
 				{% endif %}
 			</ul>
