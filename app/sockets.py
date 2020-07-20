@@ -17,6 +17,7 @@ global roomPlaylist
 global songs
 global songsFiltered
 global currentSongIndex
+global sessions
 playerRooms = {}
 scores = {}
 roomPlaylist = {}
@@ -24,11 +25,13 @@ songs = {}
 songsFiltered = {}
 currentSongIndex={}
 submitted = {}
+sessions ={}
 
 #SOCKETS
 @socketio.on('connectFirstTime', namespace='/sockets')
 def connectFirstTime(message):
     # sharedVar setters
+
 
     if not(message['room']  in playerRooms):
         playerRooms[message['room']] = []
@@ -37,6 +40,9 @@ def connectFirstTime(message):
     # add only unique players
     if(not(message['userId'] in playerRooms[message['room']] )):
         playerRooms[message['room']].append(message['userId'])
+        print('Client Connected', request.sid)
+        sessions[request.sid] = {"room":message['room'],"userId":message['userId']}
+
 
     # RESET USER SCORE
     scores[message['userId']] = 0
@@ -82,12 +88,12 @@ def nextSong(message):
     currentSongIndexLocal = currentSongIndex[room]
 
     # END OF THE SONG
-    songFiltered = songsFiltered[room]
-    if (len(songFiltered) <= currentSongIndexLocal):
+    songFilteredLocal = songsFiltered[room]
+    if (len(songFilteredLocal) <= currentSongIndexLocal):
         emit('gameOver', {}, room=room)
         playerRooms[room]=[]
     else:
-        currentSongFiltered = songFiltered[currentSongIndexLocal]
+        currentSongFiltered = songFilteredLocal[currentSongIndexLocal]
         emit('receivesSongData',currentSongFiltered,room=room)
         currentSongIndex[room] += 1
 
@@ -128,4 +134,21 @@ def submitAnswer(message):
 
 @socketio.on('disconnect', namespace='/sockets')
 def test_disconnect():
-    print('Client disconnected', request.sid)
+    try:
+        sid = request.sid
+        room = sessions[sid]["room"]
+        userId = sessions[sid]["userId"]
+        song = songs[room][currentSongIndex[room]]
+        print(currentSongIndex[room])
+        print(song)
+        playerRooms[room].remove(userId)
+
+        if (isAllPlayerInRoomSubmitted(room)):
+            resetSubmittedForAllPlayers(room)
+            emit('ready',{"songName": song["songName"],"artist":song["artist"]},room=room)
+        print('Client Disconnected', sid)
+    except KeyError as err:
+        #Silent Error for Non ExistingID
+        print('Client Disconnected - Silent:', request.sid)
+        print(err)
+
