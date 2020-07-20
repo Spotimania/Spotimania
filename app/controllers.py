@@ -35,9 +35,6 @@ def createNewAdmin(username, password, email):
 def getAllUsers():
     return User.query.all()
 
-def getProfile(userId):
-    return User.query.get(userId)
-
 # Gets The User Object Once Validated, otherwise returns false
 def validateUserLogin(username, password):
     user = User.query.filter_by(username=username.strip()).first()

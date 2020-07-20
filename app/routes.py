@@ -114,9 +114,7 @@ def results():
 @app.route('/profile')
 @login_required
 def profile():
-    userId = current_user.id
-    profile = getProfile(userId)
-    return render_template("profile.html", title="Your Profile", userProfile=profile)
+    return render_template("profile.html", title="Your Profile")
 
 @app.route('/users')
 @login_required

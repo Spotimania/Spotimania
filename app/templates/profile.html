@@ -3,8 +3,6 @@
 {% block content %}
 
 <h1 class="table-text">Your Profile <span class ="table-title">{{ current_user.username }}</span> !</h1>
-<!-- <div class="panel-group">
-</div> -->
 
 <div>
     <div class="card">
@@ -16,9 +14,9 @@
                     <th> Password Hash </th>
                 </tr>
                 <tr>
-                    <td>{{ userProfile.username }}</td>
-                    <td>{{ userProfile.email }}</td>
-                    <td>{{ userProfile.password_hash }}</td>
+                    <td>{{ current_user.username }}</td>
+                    <td>{{ current_user.email }}</td>
+                    <td>{{ current_user.password_hash }}</td>
                 </tr>
             </table>
         </div>
