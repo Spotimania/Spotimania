@@ -35,8 +35,8 @@ const spotifyFetchAPI = (
 
 const deleteSong = async (e, playlistId) => {
 	try {
-		sameOriginAPI(`playlist/${playlistId}/${e.id}`, (body = {}), (method = 'DELETE'));
-		deleteSongDom(e.id);
+		sameOriginAPI(`playlist/${playlistId}/${e.name}`, (body = {}), (method = 'DELETE'));
+		deleteSongDom(e.name);
 	} catch (err) {
 		console.log(err);
 	}
