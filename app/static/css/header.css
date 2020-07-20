@@ -92,7 +92,6 @@ header{
     letter-spacing: 0.5px;
     margin-right: -1px;
     font-weight: 1000;
-    transition: color .15s;
 }
 
 .nav-link:hover{
@@ -100,5 +99,6 @@ header{
 }
 
 .dropdown-item:hover {
-    background-color: transparent;
+    background-color: lightgrey;
+    color: black;
 }
