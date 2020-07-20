@@ -43,8 +43,8 @@
 	</h1>
 	<div id="headerButtons">
 		{% if current_user.is_admin() %}
-		<!-- Button trigger modal -->
-		<button class="btn inputSubmit" data-toggle="modal" data-target="#playlistModal">
+		<!-- Button triggers modal -->
+		<button class="btn inputSubmit" data-toggle="modal" data-target="#playlistModal" style="margin-right: 20px;">
 			Create New Playlist
 		</button>
 		{% endif %}
@@ -56,37 +56,38 @@
 
 <div class="mainContent" style="background-position: top right;">
 	<div class="innerContent" style="margin: 0;">
-		<div class="table table-hover" style="margin-bottom: 0;">
-			<table style="width: 100%; font-size: 1.5rem">
-				<tr>
-					{% if current_user.is_admin() %}
-					<th>Playlist Id</th>
-					{% endif %}
-					<th>Playlist Name</th>
-					<th>Date Created</th>
-					<th>Date Last Modified</th>
-					<th>Actions</th>
-					<th></th>
-				</tr>
-				<tr>
-					{% for playlist in playlists %}
-				</tr>
-				<tr>
-					{% if current_user.is_admin() %}
-					<td>{{ playlist.id }}</td>
-					{% endif %}
-					<td>{{ playlist.playlistName }}</td>
-					<td>{{ playlist.date_created|datetimeformat }}</td>
-					<td>{{ playlist.date_modified|datetimeformat }}</td>
-					<td>
+		<div class="table-responsive-xl">
+			<table class="table table-hover" style="width: 100%; font-size: 1.5rem; margin-bottom: 0;">
+				<thead>
+					<tr>
 						{% if current_user.is_admin() %}
-						<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}"><i class="fa-2x fas fa-edit" title="Edit"></i></a>
+						<th>Playlist Id</th>
 						{% endif %}
-		
-						<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}"><i class="fa-2x fas fa-gamepad" title="Play"></i></a>
-					</td>
-				</tr>
-				{% endfor %}
+						<th scope="col">Playlist Name</th>
+						<th scope="col">Date Created</th>
+						<th scope="col">Date Last Modified</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for playlist in playlists %}
+					<tr>
+						{% if current_user.is_admin() %}
+						<td>{{ playlist.id }}</td>
+						{% endif %}
+						<td>{{ playlist.playlistName }}</td>
+						<td>{{ playlist.date_created|datetimeformat }}</td>
+						<td>{{ playlist.date_modified|datetimeformat }}</td>
+						<td>
+							<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}"><i class="fa-2x fas fa-gamepad" title="Play Playlist"></i></a>
+	
+							{% if current_user.is_admin() %}
+							<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}"><i class="fa-2x fas fa-edit" title="Edit or Delete Playlist"></i></a>
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
 			</table>
 		</div>
 	</div>
