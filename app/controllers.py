@@ -21,8 +21,17 @@ def getAdminRole():
     commitToDatabase(adminRole)
     return adminRole
 
+def getUserRole():
+    userRole = Privileges.query.filter_by(name="User").first()
+    if (userRole):
+        return userRole
+    userRole = Privileges("User")
+    commitToDatabase(userRole)
+    return userRole
+
 def createNewUser(username, password, email):
-    user = User(username.strip(), email.strip(),password.strip())
+    userRole = getUserRole()
+    user = User(username.strip(), email.strip(),password.strip(),userRole)
     commitToDatabase(user)
     return user
 
@@ -31,6 +40,12 @@ def createNewAdmin(username, password, email):
     user = User(username.strip(), email.strip(),password.strip(),adminRole)
     commitToDatabase(user)
     return user
+
+def getAllUsers():
+    return User.query.all()
+
+def getAllPrivileges():
+    return Privileges.query.all()
 
 # Gets The User Object Once Validated, otherwise returns false
 def validateUserLogin(username, password):

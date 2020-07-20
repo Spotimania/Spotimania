@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h1 class="table-text">Manage <span class ="table-title">All Users</span> !</h1>
+
+
+<div class="panel-group" >
+    <div>
+        {% for privilege in allPrivileges %}
+        <div class="card">
+            <div class="card-header" id="headingOne"  style="background-color: rgb(69, 225, 159);">
+                <h2 class="mb-0">
+                    {{ privilege.name }}s
+                </h2>
+            </div>
+
+            <div class="card-body">
+                <table  class= "table table-hover" style="width:100%; font-size: 1.3rem; margin: 0;">
+                    <tr>
+                        <th> Username </th>
+                        <th> Email </th>
+                        <th> Password Hash </th>
+                    </tr>
+                    {% for user in allUsers %}
+                    {% if user.privilegeId == privilege.id %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.password_hash }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

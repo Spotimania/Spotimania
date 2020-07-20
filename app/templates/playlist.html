@@ -1,16 +1,7 @@
 {% extends 'layout.html' %} {% block content %}
 
-<div class="d-flex justify-content-between">
-<h1 class="table-text">List of Quizzes</h1>
-{% if current_user.is_admin() %}
-<!-- Button trigger modal -->
-<button type="button" class="btn playlist-btn" style="border-radius: initial;"data-toggle="modal" data-target="#playlistModal">
-	Create New Playlist
-</button>
-{% endif %}
-</div>
 
-<!-- Modal -->
+<!-- Create New Playlist Modal -->
 <div class="modal fade" id="playlistModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
@@ -41,38 +32,64 @@
 		</div>
 	</div>
 </div>
-<div class="table table-hover">
-	<table style="width: 100%; font-size: 1.5rem">
-		<tr>
-			{% if current_user.is_admin() %}
-			<th>Playlist Id</th>
-			{% endif %}
-			<th>Date Created</th>
-			<th>Date Last Modified</th>
-			<th>Playlist Name</th>
-			<th>Quizzes</th>
-			<th></th>
-		</tr>
-		<tr>
-			{% for playlist in playlists %}
-		</tr>
-		<tr>
-			{% if current_user.is_admin() %}
-			<td>{{ playlist.id }}</td>
-			{% endif %}
-			<td>{{ playlist.date_created|datetimeformat  }}</td>
-			<td>{{ playlist.date_modified|datetimeformat }}</td>
-			<td>{{ playlist.playlistName }}</td>
-			<td>
-				{% if current_user.is_admin() %}
-				<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}"><i class="fa-2x fas fa-edit"></i></a>
-				{% endif %}
 
-				<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}"><i class="fa-2x fas fa-gamepad"></i></a>
-			</td>
-		</tr>
-		{% endfor %}
-	</table>
+<div class="d-flex justify-content-between align-items-center">
+	<h1 id="headerTitle" class="sub-headline" style="font-size: 40px; color: black;">
+		{% if current_user.is_admin() %}
+		List of Playlists/Quizzes
+		{% else %}
+		List of Quizzes
+		{% endif %}
+	</h1>
+	<div id="headerButtons">
+		{% if current_user.is_admin() %}
+		<!-- Button trigger modal -->
+		<button class="btn inputSubmit" data-toggle="modal" data-target="#playlistModal">
+			Create New Playlist
+		</button>
+		{% endif %}
+	</div>
+</div>
+
+
+
+
+<div class="mainContent" style="background-position: top right;">
+	<div class="innerContent" style="margin: 0;">
+		<div class="table table-hover" style="margin-bottom: 0;">
+			<table style="width: 100%; font-size: 1.5rem">
+				<tr>
+					{% if current_user.is_admin() %}
+					<th>Playlist Id</th>
+					{% endif %}
+					<th>Playlist Name</th>
+					<th>Date Created</th>
+					<th>Date Last Modified</th>
+					<th>Actions</th>
+					<th></th>
+				</tr>
+				<tr>
+					{% for playlist in playlists %}
+				</tr>
+				<tr>
+					{% if current_user.is_admin() %}
+					<td>{{ playlist.id }}</td>
+					{% endif %}
+					<td>{{ playlist.playlistName }}</td>
+					<td>{{ playlist.date_created|datetimeformat }}</td>
+					<td>{{ playlist.date_modified|datetimeformat }}</td>
+					<td>
+						{% if current_user.is_admin() %}
+						<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}"><i class="fa-2x fas fa-edit" title="Edit"></i></a>
+						{% endif %}
+		
+						<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}"><i class="fa-2x fas fa-gamepad" title="Play"></i></a>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
 </div>
 
 {% endblock %}
