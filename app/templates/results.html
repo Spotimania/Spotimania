@@ -2,8 +2,13 @@
 
 {% block content %}
 
-<h1 class="table-text">Your Results History <span class ="table-title">{{ current_user.username }}</span> !</h1>
-<div class="panel-group" >
+<div class="d-flex justify-content-between align-items-center">
+	<h1 id="headerTitle" class="sub-headline" style="font-size: 40px; padding-left: 0; color: black;">
+        Your Results History <span class ="table-title">{{ current_user.username }}</span> !
+	</h1>
+</div>
+
+<div class="panel-group">
     <div>
         {% for playlist in userPlayedPlaylist %}
         <div class="card">
