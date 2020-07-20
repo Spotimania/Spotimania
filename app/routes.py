@@ -125,7 +125,8 @@ def user():
         return redirectTo404()
         
     usersCollection = getAllUsers()
-    return render_template("user.html", title="Manage Users", allUsers=usersCollection)
+    privilegesCollection = getAllPrivileges()
+    return render_template("user.html", title="Manage Users", allUsers=usersCollection, allPrivileges=privilegesCollection)
 
 @app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
 @login_required
