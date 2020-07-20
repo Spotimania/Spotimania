@@ -147,12 +147,12 @@ def playlist(playlistId):
 @app.route('/playlist/delete/<playlistId>')
 @login_required
 def deletePlaylistRoute(playlistId):
-     # admin exclusive page
+    # admin exclusive page
     if (not (current_user.is_admin())):
         return redirectTo404()
 
     deletePlaylist(playlistId)
-    flash("Successfully Deleted Song", "success")
+    flash("Successfully Deleted Playlist", "success")
     return redirect( url_for('playlists') )
 
 #SOCKET PAGES
