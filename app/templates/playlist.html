@@ -1,14 +1,25 @@
 {% extends 'layout.html' %} {% block content %}
 
-<div class="d-flex justify-content-between">
-<h1 class="table-text">List of Quizzes</h1>
-{% if current_user.is_admin() %}
-<!-- Button trigger modal -->
-<button type="button" class="btn playlist-btn" style="border-radius: initial;"data-toggle="modal" data-target="#playlistModal">
-	Create New Playlist
-</button>
-{% endif %}
+
+
+<div class="d-flex justify-content-between align-items-center">
+	<h1 id="headerTitle" class="sub-headline" style="font-size: 40px; padding-left: 0; color: black;">
+		{% if current_user.is_admin() %}
+		List of Playlists/Quizzes
+		{% else %}
+		List of Quizzes
+		{% endif %}
+	</h1>
+	<div id="headerButtons">
+		{% if current_user.is_admin() %}
+		<!-- Button trigger modal -->
+		<button class="btn inputSubmit" data-toggle="modal" data-target="#playlistModal">
+			Create New Playlist
+		</button>
+		{% endif %}
+	</div>
 </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="playlistModal" tabindex="-1" role="dialog">
@@ -50,7 +61,7 @@
 			<th>Date Created</th>
 			<th>Date Last Modified</th>
 			<th>Playlist Name</th>
-			<th>Quizzes</th>
+			<th>Actions</th>
 			<th></th>
 		</tr>
 		<tr>
