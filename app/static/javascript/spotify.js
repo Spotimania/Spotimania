@@ -182,3 +182,20 @@ const addSongDom = ({ spotifySongID, prevURL, prevIMG, songName, artist, album }
 	element.innerHTML = toBeAdded + temp;
 	document.querySelector('#SearchedSongsInPlaylist').scrollIntoView();
 };
+
+
+const deleteUserDom = (username) => {
+	$(`#${username}`).remove();
+};
+
+
+const deleteUser = async (e, userId) => {
+	// "/user/<userId>/<username>"
+	// routeDeleteUser(userId, username):
+	try {
+		sameOriginAPI(`users/${userId}/${e.name}`, (body = {}), (method = 'DELETE'));
+		deleteUserDom(e.name);
+	} catch (err) {
+		console.log(err);
+	}
+};

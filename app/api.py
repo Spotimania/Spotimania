@@ -39,3 +39,12 @@ def routeDeleteSongsInPlaylist(playlistId, spotifySongId):
         return ({"message": "Success!"})
     except Exception as err:
         abort(Response("Something Went Wrong"))
+
+
+@api.route("/users/<userId>/<username>", methods=['DELETE'])
+def routeDeleteUser(userId, username):
+    try:
+        deleteUser(username)
+        return ({"message": "Success!"})
+    except Exception as err:
+        abort(Response("Something Went Wrong"))

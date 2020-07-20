@@ -21,13 +21,17 @@
                         <th> Username </th>
                         <th> Email </th>
                         <th> Password Hash </th>
+                        <th> Actions </th>
                     </tr>
                     {% for user in allUsers %}
                     {% if user.privilegeId == privilege.id %}
-                    <tr>
+                    <tr id="{{ user.username }}">
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td>{{ user.password_hash }}</td>
+                        <td>
+                            <a name="{{ user.username }}" class="btn" onclick=" deleteUser(this,'{{user.id}}')"><i class="fa-2x fas fa-trash" title="Delete User"></i></a>
+                        </td>
                     </tr>
                     {% endif %}
                     {% endfor %}
