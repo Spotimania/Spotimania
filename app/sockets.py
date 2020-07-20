@@ -41,7 +41,7 @@ def connectFirstTime(message):
     if(not(message['userId'] in playerRooms[message['room']] )):
         playerRooms[message['room']].append(message['userId'])
         print('Client Connected', request.sid)
-        sessions[request.sid] = {"room":message['room'],"userId":message['userId']}
+        sessions[request.sid] = {"room":message['room'],"userId":message['userId'],'username': message['username']}
 
 
     # RESET USER SCORE
@@ -138,17 +138,16 @@ def test_disconnect():
         sid = request.sid
         room = sessions[sid]["room"]
         userId = sessions[sid]["userId"]
+        username = sessions[sid]["username"]
         song = songs[room][currentSongIndex[room]]
-        print(currentSongIndex[room])
-        print(song)
         playerRooms[room].remove(userId)
 
         if (isAllPlayerInRoomSubmitted(room)):
             resetSubmittedForAllPlayers(room)
             emit('ready',{"songName": song["songName"],"artist":song["artist"]},room=room)
         print('Client Disconnected', sid)
+        emit('onUserDisconnect',{'username': username,'userId': userId},room=room)
     except KeyError as err:
         #Silent Error for Non ExistingID
-        print('Client Disconnected - Silent:', request.sid)
         print(err)
 

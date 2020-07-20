@@ -90,6 +90,9 @@ const showToast = (title, message) => {
 const notifyUserJoin = (username) => {
 	showToast(`A User Has Joined!`, `${username} has joined !`);
 };
+const notifyUserDisconnect = (username) => {
+	showToast(`${username} has left !`);
+};
 const notifyScore = (username, newScore, scoreReceived) => {
 	showToast('Player Scored', `${username} received ${scoreReceived} points. New score is ${newScore}`);
 };
@@ -118,6 +121,9 @@ $(document).ready(function () {
 
 	socket.on('onUserJoin', (data) => {
 		notifyUserJoin(data.username);
+	});
+	socket.on('onUserDisconnect', (data) => {
+		notifyUserDisconnect(data.username);
 	});
 	socket.on('syncUsers', (data) => {
 		const users = data.map((user) => ({ ...user, score: 0 }));
