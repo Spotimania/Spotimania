@@ -78,7 +78,12 @@ def getResultsOfUser(userId):
     for playlist in userPlayedPlaylist:
         hashMap = playlist.to_dict()
         hashMap["results"] = []
-        hashMap["playlistName"] = getPlaylist(playlist.playlistId).playlistName
+
+        if(bool(playlist.playlistId)):
+            hashMap["playlistName"] = getPlaylist(playlist.playlistId).playlistName
+        else:
+            hashMap["playlistName"] = "Uncategorized"
+
         # Parse all the question sets in the playlist
         individualResultsCollection = playlist.resultsIndividual
         for individualResult in individualResultsCollection:
@@ -117,6 +122,9 @@ def createNewPlaylist(playlistName):
 
 def deletePlaylist(playlistId):
     playlist = Playlist.query.get(playlistId)
+    resultsInPlaylist=playlist.playlistUser
+    for result in resultsInPlaylist:
+        result.playlistId = ""
     db.session.delete(playlist)
     db.session.commit()
 
