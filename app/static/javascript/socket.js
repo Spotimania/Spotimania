@@ -103,7 +103,7 @@ $(document).ready(function () {
 	audioPlayer.volume = 0.5;
 
 	//SOCKET CONNECTION
-	socket = io.connect('http://' + document.domain + ':' + location.port + '/sockets');
+	socket = io.connect('https://' + document.domain + ':' + location.port + '/sockets');
 
 	socket.on('connect', () => {
 		// REGISTER ON THE SERVER SESSION
@@ -207,7 +207,8 @@ const gameOver = () => {
 	//CHANGE BUTTON FUNCTION
 	const primaryButton = document.querySelector('#modalPrimary');
 	primaryButton.textContent = 'Play Other Playlists';
-	primaryButton.onclick = () => (window.location.href = '../playlists');$('#modalPrimary').show();
+	primaryButton.onclick = () => (window.location.href = '../playlists');
+	$('#modalPrimary').show();
 
 	//MODAL INTERACTION
 	// WORK AROUND - FORCE SHOW
