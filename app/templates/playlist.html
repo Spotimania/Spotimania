@@ -2,32 +2,27 @@
 
 
 <!-- Create New Playlist Modal -->
-<div class="modal fade" id="playlistModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="NewPlaylistModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="ModalLabel">Create New Playlist</h5>
-				<button type="button" class="close" data-dismiss="modal">
-					<span>&times;</span>
-				</button>
+				<h1 class="modal-title searchResultHeading">Create New Playlist</h1>
+				<button class="close closeInput" data-dismiss="modal">&times;</button>
 			</div>
 			<form name="login" method="POST">
-			{{form.hidden_tag()}}
-			<div class="modal-body">
-
-
-				<div class="form-group">
-					{{form.playlistName.label(class="inputLabel")}}<br />
-					{{form.playlistName(size=30, class="inputGuess")}} <br />
-					{% for error in form.playlistName.errors%}
-					<span class="error-message">{{error}}</span>
-					{% endfor %}
+				{{form.hidden_tag()}}
+				<div class="modal-body">
+					<div class="form-group">
+						{{form.playlistName.label(class="inputLabel")}} <br>
+						{{form.playlistName(size=30, class="inputGuess")}} <br>
+						{% for error in form.playlistName.errors%}
+						<span class="error-message">{{error}}</span>
+						{% endfor %}
+					</div>
 				</div>
-
-			</div>
-			<div class="modal-footer">
-				{{form.submit(class="inputSubmit")}}
-			</div>
+				<div class="modal-footer">
+					{{form.submit(class="inputSubmit")}}
+				</div>
 			</form>
 		</div>
 	</div>
@@ -44,7 +39,7 @@
 	<div id="headerButtons">
 		{% if current_user.is_admin() %}
 		<!-- Button triggers modal -->
-		<button class="btn inputSubmit" data-toggle="modal" data-target="#playlistModal" style="margin-right: 20px;">
+		<button class="btn inputSubmit" data-toggle="modal" data-target="#NewPlaylistModal" style="margin-right: 20px;">
 			Create New Playlist
 		</button>
 		{% endif %}
@@ -79,11 +74,11 @@
 						<td>{{ playlist.date_created|datetimeformat }}</td>
 						<td>{{ playlist.date_modified|datetimeformat }}</td>
 						<td>
-							<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}"><i class="fa-2x fas fa-gamepad" title="Play Playlist"></i></a>
-	
 							{% if current_user.is_admin() %}
 							<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}"><i class="fa-2x fas fa-edit" title="Edit or Delete Playlist"></i></a>
 							{% endif %}
+							
+							<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}"><i class="fa-2x fas fa-gamepad" title="Play Playlist"></i></a>
 						</td>
 					</tr>
 					{% endfor %}
