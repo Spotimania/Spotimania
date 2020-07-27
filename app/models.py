@@ -147,7 +147,7 @@ class Playlist_Song(BaseAutoPrimary):
 
 class Playlist(BaseAutoPrimary):
     playlistName = db.Column(db.String(100))
-    isPublic = db.Column(db.Boolean,default=False)
+    isPublic = db.Column(db.Boolean,default=True)
     noSongs = db.Column(db.Integer)
 
     # Foreign Keys
@@ -159,8 +159,11 @@ class Playlist(BaseAutoPrimary):
     playlistUser = db.relationship(
         "Results", backref="playlist", lazy="dynamic")
 
-    def __init__(self, name):
+    def __init__(self, name,user,isPublic):
         self.playlistName = name
+        self.creator = user
+        self.isPublic = isPublic
+        self.noSongs = 0
 
     def __repr__(self):
         return '<Playlist %r>' % (self.playlistName)
