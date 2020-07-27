@@ -63,6 +63,9 @@ class User(UserMixin, BaseAutoPrimary):
     # Back Reference
     userPlayedPlaylist = db.relationship(
         "Results", backref="user", lazy="dynamic")
+    createdPlaylist= db.relationship(
+        "Playlist", backref="creator",lazy="dynamic"
+    )
 
     # Password Methods
     def check_password(self, password):
@@ -144,6 +147,11 @@ class Playlist_Song(BaseAutoPrimary):
 
 class Playlist(BaseAutoPrimary):
     playlistName = db.Column(db.String(100))
+    isPublic = db.Column(db.Boolean,default=False)
+    noSongs = db.Column(db.Integer)
+
+    # Foreign Keys
+    userId = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     # Back Reference
     playlistInSong = db.relationship(
