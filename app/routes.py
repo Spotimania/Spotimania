@@ -22,7 +22,7 @@ def redirectTo404():
 @app.route("/home")
 @app.route("/index")
 def index():
-    return render_template("index.html", index=True)
+    return render_template("index.html", index=True, title="Spotimania")
 
 @app.route("/login",methods=["GET","POST"])
 def login():
@@ -85,7 +85,7 @@ def logout():
 @app.errorhandler(404)
 @app.route('/404')
 def page404(error=404):
-    return render_template('404.html'), 404
+    return render_template('404.html', title="Page not found"), 404
 
 
 @app.route('/playlists', methods=['GET', 'POST'])
@@ -98,7 +98,7 @@ def playlists():
         newPlaylist = createNewPlaylist(playlistName)
         return redirect(url_for('playlist',playlistId=newPlaylist.id))
 
-    playlistsCollection = getAllPlaylists();
+    playlistsCollection = getAllPlaylists()
     if (not(current_user.is_admin())): #filter empty playlist if not admin
         playlistsCollection = list(filter(lambda playlist: len(getSongsInPlaylist(playlist.id)),playlistsCollection))
 
@@ -108,8 +108,25 @@ def playlists():
 @login_required
 def results():
     userId = current_user.id
-    resultsCollection = getResultsOfUser(userId);
+    resultsCollection = getResultsOfUser(userId)
     return render_template("results.html", title="Results Page", userPlayedPlaylist=resultsCollection)
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template("profile.html", title="Your Profile")
+
+@app.route('/users')
+@login_required
+def user():
+
+    # admin exclusive page
+    if (not (current_user.is_admin())):
+        return redirectTo404()
+        
+    usersCollection = getAllUsers()
+    privilegesCollection = getAllPrivileges()
+    return render_template("user.html", title="Manage Users", allUsers=usersCollection, allPrivileges=privilegesCollection)
 
 @app.route('/playlist/<playlistId>', methods=['GET', 'POST'])
 @login_required
@@ -130,12 +147,12 @@ def playlist(playlistId):
 @app.route('/playlist/delete/<playlistId>')
 @login_required
 def deletePlaylistRoute(playlistId):
-     # admin exclusive page
+    # admin exclusive page
     if (not (current_user.is_admin())):
         return redirectTo404()
 
     deletePlaylist(playlistId)
-    flash("Successfully Deleted Song", "success")
+    flash("Successfully Deleted Playlist", "success")
     return redirect( url_for('playlists') )
 
 #SOCKET PAGES

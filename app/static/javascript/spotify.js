@@ -35,8 +35,8 @@ const spotifyFetchAPI = (
 
 const deleteSong = async (e, playlistId) => {
 	try {
-		sameOriginAPI(`playlist/${playlistId}/${e.id}`, (body = {}), (method = 'DELETE'));
-		deleteSongDom(e.id);
+		sameOriginAPI(`playlist/${playlistId}/${e.name}`, (body = {}), (method = 'DELETE'));
+		deleteSongDom(e.name);
 	} catch (err) {
 		console.log(err);
 	}
@@ -181,4 +181,21 @@ const addSongDom = ({ spotifySongID, prevURL, prevIMG, songName, artist, album }
 
 	element.innerHTML = toBeAdded + temp;
 	document.querySelector('#SearchedSongsInPlaylist').scrollIntoView();
+};
+
+
+const deleteUserDom = (username) => {
+	$(`#${username}`).remove();
+};
+
+
+const deleteUser = async (e, userId) => {
+	// "/user/<userId>/<username>"
+	// routeDeleteUser(userId, username):
+	try {
+		sameOriginAPI(`users/${userId}/${e.name}`, (body = {}), (method = 'DELETE'));
+		deleteUserDom(e.name);
+	} catch (err) {
+		console.log(err);
+	}
 };

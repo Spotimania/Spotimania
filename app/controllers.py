@@ -21,8 +21,17 @@ def getAdminRole():
     commitToDatabase(adminRole)
     return adminRole
 
+def getUserRole():
+    userRole = Privileges.query.filter_by(name="User").first()
+    if (userRole):
+        return userRole
+    userRole = Privileges("User")
+    commitToDatabase(userRole)
+    return userRole
+
 def createNewUser(username, password, email):
-    user = User(username.strip(), email.strip(),password.strip())
+    userRole = getUserRole()
+    user = User(username.strip(), email.strip(),password.strip(),userRole)
     commitToDatabase(user)
     return user
 
@@ -31,6 +40,12 @@ def createNewAdmin(username, password, email):
     user = User(username.strip(), email.strip(),password.strip(),adminRole)
     commitToDatabase(user)
     return user
+
+def getAllUsers():
+    return User.query.all()
+
+def getAllPrivileges():
+    return Privileges.query.all()
 
 # Gets The User Object Once Validated, otherwise returns false
 def validateUserLogin(username, password):
@@ -78,7 +93,12 @@ def getResultsOfUser(userId):
     for playlist in userPlayedPlaylist:
         hashMap = playlist.to_dict()
         hashMap["results"] = []
-        hashMap["playlistName"] = getPlaylist(playlist.playlistId).playlistName
+
+        if(bool(playlist.playlistId)):
+            hashMap["playlistName"] = getPlaylist(playlist.playlistId).playlistName
+        else:
+            hashMap["playlistName"] = "Uncategorized"
+
         # Parse all the question sets in the playlist
         individualResultsCollection = playlist.resultsIndividual
         for individualResult in individualResultsCollection:
@@ -117,6 +137,9 @@ def createNewPlaylist(playlistName):
 
 def deletePlaylist(playlistId):
     playlist = Playlist.query.get(playlistId)
+    resultsInPlaylist=playlist.playlistUser
+    for result in resultsInPlaylist:
+        result.playlistId = ""
     db.session.delete(playlist)
     db.session.commit()
 
