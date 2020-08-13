@@ -76,12 +76,16 @@ def doesThisMatch(string1, string2):
     ratio = fuzz.ratio(string1.lower(), string2.lower())
     return ratio > 80
 
-
-
 # Results Controllers
 def editPlaylistName(playlistId, playlistName):
     playlist = Playlist.query.filter_by(id=playlistId).first()
     playlist.playlistName = playlistName
+    db.session.commit()
+    return 'success'
+
+def editPlaylistPublicity(playlistId, isPublic):
+    playlist = Playlist.query.filter_by(id=playlistId).first()
+    playlist.isPublic = isPublic
     db.session.commit()
     return 'success'
 
@@ -129,8 +133,8 @@ def addIndividualResults(userId, playlistId, songId, answerArtist, answerSong, i
 
 # Playlist and Playlist/Song Controllers
 
-def createNewPlaylist(playlistName):
-    playlist = Playlist(playlistName)
+def createNewPlaylist(playlistName,user,isPublic=True):
+    playlist = Playlist(playlistName,user,isPublic)
     commitToDatabase(playlist)
     return playlist
 
@@ -154,6 +158,12 @@ def getPlaylistName(playlistId):
     playlist = Playlist.query.get(playlistId)
     return playlist.playlistName
 
+def updateNoSongInPlaylist(playlistId):
+    playlist = Playlist.query.get(playlistId)
+    playlist.noSongs = playlist.playlistInSong.count()
+    db.session.commit()
+    return playlist.noSongs
+
 def addSongInPlaylist(songId, playlistId):
     playlist = Playlist.query.get(playlistId)
     if (playlist is None):  # playlist does not exist
@@ -164,12 +174,14 @@ def addSongInPlaylist(songId, playlistId):
 
     if(playlistSong is None):
         song = Song.query.get(songId)
-        addSong = Playlist_Song(playlist,song)
+        addSong = Playlist_Song(playlist, song)
+        updateNoSongInPlaylist(playlistId)
         commitToDatabase(addSong)
 
 def deleteSongInPlaylist(songId,playlistId):
     playlistSong = Playlist_Song.query.filter_by(playlistId=playlistId, songId=songId).first()
     db.session.delete(playlistSong)
+    updateNoSongInPlaylist(playlistId)
     db.session.commit()
 
 def getSongsInPlaylist(playlistId):

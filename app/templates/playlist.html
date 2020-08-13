@@ -1,6 +1,5 @@
 {% extends 'layout.html' %} {% block content %}
 
-
 <!-- Create New Playlist Modal -->
 <div class="modal fade" id="NewPlaylistModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
@@ -30,24 +29,15 @@
 
 <div class="d-flex justify-content-between align-items-center">
 	<h1 id="headerTitle" class="sub-headline" style="font-size: 40px; color: black;">
-		{% if current_user.is_admin() %}
-		List of Playlists/Quizzes
-		{% else %}
-		List of Quizzes
-		{% endif %}
+		{% if current_user.is_admin() %} List of Playlists/Quizzes {% else %} List of Quizzes {% endif %}
 	</h1>
 	<div id="headerButtons">
-		{% if current_user.is_admin() %}
 		<!-- Button triggers modal -->
 		<button class="btn inputSubmit" data-toggle="modal" data-target="#NewPlaylistModal" style="margin-right: 20px;">
 			Create New Playlist
 		</button>
-		{% endif %}
 	</div>
 </div>
-
-
-
 
 <div class="mainContent" style="background-position: top right;">
 	<div class="innerContent" style="margin: 0;">
@@ -67,19 +57,22 @@
 				<tbody>
 					{% for playlist in playlists %}
 					<tr>
-						{% if current_user.is_admin() %}
+						{% if current_user.is_admin() or current_user.id == playlist.userId or playlist.isPublic%} {% if current_user.is_admin() %}
 						<td>{{ playlist.id }}</td>
 						{% endif %}
 						<td>{{ playlist.playlistName }}</td>
 						<td>{{ playlist.date_created|datetimeformat }}</td>
 						<td>{{ playlist.date_modified|datetimeformat }}</td>
 						<td>
+							<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}"><i class="fa-2x fas fa-gamepad" title="Play Playlist"></i></a>
+	
 							{% if current_user.is_admin() %}
 							<a class="btn" href="{{ url_for('playlist',playlistId=playlist.id) }}"><i class="fa-2x fas fa-edit" title="Edit or Delete Playlist"></i></a>
 							{% endif %}
 							
 							<a class="btn" href="{{ url_for('quiz',playlistId=playlist.id) }}"><i class="fa-2x fas fa-gamepad" title="Play Playlist"></i></a>
 						</td>
+						{% endif %}
 					</tr>
 					{% endfor %}
 				</tbody>
