@@ -1,14 +1,13 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %}
+{% block content %}
 
-<!-- Modal -->
-<div class="modal fade" id="playlistModal" tabindex="-1" role="dialog">
+<!-- Edit Playlist Name Modal -->
+<div class="modal fade" id="newPlaylistNameModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content" style="padding: 5px 10px; border-radius: 25px;">
+		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title searchResultHeading" id="ModalLabel">Edit Playlist Name</h5>
-				<button class="close" data-dismiss="modal" style="font-size: 25px;">
-					<span>&times;</span>
-				</button>
+				<h1 class="modal-title searchResultHeading">Edit Playlist Name</h1>
+				<button class="close closeInput" data-dismiss="modal">&times;</button>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
@@ -17,11 +16,31 @@
 				</div>
 			</div>
 			<div class="modal-footer">
+				<button class="btn inputHint" data-dismiss="modal">Cancel</button>
 				<button class="btn inputSubmit"
 					data-dismiss="modal"
 					onclick="changePlaylistName(this,{{playlist.id}})"
 					id="modalPrimary"
-				>Save</button>
+				>Edit Playlist Name</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Delete Playlist Modal -->
+<div class="modal fade" id="deletePlaylistModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title searchResultHeading">Delete Playlist</h1>
+				<button class="close closeInput" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<label for="newPlaylistName" class="inputLabel">Delete <b>"{{ playlist.playlistName }}"</b> playlist?</label>
+			</div>
+			<div class="modal-footer">
+				<button class="btn inputSubmit" data-dismiss="modal">Cancel</button>
+				<a class="btn inputHint" href="{{ url_for('deletePlaylistRoute',playlistId=playlist.id) }}">Delete Playlist</a>
 			</div>
 		</div>
 	</div>
@@ -29,22 +48,22 @@
 
 <div class="mainContent" style="background-position: bottom right;">
 	<div class="d-flex justify-content-between align-items-center">
-		<h1 id="headerTitle" class="sub-headline" style="font-size: 40px;">Playlist: {{playlist.playlistName}}</h1>
+		<h1 id="headerTitle" class="sub-headline" style="font-size: 40px; padding-left: 0;">Playlist: {{playlist.playlistName}}</h1>
 		<div id="headerButtons">
-			<a class="btn inputHint" href="{{url_for('deletePlaylistRoute',playlistId=playlist.id) }}">
-				Delete Playlist
-			</a>
-			<!-- Button trigger modal -->
-			<button class="btn inputSubmit" data-toggle="modal" data-target="#playlistModal">
-				Edit Playlist Name
-			</button>
+			<!-- Button Triggers "Delete Playlist" Modal -->
+			<button class="btn inputHint" data-toggle="modal" data-target="#deletePlaylistModal">Delete Playlist</button>
+			
+			<!-- Button Triggers "Edit Playlist Name" Modal -->
+			<button class="btn inputSubmit" data-toggle="modal" data-target="#newPlaylistNameModal">Edit Playlist Name</button>
+
+			<a class="btn inputComplete" href="{{ url_for('playlists') }}">Done</a>
 		</div>
 	</div>
 	<!-- Search -->
 	<div class="innerContent" style="margin-left: 0; margin-right: 0;">
 		<h2 class="searchResultHeading">Search</h2>
 		<form onsubmit="searchSong(this); return false;">
-			<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search" class="inputGuess" />
+			<input id="searchInput" type="text" name="searchInput" placeholder="Enter Search..." class="inputGuess" />
 			<br /><br />
 			<div class="d-flex justify-content-end">
 				<div class="btn-group btn-group-toggle" data-toggle="buttons" style="min-width: 20vw;">
@@ -88,15 +107,10 @@
 						</div>
 						<div class="card-body">
 							<img class="card-img-top artistArt" src="{{song['prevIMG']}}" style="width: 80%;" />
-							<br />
+							<br>
 							<h4 class="card-title inputLabel" style="font-size: 15px;">by {{song["artist"]}}</h4>
-							<br />
-							<a
-								name="{{song['spotifySongID']}}"
-								onclick=" deleteSong(this,'{{playlist.id}}')"
-								style="font-size: 25px;"
-								class="btn text-muted"
-							>
+							<br>
+							<a name="{{song['spotifySongID']}}" onclick=" deleteSong(this,'{{playlist.id}}')" style="font-size: 25px;" class="btn text-muted">
 								<i class="fa fa-trash"></i>
 							</a>
 						</div>

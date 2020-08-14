@@ -30,7 +30,7 @@ class RegisterForm(FlaskForm):
             raise ValidationError("Username Is Already In Use")
 
 class CreateNewPlaylistForm(FlaskForm):
-    playlistName = StringField('Playlist Name', [DataRequired()])
+    playlistName = StringField('Playlist Name', [DataRequired()], render_kw={"placeholder": "Enter Name..."})
     submit = SubmitField("Create New Playlist")
 
 class RegisterAdminForm(RegisterForm):

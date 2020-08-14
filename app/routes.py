@@ -95,12 +95,12 @@ def playlists():
     form = CreateNewPlaylistForm()
     if (form.validate_on_submit()):
         playlistName = form.playlistName.data
-        newPlaylist = createNewPlaylist(playlistName)
+        newPlaylist = createNewPlaylist(playlistName,current_user)
         return redirect(url_for('playlist',playlistId=newPlaylist.id))
 
     playlistsCollection = getAllPlaylists()
     if (not(current_user.is_admin())): #filter empty playlist if not admin
-        playlistsCollection = list(filter(lambda playlist: len(getSongsInPlaylist(playlist.id)),playlistsCollection))
+        playlistsCollection = list(filter(lambda playlist: len(getSongsInPlaylist(playlist.id)) or current_user.id==playlist.userId,playlistsCollection))
 
     return render_template('playlist.html', title='Songs', playlists = playlistsCollection, form=form)
 
@@ -123,7 +123,7 @@ def user():
     # admin exclusive page
     if (not (current_user.is_admin())):
         return redirectTo404()
-        
+
     usersCollection = getAllUsers()
     privilegesCollection = getAllPrivileges()
     return render_template("user.html", title="Manage Users", allUsers=usersCollection, allPrivileges=privilegesCollection)
@@ -132,17 +132,17 @@ def user():
 @login_required
 def playlist(playlistId):
 
-    # admin exclusive page
-    if (not (current_user.is_admin())):
-        return redirectTo404()
-
     #playlist does not exist
     playlist = getPlaylist(playlistId)
     if (playlist is None):
         return redirectTo404()
 
+    # user editting privilege
+    if (not (current_user.is_admin() or current_user.id==playlist.userId)):
+        return redirectTo404()
+
     songs = getSongsInPlaylist(playlistId)
-    return render_template("admin.html", title="Admin Home",playlist=playlist,songs=songs,session=True)
+    return render_template("playlistEditor.html", title="Playlist Editor",playlist=playlist,songs=songs,session=True)
 
 @app.route('/playlist/delete/<playlistId>')
 @login_required
